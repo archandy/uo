@@ -1,0 +1,34 @@
+warmode 'on'
+if buffexists "Blood Oath"
+  warmode 'off'
+  usetype 0x2fd8
+  pause 1500
+endif
+if not buffexists 'Consecrate Weapon'
+  cast 'Consecrate Weapon'
+  pause 600
+endif
+if not buffexists 'lightning strike' and mana > 4
+  cast 'lightning strike'
+  pause 600
+endif
+if not buffexists 'Curse Weapon' and mana > 6
+  cast 'Curse Weapon'
+  pause 600
+endif
+if not buffexists 'Consecrate Weapon'
+  cast 'Consecrate Weapon'
+  pause 600
+endif
+if buffexists 'Consecrate Weapon'and not buffexists 'lightning strike'
+  cast 'lightning strike'
+  pause 600
+endif
+if buffexists 'Curse Weapon'and not buffexists 'Consecrate Weapon'
+  cast 'Consecrate Weapon'
+  pause 600
+endif
+if not buffexists 'Counter Attack' and mana > 8
+  cast 'Counter Attack'
+  pause 600
+endif
