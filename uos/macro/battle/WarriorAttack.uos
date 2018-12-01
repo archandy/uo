@@ -1,0 +1,23 @@
+if not timerexists 'counterAttack'
+	settimer 'counterAttack' 0
+endif
+if not timerexists 'consecrateWeapon'
+	settimer 'consecrateWeapon' 0
+endif
+if not timerexists 'curseWeapon'
+	settimer 'curseWeapon' 0
+endif
+if timer 'counterAttack' >= 7000
+	cast "counter attack"
+	settimer 'counterAttack' 0
+endif
+
+if timer 'curseWeapon' >= 5000
+	cast "curse weapon"
+	settimer 'curseWeapon' 0
+endif
+
+if timer 'consecrateWeapon' >= 8000
+	cast "Consecrate Weapon"
+	settimer 'consecrateWeapon' 0
+endif
