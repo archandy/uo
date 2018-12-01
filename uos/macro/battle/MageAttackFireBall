@@ -1,0 +1,82 @@
+// 2018 Halloween Town Boss Check by Fireball
+// 181030
+// v1.5, written by Love
+//
+shownames 'mobiles'
+for 1000
+  if @findtype '0x1f03' '1194'
+    waitforcontext 'self' 3 3000
+    waitfortarget 3000
+    target! 'found'
+    waitfortarget 3000
+    canceltarget
+    if findlayer 'self' 22
+      moveitem 'found' 'backpack'
+    endif
+    equipitem 'found' 22
+    pause 1000
+  endif
+  //
+  if poisoned 'self'
+    cast 'cure'
+    waitfortarget 1000
+    @target! 'self'
+  elseif hits 'self' < 90
+    cast 'heal'
+    waitfortarget 1000
+    @target! 'self'
+  endif
+  //
+  @canceltarget
+  @clearlist 'names'
+  @createlist 'names'
+  //pushlist 'names' 'A Pumpkin Lord'
+  pushlist 'names' 'First'
+  pushlist 'names' 'Second'
+  //pushlist 'names' 'The Gravedigger'
+  pushlist 'names' 'a bull'
+  //pushlist 'names' 'A Headless Horseman'
+  //
+  //pushlist 'names' 'Peinsluth'
+  //pushlist 'names' 'Araneam'
+  //pushlist 'names' 'Mr. Hyde'
+  //pushlist 'names' 'A Customed Orc Champion'
+  //pushlist 'names' 'Jack the Ripper'
+  //pushlist 'names' 'The Guardian Of The Asylum'
+  //
+  @getenemy 'murderer' 'gray'
+  for 0 to 'names'
+    headmsg 'names[]' '996'
+    if @name 'enemy' == names[]
+      while @inrange 'enemy' 12
+        headmsg '▼' 34 'enemy'
+        //
+        if poisoned 'self'
+          cast 'arch cure'
+          waitfortarget 2000
+          @target! 'self'
+        elseif hits 'self' < 90
+          cast 'heal'
+          waitfortarget 1000
+          @target! 'self'
+        else
+          cast 'fireball'
+          waitfortarget 2000
+          @target! 'enemy'
+        endif
+        //
+      endwhile
+    endif
+  endfor
+  //
+  //if not hidden 'self'
+  // if skill 'hiding' > 90
+  //    useskill 'hiding'
+  //    elseif mana > 90
+  //    cast 'invisibility' 'self'
+  //      pause 1000
+  //    endif
+  // endif
+  //
+  pause 1
+endfor
