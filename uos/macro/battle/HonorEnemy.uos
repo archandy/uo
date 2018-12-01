@@ -3,20 +3,4 @@ if @findobject 'enemy'
   virtue 'honor'
   autotargetobject! 'enemy'
   pause 1000
-  if criminal 'enemy'
-    msg 'All Guard Me'
-    attack! 'enemy'
-    target! 'enemy'
-    @clearusequeue
-    @cancelautotarget
-    stop
-  endif
-  if gray 'enemy'
-    msg 'All Guard Me'
-    attack! 'enemy'
-    target! 'enemy'
-    @clearusequeue
-    @cancelautotarget
-    stop
-  endif
 endif
