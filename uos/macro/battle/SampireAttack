@@ -1,3 +1,7 @@
+getenemy 'criminal' 'enemy' 'murderer' 'grey' 'closest'
+headmsg 'enemy' 'found'
+while @inrange 'enemy' 3
+headmsg 'enemy' 'attack'
 // use curse weapon
 if not buffexists 'Curse Weapon' and mana > 6
   cast 'Curse Weapon'
@@ -28,5 +32,5 @@ endif
 //  cast 'Counter Attack'
 //  pause 600
 //endif
-getenemy 'criminal' 'enemy' 'murderer' 'grey' 'closest'
 attack 'enemy'
+endwhile
