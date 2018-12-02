@@ -1,0 +1,138 @@
+1001: Dismount (cliloc1=1075635,cliloc2=1075636)
+1002: Disarm (cliloc1=1075637,cliloc2=1075638)
+1005: Nightsight (cliloc1=1075643,cliloc2=1075644)
+1006: Death Strike 
+1007: Evil Omen 
+1008: unknown? (GumpID 0x7556)
+1009: Regeneration (cliloc1=1044106,cliloc2=1075106)
+1010: Divine Fury 
+1011: Enemy Of One 
+1012: Stealth (cliloc1=1044107,cliloc2=1075655)
+1013: Active Meditation (cliloc1=1044106,cliloc2=1075106)
+1014: Blood Oath caster 
+1015: Blood Oath curse 
+1016: Corpse Skin 
+1017: Mindrot 
+1018: Pain Spike 
+1019: Strangle 
+1020: Gift of Renewal 
+1021: Attune Weapon 
+1022: Thunderstorm 
+1023: Essence of Wind 
+1024: Ethereal Voyage 
+1025: Gift Of Life 
+1026: Arcane Empowerment 
+1027: Mortal Strike 
+1028: Reactive Armor (cliloc1=1075812,cliloc2=1075813)
+1029: Protection (cliloc1=1075814,cliloc2=1075815)
+1030: Arch Protection (cliloc1=1075816,cliloc2=1075816)
+1031: Magic Reflection (cliloc1=1075817,cliloc2=1075818)
+1032: Incognito (cliloc1=1075819,cliloc2=1075820)
+1033: Disguised 
+1034: Animal Form 
+1035: Polymorph (cliloc1=1075824,cliloc2=1075820)
+1036: Invisibility (cliloc1=1075825,cliloc2=1075826)
+1037: Paralyze (cliloc1=1075827,cliloc2=1075828)
+1038: Poison (cliloc1=0x0F8627,	cliloc2=0x1069B1)
+1039: Bleed (cliloc1=0x106a75,cliloc2=0x106a76)
+1040: Clumsy (cliloc1=0x106a77,cliloc2=0x106a78)
+1041: Feeble Mind (cliloc1=0x106a79,cliloc2=0x106a7a)
+1042: Weaken (cliloc1=1075837,cliloc2=1075838)
+1043: Curse (cliloc1=1075835,cliloc2=1075836)
+1044: Mass Curse (cliloc1=0x106a7f,cliloc2=0x106a80)
+1045: Agility (cliloc1=0x106a81,cliloc2=0x106a82)
+1046: Cunning (cliloc1=0x106a83,cliloc2=0x106a84)
+1047: Strength (cliloc1=0x106a85,cliloc2=0x106a86)
+1048: Bless (cliloc1=0x106a87,cliloc2=0x106a88)
+Packets
+Show All
+Sort By ID
+[-]
+Both
+[0x0C] Edit Tile Data (God Client)
+[0x15] Follow
+[0x22] Character Move ACK/ Resync Request
+[0x2C] Resurrection Menu
+[0x39] Remove (Group)
+[0x3A] Send Skills
+[0x56] Map Packet (cartography/treasure)
+[0x66] Books (Pages)
+[0x6C] Target Cursor Commands
+[0x6F] Secure Trading
+[0x71] Bulletin Board Messages
+[0x72] Request War Mode
+[0x73] Ping Message
+[0x93] Book Header ( Old )
+[0x95] Dye Window
+[0x98] All Names (3D Client Only)
+[0x99] Give Boat/House Placement View
+[0x9A] Console Entry Prompt
+[0xB8] Request/Char Profile
+[0xBB] Ultima Messenger
+[0xBD] Client Version
+[0xBE] Assist Version
+[0xBF] General Information Packet
+[0xC2] Unicode TextEntry
+[0xC8] Client View Range
+[0xC9] Get Area Server Ping (God Client)
+[0xCA] Get User Server Ping (God Client)
+[0xD0] Configuration File
+[0xD1] Logout Status
+[0xD4] Book Header ( New )
+[0xD6] Mega Cliloc
+[0xD7] Generic AOS Commands
+[0xF1] Freeshard List
+[-]
+Client
+[0x00] Create Character
+[0x01] Disconnect Notification
+[0x02] Move Request
+[0x03] Talk Request
+[0x04] Request God Mode (God Client)
+[0x05] Request Attack
+[0x06] Double Click
+[0x07] Pick Up Item
+[0x08] Drop Item
+[0x09] Single Click
+[0x0A] Edit (God Client)
+[0x12] Request Skill etc use
+[0x13] Drop->Wear Item
+[0x14] Send Elevation (God Client)
+[0x1E] Control Animation
+[0x34] Get Player Status
+[0x35] Add Resource (God Client)
+[0x37] Move Item (God Client)
+[0x38] Pathfinding in Client
+[0x3B] Buy Item(s)
+[0x45] Version OK
+[0x46] New Artwork
+[0x47] New Terrain
+[0x48] New Animation
+[0x49] New Hues
+[0x4A] Delete Art
+[0x4B] Check Client Version
+[0x4C] Script Names
+[0x4D] Edit Script File
+[0x50] Board Header
+[0x51] Board Message
+[0x52] Board Post Message
+[0x57] Update Regions
+[0x58] Add Region
+[0x59] New Context FX
+[0x5A] Update Context FX
+[0x5C] Restart Version
+[0x5D] Login Character
+[0x5E] Server Listing
+[0x5F] Server List Add Entry
+[0x60] Server List Remove Entry
+[0x61] Remove Static Object
+[0x62] Move Static Object
+[0x63] Load Area
+[0x64] Load Area Request
+[0x69] Change Text/Emote Colors
+[0x75] Rename Character
+[0x7D] Response To Dialog Box
+[0x80] Login Request
+[0x83] Delete Character
+[0x8D] Character Creation ( KR + SA 3D clients only )
+[0x91] Game Server Login
