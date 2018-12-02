@@ -1,10 +1,19 @@
 getenemy 'criminal' 'enemy' 'murderer' 'grey' 'closest'
 headmsg 'enemy' 'found'
-while @inrange 'enemy' 3
+getenemy 'found'
+// honor enemy
+if inrange 'found' 4 and hits 'found' == maxhits 'found'
+virtue 'honor'
+@headmsg 'HONORED' 34 'enemy'
+waitfortarget 500
+target! 'found'
+endif
+// attack start when enemy in range 2
+while @inrange 'enemy' 2
 headmsg 'enemy' 'attack'
 // use curse weapon
-if not buffexists 'Curse Weapon' and mana > 6
-  cast 'Curse Weapon'
+if not buffexists 1088
+  cast 'curse weapon'
   pause 600
 endif
 // use Consecrate Weapon
