@@ -1,6 +1,11 @@
+cancelautotarget
+@unsetalias 'enemy'
 @getenemy 'murderer' 'criminal' 'closest'
-if @findobject 'enemy'
+if @inrange 'enemy' 12  
   virtue 'honor'
   autotargetobject! 'enemy'
-  pause 1000
+  headmsg 'Honored' 34 'enemy'
+  pause 600
+else
+  headmsg 'Too Far' 34
 endif
