@@ -1,0 +1,74 @@
+@unsetalias 'enemy'
+
+// get emeny
+getenemy 'criminal' 'enemy' 'murderer' 'grey' 'closest'
+headmsg '▽' 74 'enemy'
+
+// Enemy of One
+while not buffexists 1011
+  cast 'enemy of one'
+	pause 600
+endif
+
+// Curse Weapon
+if not buffexists 1088
+  cast 'curse weapon'
+  pause 600
+endif
+
+// honor enemy
+if inrange 'enemy' 12 and diffhits 'enemy' == 0
+@headmsg 'START HONORING' 44 'enemy'
+  while not buffexists 1008
+    virtue 'honor'
+    waitfortarget 500
+    target! 'enemy'
+  endwhile
+  // check if honored
+  if buffexists 1008
+    @headmsg '★★ HONORED ★★' 74 'enemy'
+  endif
+endif
+
+// Attack Start
+headmsg 'ATTACKING' 34 'self'
+attack 'enemy'
+
+// attack start when enemy in range 5
+while @inrange 'enemy' 5
+  headmsg '▼' 34 'enemy'
+  // use primary skill
+  if not timerexists 'primaryskill'
+    createtimer 'primaryskill'
+  endif
+  // depends on your AS(attack speed) change 1500 -> your AS
+  if timer 'primaryskill' > 1500
+    @setability 'primary' on
+    settimer 'primaryskill' 0
+  endif
+  // use Consecrate Weapon
+  if not buffexists 1082 and mana > 12
+    cast 'Consecrate Weapon'
+    pause 600
+  endif
+  // cast Confidence
+  if hits <= 40
+  	cast 'confidence'
+  	pause 600
+  	endif
+  // cast divine fury when stam is below 80
+  if stam < 80
+    cast 'divine fury'
+    pause 600
+  else
+  // remove blood oath (eat enchanted apple or cast remove curse)
+  if buffexists 1015
+  	if @findtype 0x2fd8 'any' 'backpack'
+   		usetype! 0x2fd8
+			pause 600
+   	else
+    	cast 'remove curse'
+    	pause 600
+  endif
+  pause 1
+endwhile
