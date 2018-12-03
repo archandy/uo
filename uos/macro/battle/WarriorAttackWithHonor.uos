@@ -7,9 +7,6 @@ if @findobject 'enemy'
 endif
 canceltarget
 pause 1500
-if stam <= 80
-  cast 'divine fury'
-endif
 getenemy 'enemy' 'grey'  'closest' 'murderer'
 while @inrange 'enemy' 3
 attack 'enemy'
@@ -19,6 +16,9 @@ endif
 pause 200
 if hits <= 40
   cast 'confidence'
+endif
+if stam <= 90
+  cast 'divine fury'
 endif
 if not timerexists 'Consecrate Weapon'
   settimer 'Consecrate Weapon' 0
