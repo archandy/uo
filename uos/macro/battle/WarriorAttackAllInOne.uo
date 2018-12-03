@@ -1,0 +1,56 @@
+// get emeny
+getenemy 'criminal' 'enemy' 'murderer' 'grey' 'closest'
+headmsg '▼' 74 'enemy'
+
+// Enemy of One
+while not buffexists 1011
+  cast 'enemy of one'
+endif
+
+// Curse Weapon
+if not buffexists 1088
+  cast 'curse weapon'
+  pause 600
+endif
+
+// honor enemy
+if inrange 'enemy' 12 and diffhits 'enemy' == 0
+@headmsg 'START HONORING' 44 'enemy'
+  while not buffexists 1008
+    virtue 'honor'
+    waitfortarget 500
+    target! 'enemy'
+  endwhile
+  // check if honored
+  if buffexists 1008
+    @headmsg 'HONORED' 74 'enemy'
+  endif
+endif
+
+// Attack Start
+headmsg 'ATTACK' 34 'enemy'
+attack 'enemy'
+
+// attack start when enemy in range 3
+while @inrange 'enemy' 3
+  headmsg '▼' 34 'enemy'
+  // use lightning strike
+  if not buffexists 1096 and mana > 6
+    cast 'lightning strike'
+    pause 600
+  endif
+  // use Consecrate Weapon
+  if not buffexists 1082 and mana > 12
+    cast 'Consecrate Weapon'
+    pause 600
+  endif
+  // cast divine fury when stam is below 80
+  if stam < 80
+    cast 'divine fury'
+  else  
+  // remove blood oath 
+  if buffexists 1015
+    cast 'remove curse'
+    pause 600
+  endif
+endwhile
