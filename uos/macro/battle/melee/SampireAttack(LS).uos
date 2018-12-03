@@ -7,6 +7,7 @@ headmsg '▽' 74 'enemy'
 // Enemy of One
 while not buffexists 1011
   cast 'enemy of one'
+	pause 600
 endif
 
 // Curse Weapon
@@ -30,7 +31,7 @@ if inrange 'enemy' 12 and diffhits 'enemy' == 0
 endif
 
 // Attack Start
-headmsg 'ATTACK' 34 'enemy'
+headmsg 'ATTACKING' 34 'self'
 attack 'enemy'
 
 // attack start when enemy in range 5
@@ -48,17 +49,21 @@ while @inrange 'enemy' 5
   endif
   // cast Confidence
   if hits <= 40
-  cast 'confidence'
-  pause 600
-  endif
+  	cast 'confidence'
+  	pause 600
+  	endif
   // cast divine fury when stam is below 80
   if stam < 80
     cast 'divine fury'
     pause 600
   else
-  // remove blood oath 
+  // remove blood oath (eat enchanted apple or cast remove curse)
   if buffexists 1015
-    cast 'remove curse'
-    pause 600
+  	if @findtype 0x2fd8 'any' 'backpack'
+   		usetype! 0x2fd8
+			pause 600
+   	else
+    	cast 'remove curse'
+    	pause 600
   endif
 endwhile
