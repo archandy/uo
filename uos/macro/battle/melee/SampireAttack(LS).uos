@@ -66,5 +66,5 @@ while @inrange 'enemy' 5
     	cast 'remove curse'
     	pause 600
   endif
-	pause 1
+pause 1
 endwhile
