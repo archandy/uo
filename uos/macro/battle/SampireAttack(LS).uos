@@ -1,6 +1,8 @@
+@unsetalias 'enemy'
+
 // get emeny
 getenemy 'criminal' 'enemy' 'murderer' 'grey' 'closest'
-headmsg '▼' 74 'enemy'
+headmsg '▽' 74 'enemy'
 
 // Enemy of One
 while not buffexists 1011
@@ -23,7 +25,7 @@ if inrange 'enemy' 12 and diffhits 'enemy' == 0
   endwhile
   // check if honored
   if buffexists 1008
-    @headmsg 'HONORED' 74 'enemy'
+    @headmsg '★★ HONORED ★★' 74 'enemy'
   endif
 endif
 
@@ -31,8 +33,8 @@ endif
 headmsg 'ATTACK' 34 'enemy'
 attack 'enemy'
 
-// attack start when enemy in range 3
-while @inrange 'enemy' 3
+// attack start when enemy in range 5
+while @inrange 'enemy' 5
   headmsg '▼' 34 'enemy'
   // use lightning strike
   if not buffexists 1096 and mana > 6
@@ -44,10 +46,16 @@ while @inrange 'enemy' 3
     cast 'Consecrate Weapon'
     pause 600
   endif
+  // cast Confidence
+  if hits <= 40
+  cast 'confidence'
+  pause 600
+  endif
   // cast divine fury when stam is below 80
   if stam < 80
     cast 'divine fury'
-  else  
+    pause 600
+  else
   // remove blood oath 
   if buffexists 1015
     cast 'remove curse'
