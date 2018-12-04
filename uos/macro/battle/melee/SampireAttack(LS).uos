@@ -1,43 +1,44 @@
 @unsetalias 'enemy'
-
+warmode 'on'
 // get emeny
-getenemy 'criminal' 'enemy' 'murderer' 'grey' 'closest'
+getenemy 'criminal' 'enemy' 'murderer' 'gray' 'closest'
 headmsg '▽' 74 'enemy'
-
+headmsg '▽▽' 74 'enemy'
+headmsg '▽▽▽' 74 'enemy'
 // honor enemy
 if @inrange 'enemy' 12
-@headmsg 'START HONORING' 44 'self'
-    virtue 'honor'
-    waitfortarget 500
-    target! 'enemy'
-    @headmsg '★★ HONORED ★★' 74 'enemy'
+//@headmsg 'START HONORING' 44 'self'
+	virtue 'honor'
+	waitfortarget 500
+	target! 'enemy'
+	@headmsg '★★ HONORED ★★' 74 'enemy'
 endif
-
+// use lightning strike
+if not buffexists 1096 and mana > 6
+	cast 'lightning strike'
+	pause 600
+endif
 // Enemy of One
 while not buffexists 1011
   cast 'enemy of one'
 	pause 600
 endwhile
-
 // Curse Weapon
 if not buffexists 1088
   cast 'curse weapon'
-  pause 600
+  pause 1100
 endif
-
 // Attack Start
 headmsg 'ATTACKING' 34 'self'
-warmode on
 attack 'enemy'
-
 // attack start when enemy in range 5
 while @inrange 'enemy' 5
   headmsg '▼' 34 'enemy'
-  // use lightning strike
-  if not buffexists 1096 and mana > 6
-    cast 'lightning strike'
-    pause 600
-  endif
+	// Lightning Strike
+	if @injournal 'attack with lightning!' or @injournal 'failure message'
+		cast "Lightning Strike"
+		clearjournal
+	endif
   // use Consecrate Weapon
   if not buffexists 1082 and mana > 12
     cast 'Consecrate Weapon'
@@ -48,11 +49,21 @@ while @inrange 'enemy' 5
   	cast 'confidence'
   	pause 600
   	endif
-  // cast divine fury when stam is below 90
-  if stam < 90
+  // cast divine fury 
+	if not buffexists 1010
     cast 'divine fury'
     pause 600
   else
+	// cast Counter Attack
+	if not buffexists 1095
+		cast 'Counter Attack'
+		pause 600
+	endif
+  // Curse Weapon
+	if not buffexists 1088
+		cast 'curse weapon'
+		pause 1100
+	endif
   // remove blood oath (eat enchanted apple or cast remove curse)
   if buffexists 1015
   	if @findtype 0x2fd8 'any' 'backpack'
