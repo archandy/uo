@@ -33,7 +33,7 @@ for 0 in 'bedlamNamed'
         // Curse Weapon
         if not buffexists 1088
           cast 'curse weapon'
-          pause 600
+          pause 1100
         endif
         // Lightning Strike
         if @injournal 'attack with lightning!' or @injournal 'failure message'
@@ -48,6 +48,7 @@ for 0 in 'bedlamNamed'
         // Divine Fury
         if stam < 90
           cast 'divine fury'
+          pause 600
         endif
         // Lightning Strike
         if @injournal 'You attack with lightning precision!' or @injournal 'failure message'
@@ -62,7 +63,7 @@ for 0 in 'bedlamNamed'
           endif
         endif
           // cast Confidence
-        if hits <= 40
+        if hits <= 70
           cast 'confidence'
           pause 600
         endif
