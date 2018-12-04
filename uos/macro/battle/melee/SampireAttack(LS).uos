@@ -4,6 +4,15 @@
 getenemy 'criminal' 'enemy' 'murderer' 'grey' 'closest'
 headmsg '▽' 74 'enemy'
 
+// honor enemy
+if @inrange 'enemy' 12
+@headmsg 'START HONORING' 44 'self'
+    virtue 'honor'
+    waitfortarget 500
+    target! 'enemy'
+    @headmsg '★★ HONORED ★★' 74 'enemy'
+endif
+
 // Enemy of One
 while not buffexists 1011
   cast 'enemy of one'
@@ -16,22 +25,9 @@ if not buffexists 1088
   pause 600
 endif
 
-// honor enemy
-if inrange 'enemy' 12 and diffhits 'enemy' == 0
-@headmsg 'START HONORING' 44 'enemy'
-  while not buffexists 1008
-    virtue 'honor'
-    waitfortarget 500
-    target! 'enemy'
-  endwhile
-  // check if honored
-  if buffexists 1008
-    @headmsg '★★ HONORED ★★' 74 'enemy'
-  endif
-endif
-
 // Attack Start
 headmsg 'ATTACKING' 34 'self'
+warmode on
 attack 'enemy'
 
 // attack start when enemy in range 5
@@ -52,8 +48,8 @@ while @inrange 'enemy' 5
   	cast 'confidence'
   	pause 600
   	endif
-  // cast divine fury when stam is below 80
-  if stam < 80
+  // cast divine fury when stam is below 90
+  if stam < 90
     cast 'divine fury'
     pause 600
   else
