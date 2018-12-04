@@ -1,0 +1,89 @@
+
+warmode 'on'
+
+if not listexists 'bedlamNamed'
+  createlist 'bedlamNamed'
+  pushlist 'bedlamNamed' 'Master Jonath'
+  pushlist 'bedlamNamed' 'Master Theophilus'
+  pushlist 'bedlamNamed' 'Master Mikael'
+  pushlist 'bedlamNamed' 'Lady Jennifyr'
+  pushlist 'bedlamNamed' 'Lady Marai'
+  pushlist 'bedlamNamed' 'Red Death'
+  pushlist 'bedlamNamed' 'Sir Patrick'
+endif
+if not listexists 'bedlamMonsters'
+  createlist 'bedlamMonsters'
+  pushlist 'bedlamMonsters' xxxx //'Skeleton War'
+  pushlist 'bedlamMonsters' xxxx //'Skeleton Mage'
+  pushlist 'bedlamMonsters' xxxx //'Red Death'
+endif
+
+for 0 in 'bedlamNamed'
+  for 0 in 'bedlamMonsters'
+    while @findtype bedlamMonsters[] 'any' 0 0 12 and not dead bedlamMonsters[] 'any' 0 0 12
+      headmsg 'bedlamNamed[]' '996'
+      if @name 'found' == bedlamNamed[]
+        headmsg '▼' 34 'enemy'
+        if hits 'found' == maxhits 'found'
+          virtue 'honor'
+          waitfortarget 500
+          target! 'found'
+        endif
+        attack 'found'
+        // Curse Weapon
+        if not buffexists 1088
+          cast 'curse weapon'
+          pause 600
+        endif
+        // Lightning Strike
+        if @injournal 'attack with lightning!' or @injournal 'failure message'
+          cast "Lightning Strike"
+          clearjournal
+        endif
+        // Enemy of One
+        if not buffexists 1011
+          cast 'enemy of one'
+          pause 600
+        endif
+        // Divine Fury
+        if stam < 90
+          cast 'divine fury'
+        endif
+        // Lightning Strike
+        if @injournal 'You attack with lightning precision!' or @injournal 'failure message'
+          cast "Lightning Strike"
+          clearjournal
+        endif
+        // use Consecrate Weapon
+        if not buffexists 1082
+          if mana > 12
+            cast 'Consecrate Weapon'
+            pause 600
+          endif
+        endif
+          // cast Confidence
+        if hits <= 40
+          cast 'confidence'
+          pause 600
+        endif
+      endwhile
+    endif
+  endfor
+endfor
+
+
+//if poisoned 'self'
+//  cast "Cleanse by Fire"
+//  waitfortarget 5000
+//  target! 'self'
+//endif
+//if gold >= 55000
+//  if @findtype '0xe76' 'any' 'backpack'
+//    @setalias 'BagOfSending' 'found'
+//    if @findtype '0xeed' 'any' 'backpack'
+//      useobject 'BagOfSending'
+//      waitfortarget 500
+//      target 'found' 500
+//    endif
+//  endif
+//endif
