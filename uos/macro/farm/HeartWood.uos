@@ -1,0 +1,1503 @@
+@setalias 'FletcherDropoff' 0x41597f58
+@setalias 'beetle' 0xb2093
+@setalias 'FletcherRunebook' 0x421cf0f1
+@removelist 'woodhue'
+@removelist 'magechiv'
+@removelist 'magechiv2'
+@removelist 'bond'
+@createlist 'woodhue'
+@createlist 'magechiv'
+@createlist 'magechiv2'
+@createlist 'bond'
+//plain=0, oak=2010, ash=1191 | mage=5,11 chiv = 7,13 | bond = 10, unbond = 9
+@pushlist 'woodhue' 0
+@pushlist 'magechiv' 5
+@pushlist 'magechiv2' 11
+@pushlist 'bond' 10
+//1. Character needs Fletching, Carpentry and Tinkering, a Fletching Bonus talisman saves resources
+//2. FletcherDropoff container needs bolts, ingots, boards in it
+//3. FletcherRunebook needs 1st rune to be Dropoff location and 2nd rune near Heartwood entrance
+//4. Start in Heartwood with a beetle full of only boards. Have crafted tinker tools, 40 ingots, and 200 bolts in your pack or start at your Dropoff location to restock these items
+//5. The macro tries to feed your beetle meat every 2 hours. If you have magery it will create the food for you.
+//6. If multiple stacks of boards at your dropoff, script will begin encountering errors when one of the stacks drop below 1600, combine them before this happens
+@setalias 'Fletching Quest Giver' 0xb06a8
+@setalias 'Trash Barrel' 0x40053e83
+@setalias 'Carpentry Quest Giver' 0xb0692
+if not listexists 'Talismans'
+  @createlist 'Talismans'
+  @pushlist 'Talismans' 0x2f58
+  @pushlist 'Talismans' 0x2f59
+  @pushlist 'Talismans' 0x2f5a
+  @pushlist 'Talismans' 0x2f5b
+endif
+if not listexists 'Slayers'
+  @createlist 'Slayers'
+  @pushlist 'Slayers' 'Ice Slayer'
+  @pushlist 'Slayers' 'Flame Slayer'
+  @pushlist 'Slayers' 'Vermin Slayer'
+  @pushlist 'Slayers' 'Mage Slayer'
+  @pushlist 'Slayers' 'Bird Slayer'
+endif
+if not listexists 'Killers'
+  @createlist 'Killers'
+  @pushlist 'Killers' 'Yamandon Killer'
+  @pushlist 'Killers' 'Lich Killer'
+  @pushlist 'Killers' 'Lich Lord Killer'
+  @pushlist 'Killers' 'Dread Spider Killer'
+  @pushlist 'Killers' 'Giant Black Widow Killer'
+  @pushlist 'Killers' 'Eagle Killer'
+endif
+if not listexists 'Protection'
+  @createlist 'Protection'
+  //@pushlist 'Protection' 'Yamandon Protection'
+  //@pushlist 'Protection' 'Lich Protection'
+  //@pushlist 'Protection' 'Lich Lord Protection'
+  //@pushlist 'Protection' 'Dread Spider Protection'
+  //@pushlist 'Protection' 'Giant Black Widow Protection'
+  //@pushlist 'Protection' 'Silver Serpent Protection'
+  //@pushlist 'Protection' 'Eagle Protection'
+endif
+if not listexists 'Jewelry'
+  @createlist 'Jewelry'
+  @pushlist 'Jewelry' 0x108a
+  @pushlist 'Jewelry' 0x1f09
+  @pushlist 'Jewelry' 0x1086
+  @pushlist 'Jewelry' 0x1f06
+endif
+if not timerexists 'feedPet'
+  createtimer 'feedPet'
+endif
+if not timerexists 'Carpentry'
+  createtimer 'Carpentry'
+endif
+if not timerexists 'carptry'
+  createtimer 'carptry'
+endif
+if not timerexists 'toggletimeout'
+  createtimer 'toggletimeout'
+endif
+//stop if you lack skills
+if skill 'Carpentry' < 30 or skill 'Tinkering' < 45
+  sysmsg 'You need 36 Carpentry and 50+ tinkering to run this macro effectively.' 34
+  stop
+elseif skill 'Bowcraft' < 90
+  sysmsg 'You need at least 90 (preferrably 100) bowcrafting to run this macro. You will also want a Fletching bonus talisman' 34
+  stop
+endif
+//stop macro if you forgot to restock bolts or ingots or have no tinker tools
+if counttype 0x1bf2 0 'backpack' == 0 and not @inrange 'FletcherDropoff' 2
+  sysmsg 'Restock ingots before starting!' 33
+  stop
+endif
+if counttype 0x1bfb 0 'backpack' == 0 and counttype 0x1bfb 1258 'backpack' == 0
+  if not @inrange 'FletcherDropoff' 2
+    sysmsg 'Restock bolts before starting!' 33
+    stop
+  endif
+endif
+if @counttype 0x1eb8 0 'backpack' == 0
+  sysmsg 'Get crafted tinker tools before starting!' 33
+  stop
+endif
+// make tinker tools
+if @counttype 0x1eb8 0 'backpack' < 2 and not @inrange 'FletcherDropoff' 2
+  pause 550
+  while @counttype 0x1eb8 0 'backpack' < 2
+    usetype! 0x1eb8
+    waitforgump 0x38920abd 2000
+    @replygump 0x38920abd 8
+    waitforgump 0x38920abd 2000
+    @replygump 0x38920abd 23
+  endwhile
+endif
+//make saws
+if @counttype 0x1034 0 'backpack' < 3 and not @inrange 'FletcherDropoff' 2
+  while @counttype 0x1034 0 'backpack' < 3
+    pause 550
+    usetype! 0x1eb8
+    waitforgump 0x38920abd 2000
+    @replygump 0x38920abd 8
+    waitforgump 0x38920abd 2000
+    @replygump 0x38920abd 51
+    waitforgump 0x38920abd 2000
+  endwhile
+endif
+// make plain fletcher kits
+if @counttype 0x1022 0 'backpack' < 3 and not @inrange 'FletcherDropoff' 2
+  while @counttype 0x1022 0 'backpack' < 3
+    pause 550
+    usetype! 0x1eb8
+    waitforgump 0x38920abd 2000
+    @replygump 0x38920abd 8
+    waitforgump 0x38920abd 2000
+    @replygump 0x38920abd 142
+  endwhile
+endif
+for 0 to 'magechiv'
+  for 0 to 'magechiv2'
+    for 0 to 'bond'
+      for 0 to 'woodhue'
+        if @findtype 0xe75 'any' 'backpack' and not @inrange 'FletcherDropoff' 2
+          if @injournal 'world will save'
+            while not @injournal 'world save complete'
+            endwhile
+            @clearjournal
+          endif
+          // Handle reward bags
+          while @findtype 0xe75 'any' 'backpack'
+            pause 550
+            @setalias 'trash' 'found'
+            @useobject! 'trash'
+            pause 550
+            // fletcher Runics
+            while @findtype 0x1022 'any' 'trash'
+              @moveitem! 'found' 'backpack'
+              pause 1000
+              if color 'found' == 2010
+                //uncomment this next line to throw Oak kits in the trash
+                @moveitem! 'found' 'Trash Barrel'
+                pause 550
+              elseif color 'found' == 1191
+                //uncomment this next line to throw Ash kits in the trash
+                @moveitem! 'found' 'Trash Barrel'
+                pause 550
+              elseif color 'found' == 1192
+                sysmsg 'Nice, a Yew kit' 33
+              elseif color 'found' == 1193
+                sysmsg 'Woohoo! Heartwood!' 63
+              endif
+              ignoreobject 'found'
+            endwhile
+            //runic saws
+            while @findtype 0x1028 'any' 'trash'
+              @moveitem! 'found' 'backpack'
+              pause 1000
+              if color 'found' == 2010
+                //uncomment this next line to throw Oak saws in the trash
+                @moveitem! 'found' 'Trash Barrel'
+                pause 550
+              elseif color 'found' == 1191
+                //uncomment this next line to throw Ash saws in the trash
+                //@moveitem! 'found' 'Trash Barrel'
+                pause 550
+              elseif color 'found' == 1192
+                sysmsg 'Nice, a Yew saw' 33
+              elseif color 'found' == 1193
+                for 10
+                  sysmsg 'Woohoo! Heartwood!' 63
+                endfor
+              endif
+              ignoreobject 'found'
+            endwhile
+            // Talismans
+            for 0 to 'Talismans'
+              while @findtype Talismans[] 0 'trash'
+                waitforproperties 'found' 15000
+                //crafting bonus and exceptional bonus talismans
+                if @property 'Tinkering Exceptional Bonus' 'found' >= 23 and @property 'Tinkering Bonus' 'found' >= 23
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                elseif @property 'Alchemy Bonus' 'found' >= 30 or @property 'Fletching Bonus' 'found' >= 30
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                elseif @property 'Fletching Exceptional Bonus' 'found' >= 23 and @property 'Fletching Bonus' 'found' >= 23
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                elseif @property 'Tailoring Exceptional Bonus' 'found' >= 23 and @property 'Tailoring Bonus' 'found' >= 23
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                elseif @property 'Carpentry Exceptional Bonus' 'found' >= 23 and @property 'Carpentry Bonus' 'found' >= 23
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                elseif @property 'Inscription Bonus' 'found' >= 30 or @property 'Cooking Bonus' 'found' >= 30
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                elseif @property 'Blacksmithing Exceptional Bonus' 'found' >= 23 and @property 'Blacksmithing Bonus' 'found' >= 23
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                //get slayers
+                for 0 to 'Slayers'
+                  if @property Slayers[] 'found'
+                    @moveitem! 'found' 'backpack'
+                    pause 1000
+                    break
+                  endif
+                endfor
+                //get killers
+                for 0 to 'Killers'
+                  if @property Killers[] 'found' >= 98
+                    @moveitem! 'found' 'backpack'
+                    pause 1000
+                    break
+                  endif
+                endfor
+                //get protections
+                for 0 to 'Protection'
+                  if @property Protection[] 'found' >= 59
+                    @moveitem! 'found' 'backpack'
+                    pause 1000
+                    break
+                  endif
+                endfor
+                ignoreobject 'found'
+              endwhile
+            endfor
+            //Jewels
+            for 0 to 'Jewelry'
+              while @findtype Jewelry[] 0 'trash'
+                waitforproperties 'found' 15000
+                //EP DI jewels
+                if @property 'Enhance Potions' 'found' >= 15 and @property 'Damage Increase' 'found' >= 15
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Faster Cast Recovery' 'found' == 3
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                //save 1/2 and 1/1
+                if @property 'Faster Cast Recovery' 'found' > 0 and @property 'Faster Casting' 'found'
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                //hci and dci jewels, other usable hci dci jewels will be captured by above
+                if @property 'Defense chance increase' 'found' >= 10 and @property 'Hit chance increase' 'found' >= 5
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Hit chance increase' 'found' >= 10 and @property 'Defense chance increase' 'found' >= 5
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                ignoreobject 'found'
+              endwhile
+            endfor
+            //clear the ignore list so it doesn't skip items at dropoff
+            clearignorelist
+            if @inrange 'Trash Barrel' 2
+              @moveitem! 'trash' 'Trash Barrel'
+              pause 550
+            else
+              @unsetalias 'dump'
+              while @findtype 0xe75 'any' 'ground' 1 2 and not @findalias 'dump'
+                waitforproperties 'found' 5000
+                if @property 'items' 'found' < 115
+                  @setalias 'dump' 'found'
+                else
+                  @ignoreobject 'found'
+                endif
+              endwhile
+              if @findalias 'dump'
+                @moveitem 'trash' 'dump'
+                pause 550
+              else
+                moveitemoffset 'trash' 'ground' [(0 1 0)]
+                pause 550
+              endif
+            endwhile
+          endif
+        elseif @inrange 'FletcherDropoff' 2
+          //open containers
+          useobject 'self'
+          pause 1000
+          useobject 'FletcherDropoff'
+          pause 1000
+          waitforcontext 'beetle' bond[] 15000
+          pause 1000
+          //unload jewels
+          while counttype 0x108a 'any' 'backpack' > 0
+            movetype 0x108a 'backpack' 'FletcherDropoff'
+            pause 500
+          endwhile
+          while counttype 0x1f09 'any' 'backpack' > 0
+            movetype 0x1f09 'backpack' 'FletcherDropoff'
+            pause 500
+          endwhile
+          while counttype 0x1f06 'any' 'backpack' > 0
+            movetype 0x1f06 'backpack' 'FletcherDropoff'
+            pause 500
+          endwhile
+          while counttype 0x1086 'any' 'backpack' > 0
+            movetype 0x1086 'backpack' 'FletcherDropoff'
+            pause 500
+          endwhile
+          //unload saws
+          while counttype 0x1028 1191 'backpack' > 0
+            movetype 0x1028 'backpack' 'FletcherDropoff' (0 0 0) 1191 1
+            pause 500
+          endwhile
+          while counttype 0x1028 2010 'backpack' > 0
+            movetype 0x1028 'backpack' 'FletcherDropoff' (0 0 0) 2010 1
+            pause 500
+          endwhile
+          while counttype 0x1028 1192 'backpack' > 0
+            movetype 0x1028 'backpack' 'FletcherDropoff' (0 0 0) 1192 1
+            pause 500
+          endwhile
+          while counttype 0x1028 1193 'backpack' > 0
+            movetype 0x1028 'backpack' 'FletcherDropoff' (0 0 0) 1193 1
+            pause 500
+          endwhile
+          //unload talismans
+          while counttype 0x2f58 0 'backpack' > 0
+            movetype 0x2f58 'backpack' 'FletcherDropoff' (0 0 0) 0 1
+            pause 500
+          endwhile
+          while counttype 0x2f59 0 'backpack' > 0
+            movetype 0x2f59 'backpack' 'FletcherDropoff' (0 0 0) 0 1
+            pause 500
+          endwhile
+          while counttype 0x2f5a 0 'backpack' > 0
+            movetype 0x2f5a 'backpack' 'FletcherDropoff' (0 0 0) 0 1
+            pause 500
+          endwhile
+          while counttype 0x2f5b 0 'backpack' > 0
+            movetype 0x2f5b 'backpack' 'FletcherDropoff' (0 0 0) 0 1
+            pause 500
+          endwhile
+          //unload kits
+          while counttype 0x1022 1191 'backpack' > 0
+            movetype 0x1022 'backpack' 'FletcherDropoff' (0 0 0) 1191 1
+            pause 500
+          endwhile
+          while counttype 0x1022 2010 'backpack' > 0
+            movetype 0x1022 'backpack' 'FletcherDropoff' (0 0 0) 2010 1
+            pause 500
+          endwhile
+          while counttype 0x1022 1192 'backpack' > 0
+            movetype 0x1022 'backpack' 'FletcherDropoff' (0 0 0) 1192 1
+            pause 500
+          endwhile
+          while counttype 0x1022 1193 'backpack' > 0
+            movetype 0x1022 'backpack' 'FletcherDropoff' (0 0 0) 1193 1
+            pause 500
+          endwhile
+          //get more bolts
+          if counttype 0x1bfb 0 'backpack' < 130
+            if counttype 0x1bfb 0 'FletcherDropoff' < 200
+              sysmsg 'Out of Bolts!' 33
+              useobject 'beetle'
+              stop
+            endif
+            movetype 0x1bfb 'FletcherDropoff' 'backpack' (0 0 0) 0 200
+            pause 1000
+          endif
+          // get ingots if low
+          if counttype 0x1bf2 0 'backpack' < 20
+            if counttype 0x1bf2 0 'FletcherDropoff' < 40
+              sysmsg 'Out of Ingots!' 33
+              useobject 'beetle'
+              stop
+            endif
+            movetype 0x1bf2 'FletcherDropoff' 'backpack' (0 0 0) 0 40
+            pause 1000
+          endif
+          //get boards on beetle and self
+          //first make sure beetle is empty, sometimes UOS won't pull 200 boards and you end up with odd number left behind
+          if counttype 0x1bd7 'any' 'beetle' > 0
+            while counttype 0x1bd7 'any' 'beetle' > 1599
+              movetype 0x1bd7 'beetle' 'FletcherDropoff' [(0 0 0)] 'any' 1600
+              pause 500
+            endwhile
+            while counttype 0x1bd7 'any' 'beetle' > 499
+              movetype 0x1bd7 'beetle' 'FletcherDropoff' [(0 0 0)] 'any' 500
+              pause 500
+            endwhile
+            while counttype 0x1bd7 'any' 'beetle' > 99
+              movetype 0x1bd7 'beetle' 'FletcherDropoff' [(0 0 0)] 'any' 100
+              pause 500
+            endwhile
+            while counttype 0x1bd7 'any' 'beetle' > 24
+              movetype 0x1bd7 'beetle' 'FletcherDropoff' [(0 0 0)] 'any' 25
+              pause 500
+            endwhile
+            while counttype 0x1bd7 'any' 'beetle' > 4
+              movetype 0x1bd7 'beetle' 'FletcherDropoff' [(0 0 0)] 'any' 5
+              pause 500
+            endwhile
+            while counttype 0x1bd7 'any' 'beetle' > 0
+              movetype 0x1bd7 'beetle' 'FletcherDropoff' [(0 0 0)] 'any' 1
+              pause 500
+            endwhile
+          endif
+          //stop if FletcherDropoff is out of boards
+          if counttype 0x1bd7 woodhue[] 'FletcherDropoff' < 1900
+            sysmsg 'Out of Boards!' 33
+            useobject 'beetle'
+            //@playmacro 'Lumberjacking'
+            while counttype 0x1bd7 woodhue[] 'FletcherDropoff' < 1900
+              pause 20000
+            endwhile
+          endif
+          //fill beetle with boards
+          if mounted 'self'
+            pause 550
+            useobject 'self'
+            pause 1000
+            waitforcontext 'beetle' bond[] 15000
+          endif
+          movetype 0x1bd7 'FletcherDropoff' 'beetle' (0 0 0) woodhue[] 1600
+          pause 1000
+          //move boards to your pack based on how low your pack is
+          //max weight minus 350
+          if weight < 175
+            movetype 0x1bd7 'FletcherDropoff' 'backpack' (0 0 0) woodhue[] 350
+            pause 1000
+            //max weight minus 300
+          elseif weight < 225
+            movetype 0x1bd7 'FletcherDropoff' 'backpack' (0 0 0) woodhue[] 300
+            pause 1000
+            //max weight minus 250
+          elseif weight < 275
+            movetype 0x1bd7 'FletcherDropoff' 'backpack' (0 0 0) woodhue[] 250
+            pause 1000
+            //max weight minus 200
+          elseif weight < 325
+            movetype 0x1bd7 'FletcherDropoff' 'backpack' (0 0 0) woodhue[] 200
+            pause 1000
+            //max weight minus 150
+          elseif weight < 375
+            movetype 0x1bd7 'FletcherDropoff' 'backpack' (0 0 0) woodhue[] 150
+            pause 1000
+            //max weight minus 100
+          elseif weight < 425
+            movetype 0x1bd7 'FletcherDropoff' 'backpack' (0 0 0) woodhue[] 100
+            pause 1000
+          elseif counttype 0x1bd7 woodhue[] 'backpack' < 1
+            movetype 0x1bd7 'FletcherDropoff' 'backpack' (0 0 0) woodhue[] 1
+            pause 1000
+          endif
+          //set fletching kits and saws to correct wood type
+          if @findtype 0x1bd7 0 'backpack'
+            pause 550
+            usetype! 0x1022
+            waitforgump 0x38920abd 1000
+            @replygump 0x38920abd 7
+            waitforgump 0x38920abd 1000
+            @replygump 0x38920abd 6
+            waitforgump 0x38920abd 1000
+            pause 550
+            usetype! 0x1034
+            waitforgump 0x38920abd 1000
+            @replygump 0x38920abd 7
+            waitforgump 0x38920abd 1000
+            @replygump 0x38920abd 6
+            waitforgump 0x38920abd 1000
+            pause 550
+            //warn if other color boards, bows, stools in place
+            if @findtype 0x1bd7 2010 'backpack' or @findtype 0x1bd7 1191 'backpack'
+              sysmsg 'You have two types of boards in your pack. Fix before starting macro.' 34
+              stop
+            endif
+            if @findtype 0x13b2 2010 'backpack' or @findtype 0x13b2 1191 'backpack'
+              sysmsg 'Delete the different hued bows from the wood type you are trying to use before starting macro.' 34
+              stop
+            endif
+            if @findtype 0xf50 2010 'backpack' or @findtype 0xf50 1191 'backpack'
+              sysmsg 'Delete the different hued crossbows from the wood type you are trying to use before starting macro.' 34
+              stop
+            endif
+            if @findtype 0x13fd 2010 'backpack' or @findtype 0x13fd 1191 'backpack'
+              sysmsg 'Delete the different hued heavy crossbows from the wood type you are trying to use before starting macro.' 34
+              stop
+            endif
+            if @findtype 0x26c3 2010 'backpack' or @findtype 0x26c3 1191 'backpack'
+              sysmsg 'Delete the different hued repeating crossbows from the wood type you are trying to use before starting macro.' 34
+              stop
+            endif
+          elseif @findtype 0x1bd7 2010 'backpack'
+            if skill 'Carpentry' < 65
+              sysmsg 'You need 65 Carpentry to craft with Oak' 33
+              stop
+            else
+              pause 550
+              usetype! 0x1022
+              waitforgump 0x38920abd 1000
+              @replygump 0x38920abd 7
+              waitforgump 0x38920abd 1000
+              @replygump 0x38920abd 13
+              waitforgump 0x38920abd 1000
+              pause 550
+              usetype! 0x1034
+              waitforgump 0x38920abd 1000
+              @replygump 0x38920abd 7
+              waitforgump 0x38920abd 1000
+              @replygump 0x38920abd 13
+              waitforgump 0x38920abd 1000
+              pause 550
+              //warn if other color boards, bows, stools in place
+              if @findtype 0x1bd7 0 'backpack' or @findtype 0x1bd7 1191 'backpack'
+                sysmsg 'You have two types of boards in your pack. Fix before starting macro.' 34
+                stop
+              endif
+              if @findtype 0x13b2 0 'backpack' or @findtype 0x13b2 1191 'backpack'
+                sysmsg 'Delete the different hued bows from the wood type you are trying to use before starting macro.' 34
+                stop
+              endif
+              if @findtype 0xf50 0 'backpack' or @findtype 0xf50 1191 'backpack'
+                sysmsg 'Delete the different hued crossbows from the wood type you are trying to use before starting macro.' 34
+                stop
+              endif
+              if @findtype 0x13fd 0 'backpack' or @findtype 0x13fd 1191 'backpack'
+                sysmsg 'Delete the different hued heavy crossbows from the wood type you are trying to use before starting macro.' 34
+                stop
+              endif
+              if @findtype 0x26c3 0 'backpack' or @findtype 0x26c3 1191 'backpack'
+                sysmsg 'Delete the different hued repeating crossbows from the wood type you are trying to use before starting macro.' 34
+                stop
+              endif
+            endif
+          elseif @findtype 0x1bd7 1191 'backpack'
+            if skill 'Carpentry' < 80
+              sysmsg 'You need 80 Carpentry to craft with Ash' 33
+              stop
+            else
+              pause 550
+              usetype! 0x1022
+              waitforgump 0x38920abd 2000
+              @replygump 0x38920abd 7
+              waitforgump 0x38920abd 2000
+              @replygump 0x38920abd 20
+              waitforgump 0x38920abd 2000
+              pause 550
+              usetype! 0x1034
+              waitforgump 0x38920abd 2000
+              @replygump 0x38920abd 7
+              waitforgump 0x38920abd 2000
+              @replygump 0x38920abd 20
+              waitforgump 0x38920abd 2000
+              pause 550
+              //warn if other color boards, bows, stools in place
+              if @findtype 0x1bd7 2010 'backpack' or @findtype 0x1bd7 0 'backpack'
+                sysmsg 'You have two types of boards in your pack. Fix before starting macro.' 34
+                stop
+              endif
+              if @findtype 0x13b2 2010 'backpack' or @findtype 0x13b2 0 'backpack'
+                sysmsg 'Delete the different hued bows from the wood type you are trying to use before starting macro.' 34
+                stop
+              endif
+              if @findtype 0xf50 2010 'backpack' or @findtype 0xf50 0 'backpack'
+                sysmsg 'Delete the different hued crossbows from the wood type you are trying to use before starting macro.' 34
+                stop
+              endif
+              if @findtype 0x13fd 2010 'backpack' or @findtype 0x13fd 0 'backpack'
+                sysmsg 'Delete the different hued heavy crossbows from the wood type you are trying to use before starting macro.' 34
+                stop
+              endif
+              if @findtype 0x26c3 2010 'backpack' or @findtype 0x26c3 0 'backpack'
+                sysmsg 'Delete the different hued repeating crossbows from the wood type you are trying to use before starting macro.' 34
+                stop
+              endif
+            endif
+          endif
+          //mount beetle and recall back to heartwood
+          if @injournal 'world will save'
+            while not @injournal 'world save complete'
+            endwhile
+            @clearjournal
+          endif
+          useobject 'beetle'
+          pause 2000
+          @unsetalias 'restockyes'
+          useobject 'FletcherRunebook'
+          pause 2000
+          waitforgump 0x554b87f3 15000
+          @replygump 0x554b87f3 magechiv2[]
+          pause 2000
+          //if the rune is blocked, pause 2 min to give time for NPCs to move, this prevents the character from running across the world from your dropoff
+          if @injournal 'blocked' 'system'
+            sysmsg 'Rune blocked, trying again in 2 minutes' 33
+            pause 120000
+            @clearjournal
+            useobject 'FletcherRunebook'
+            pause 2000
+            waitforgump 0x554b87f3 15000
+            @replygump 0x554b87f3 magechiv2[]
+            pause 2000
+            //if it's still blocked, stop macro
+            if @injournal 'blocked' 'system'
+              sysmsg 'Rune still blocked, stopping macro' 33
+              @clearjournal
+              stop
+            endif
+          endif
+          //navigate to heartwood entrance
+          while y != 992 and y > 400
+            for 2
+              if y > 992
+                walk 'north'
+              endif
+              pause 250
+              if y < 992
+                walk 'south'
+              endif
+              pause 250
+            endfor
+          endwhile
+          if x > 535 and x < 1000
+            while x > 535 and x < 1000
+              run 'west'
+              pause 100
+            endwhile
+          endif
+          if x < 537
+            while x < 537
+              run 'east'
+              pause 100
+            endwhile
+          endif
+          //navigate through heartwood to quest area
+          while y < 372
+            run 'southeast'
+            //crafting while running southeast
+            if @findalias 'bowquesting' and not @findalias 'bowsdone'
+              if @gumpexists 0x38920abd and not @ingump 0x38920abd 'Faerie Fire'
+                pause 550
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+                @replygump 0x38920abd 15
+                waitforgump 0x38920abd 2000
+              endif
+            endif
+            if @gumpexists 0x38920abd
+              if @ingump 0x38920abd 'Faerie Fire'
+                if @findalias 'simplebow' and counttype 0x13b2 'any' 'backpack' < 10
+                  @replygump 0x38920abd 2
+                elseif @findalias 'ingenious1' and counttype 0xf50 'any' 'backpack' < 10
+                  @replygump 0x38920abd 9
+                elseif @findalias 'ingenious2' and counttype 0x13fd 'any' 'backpack' < 8
+                  @replygump 0x38920abd 16
+                elseif @findalias 'ingenious3' and counttype 0x26c3 'any' 'backpack' < 10
+                  @replygump 0x38920abd 30
+                elseif not @findalias 'bowsdone' and @findalias 'bowquesting'
+                  if @findalias 'simplebow' and counttype 0x13b2 'any' 'backpack' > 9
+                    @setalias 'bowsdone' 'self'
+                  elseif @findalias 'ingenious1' and counttype 0xf50 'any' 'backpack' > 9
+                    @setalias 'bowsdone' 'self'
+                  elseif @findalias 'ingenious2' and counttype 0x13fd 'any' 'backpack' > 7
+                    @setalias 'bowsdone' 'self'
+                  elseif @findalias 'ingenious3' and counttype 0x26c3 'any' 'backpack' > 9
+                    @setalias 'bowsdone' 'self'
+                  endif
+                elseif counttype 0xb5e 'any' 'backpack' < 10
+                  pause 550
+                  usetype 0x1034 0 'backpack'
+                  waitforgump 0x38920abd 2000
+                  @replygump 0x38920abd 8
+                  waitforgump 0x38920abd 2000
+                endif
+              elseif counttype 0xb5e 'any' 'backpack' < 10 and @ingump 0x38920abd 'Magincia-style'
+                @replygump 0x38920abd 2
+              elseif counttype 0xb5e 'any' 'backpack' < 10
+                if x > 7026
+                  pause 550
+                endif
+                usetype 0x1034 0 'backpack'
+                waitforgump 0x38920abd 2000
+                @replygump 0x38920abd 8
+                waitforgump 0x38920abd 2000
+              endif
+            endif
+          endwhile
+          while y < 377
+            run 'southwest'
+          endwhile
+          pause 250
+          for 10
+            while y < 378
+              walk 'south'
+              pause 300
+            endwhile
+            while y > 378
+              walk 'north'
+              pause 300
+            endwhile
+          endfor
+          if timer 'Carpentry' > 30000
+            while x > 7000
+              run 'west'
+            endwhile
+          else
+            while x < 7036
+              run 'east'
+            endwhile
+          endif
+        elseif @findalias 'restockyes' and counttype 0x1bd7 woodhue[] 'backpack' < 10
+          //leave heartwood
+          if not mounted 'self'
+            useobject 'beetle'
+            pause 1000
+          endif
+          while x < 7024
+            run 'east'
+          endwhile
+          while x > 7028
+            run 'west'
+          endwhile
+          pause 300
+          while y > 343
+            run "Northwest"
+          endwhile
+          while x < 6989
+            walk 'east'
+            pause 150
+          endwhile
+          while x > 6989
+            walk 'west'
+            pause 150
+          endwhile
+          while y != 338 and y < 600
+            for 10
+              if y > 338 and y < 600
+                walk 'north'
+                pause 250
+              endif
+              if y < 338 and y < 600
+                walk 'south'
+                pause 250
+              endif
+              if x > 6989
+                turn 'west'
+                walk 'west'
+              elseif x < 6989
+                turn 'east'
+                walk 'east'
+              endif
+            endfor
+          endwhile
+          while x > 1000
+            while y > 338 and y < 600
+              turn 'north'
+              walk 'north'
+              pause 250
+            endwhile
+            while y < 338 and y < 600
+              turn 'south'
+              walk 'south'
+              pause 250
+            endwhile
+            run 'west'
+          endwhile
+          //recall home
+          if @injournal 'world will save'
+            while not @injournal 'world save complete'
+            endwhile
+            @clearjournal
+          endif
+          useobject 'FletcherRunebook'
+          waitforgump 0x554b87f3 15000
+          @replygump 0x554b87f3 magechiv[]
+          pause 2000
+          while y == 994
+          endwhile
+        elseif counttype 0x1bd7 woodhue[] 'backpack' < 10
+          //get 200 boards from beetle
+          if mounted 'self'
+            pause 550
+            useobject 'self'
+            pause 1000
+          endif
+          waitforcontext 'beetle' bond[] 15000
+          movetype 0x1bd7 'beetle' 'backpack' [(0 0 0)] woodhue[] 200
+          pause 1000
+          if counttype 0x1bd7 woodhue[] 'beetle' < 200
+            @setalias 'restockyes' 'self'
+          endif
+          useobject 'beetle'
+          pause 1000
+        elseif @inrange 'Trash Barrel' 2
+          //wipe aliases if it thinks you're on two quests
+          if @findalias 'simplebow' and @findalias 'ingenious1'
+            @unsetalias 'bowquesting'
+            @unsetalias 'simplebow'
+            @unsetalias 'ingenious1'
+            @unsetalias 'ingenious2'
+            @unsetalias 'ingenious3'
+            @unsetalias 'bowsdone'
+          elseif @findalias 'simplebow' and @findalias 'ingenious2'
+            @unsetalias 'bowquesting'
+            @unsetalias 'simplebow'
+            @unsetalias 'ingenious1'
+            @unsetalias 'ingenious2'
+            @unsetalias 'ingenious3'
+            @unsetalias 'bowsdone'
+          elseif @findalias 'simplebow' and @findalias 'ingenious3'
+            @unsetalias 'bowquesting'
+            @unsetalias 'simplebow'
+            @unsetalias 'ingenious1'
+            @unsetalias 'ingenious2'
+            @unsetalias 'ingenious3'
+            @unsetalias 'bowsdone'
+          elseif @findalias 'ingenious1' and @findalias 'ingenious2'
+            @unsetalias 'bowquesting'
+            @unsetalias 'simplebow'
+            @unsetalias 'ingenious1'
+            @unsetalias 'ingenious2'
+            @unsetalias 'ingenious3'
+            @unsetalias 'bowsdone'
+          elseif @findalias 'ingenious1' and @findalias 'ingenious3'
+            @unsetalias 'bowquesting'
+            @unsetalias 'simplebow'
+            @unsetalias 'ingenious1'
+            @unsetalias 'ingenious2'
+            @unsetalias 'ingenious3'
+            @unsetalias 'bowsdone'
+          elseif @findalias 'ingenious2' and @findalias 'ingenious3'
+            @unsetalias 'bowquesting'
+            @unsetalias 'simplebow'
+            @unsetalias 'ingenious1'
+            @unsetalias 'ingenious2'
+            @unsetalias 'ingenious3'
+            @unsetalias 'bowsdone'
+          endif
+          // Bihourly feed pet
+          if timer 'feedPet' >= 7200000
+            if mounted 'self'
+              pause 550
+              useobject 'self'
+              pause 1000
+            endif
+            feed 'beetle' 'Meat' 'any' 1
+            pause 500
+            if @injournal 'happier'
+              settimer 'feedPet' 0
+              sysmsg 'Pet Fed' 33
+              @clearjournal
+            else
+              sysmsg 'Out of Meat!' 33
+              //make meat and trash rest
+              if skill 'magery' > 50
+                for 25
+                  cast 'create food'
+                  pause 300
+                endfor
+                while counttype 0x9eb 0 'backpack' > 0
+                  movetype 0x9eb 'backpack' 'Trash Barrel'
+                endwhile
+                while counttype 0x9d1 0 'backpack' > 0
+                  movetype 0x9d1 'backpack' 'Trash Barrel'
+                endwhile
+                while counttype 0x9d0 0 'backpack' > 0
+                  movetype 0x9d0 'backpack' 'Trash Barrel'
+                endwhile
+                while counttype 0x9d2 0 'backpack' > 0
+                  movetype 0x9d2 'backpack' 'Trash Barrel'
+                endwhile
+                while counttype 0x97d 0 'backpack' > 0
+                  movetype 0x97d 'backpack' 'Trash Barrel'
+                endwhile
+                while counttype 0x97b 0 'backpack' > 0
+                  movetype 0x97b 'backpack' 'Trash Barrel'
+                endwhile
+              else
+                stop
+              endif
+            endif
+            pause 550
+            useobject 'beetle'
+            pause 1000
+          endif
+          //get a quest if not on one
+          if not findalias 'bowquesting'
+            @useobject 'Fletching Quest Giver'
+            waitforgump 0x19bc4061 1000
+            if @ingump 0x19bc4061 'crafted in the human style' or @ingump 0xa8b319c6 'debt if you bring me bows'
+              if @gumpexists 0x19bc4061
+                @replygump 0x19bc4061 1
+              endif
+              @setalias 'simplebow' 'self'
+              @setalias 'bowquesting' 'self'
+              pause 550
+            elseif @ingump 0x19bc4061 'such an instrument for me?' or @ingump 0xa8b319c6 'debt if you bring me crossbows'
+              if @gumpexists 0x19bc4061
+                @replygump 0x19bc4061 1
+              endif
+              @setalias 'ingenious1' 'self'
+              @setalias 'bowquesting' 'self'
+              pause 550
+            elseif @ingump 0x19bc4061 'remarkable instrument of war' or @ingump 0xa8b319c6 'debt if you bring me heavy crossbows'
+              if @gumpexists 0x19bc4061
+                @replygump 0x19bc4061 1
+              endif
+              @setalias 'ingenious2' 'self'
+              @setalias 'bowquesting' 'self'
+              pause 550
+            elseif @ingump 0x19bc4061 'remarkable human ingenuity' or @ingump 0xa8b319c6 'debt if you bring me repeating crossbows'
+              if @gumpexists 0x19bc4061
+                @replygump 0x19bc4061 1
+              endif
+              @setalias 'ingenious3' 'self'
+              @setalias 'bowquesting' 'self'
+              pause 550
+            elseif @ingump 0x19bc4061 'deadly crossbow bolt' or @ingump 0xa8b319c6 'debt if you bring me crossbow bolts'
+              if @findtype 0x1bfb 'any' 'backpack' 10
+                @replygump 0x19bc4061 1
+                pause 550
+                if color 'found' == 0
+                  waitforcontext 'self' 4 5000
+                  waitfortarget 5000
+                  Target! 'found'
+                  waitfortarget 5000
+                endif
+              endif
+              @canceltarget
+              pause 500
+              @useobject! 'Fletching Quest Giver'
+              waitforgump 0xdf31ecf8 5000
+              @replygump 0xdf31ecf8 4
+              waitforgump 0x96626c6e 15000
+              @replygump 0x96626c6e 1
+            elseif @ingump 0xdf31ecf8 'My thanks'
+              replygump 0xdf31ecf8 4
+              waitforgump 0x96626c6e 3000
+              replygump 0x96626c6e 1
+            elseif @gumpexists 0x96626c6e
+              replygump 0x96626c6e 1
+            elseif @ingump 0x19bc4061 'melodious of muisc'
+              @replygump 0x19bc4061 2
+              waitforgump 0xa8b319c6 15000
+              @replygump 0xa8b319c6 3
+            endif
+          endif
+          //trigger to go check stool quest every 30 seconds
+          if timer 'Carpentry' > 146000
+            setalias 'checkcarp' 'self'
+            sysmsg '150' 34
+          elseif timer 'Carpentry' > 118000 and not @findalias '120no'
+            setalias 'checkcarp' 'self'
+            sysmsg '120' 34
+          elseif timer 'Carpentry' > 88000 and not @findalias '90no'
+            setalias 'checkcarp' 'self'
+            sysmsg '90' 34
+          elseif timer 'Carpentry' > 58000 and not @findalias '60no'
+            setalias 'checkcarp' 'self'
+            sysmsg '60' 34
+          elseif timer 'Carpentry' > 28000 and not @findalias '30no'
+            setalias 'checkcarp' 'self'
+            sysmsg '30' 34
+          endif
+          if @gumpexists 0xa8b319c6
+            @replygump 0xa8b319c6 3
+          endif
+          //complete quests if you have enough bows crafted
+          if counttype 0x13b2 'any' 'backpack' > 9 and @findalias 'simplebow'
+            waitforcontext 'self' 4 5000
+            waitfortarget 5000
+            settimer 'toggletimeout' 0
+            while @counttype 0x13b2 0x4ea 'backpack' != 10 and timer 'toggletimeout' < 5000
+              @targettype 0x13b2 woodhue[]
+              pause 150
+            endwhile
+            @canceltarget
+            pause 500
+            @useobject! 'Fletching Quest Giver'
+            waitforgump 0xdf31ecf8 2000
+            @replygump 0xdf31ecf8 4
+            waitforgump 0x96626c6e 2000
+            @replygump 0x96626c6e 1
+            @unsetalias 'simplebow'
+            @unsetalias 'bowquesting'
+            @unsetalias 'bowsdone'
+            pause 1000
+          elseif counttype 0xf50 'any' 'backpack' > 9 and @findalias 'ingenious1'
+            waitforcontext 'self' 4 5000
+            waitfortarget 5000
+            settimer 'toggletimeout' 0
+            while @counttype 0xf50 0x4ea 'backpack' != 10 and timer 'toggletimeout' < 5000
+              @targettype 0xf50 woodhue[]
+              pause 150
+            endwhile
+            @canceltarget
+            pause 500
+            @useobject! 'Fletching Quest Giver'
+            waitforgump 0xdf31ecf8 2000
+            @replygump 0xdf31ecf8 4
+            waitforgump 0x96626c6e 2000
+            @replygump 0x96626c6e 1
+            @unsetalias 'ingenious1'
+            @unsetalias 'bowquesting'
+            @unsetalias 'bowsdone'
+            pause 1000
+          elseif counttype 0x13fd 'any' 'backpack' > 7 and @findalias 'ingenious2'
+            waitforcontext 'self' 4 5000
+            waitfortarget 5000
+            settimer 'toggletimeout' 0
+            while @counttype 0x13fd 0x4ea 'backpack' != 8 and timer 'toggletimeout' < 5000
+              @targettype 0x13fd woodhue[]
+              pause 150
+            endwhile
+            @canceltarget
+            pause 500
+            @useobject! 'Fletching Quest Giver'
+            waitforgump 0xdf31ecf8 2000
+            @replygump 0xdf31ecf8 4
+            waitforgump 0x96626c6e 2000
+            @replygump 0x96626c6e 1
+            @unsetalias 'ingenious2'
+            @unsetalias 'bowquesting'
+            @unsetalias 'bowsdone'
+            pause 1000
+          elseif counttype 0x26c3 'any' 'backpack' > 9 and @findalias 'ingenious3'
+            waitforcontext 'self' 4 5000
+            waitfortarget 5000
+            settimer 'toggletimeout' 0
+            while @counttype 0x26c3 0x4ea 'backpack' != 10 and timer 'toggletimeout' < 5000
+              @targettype 0x26c3 woodhue[]
+              pause 150
+            endwhile
+            @canceltarget
+            pause 500
+            @useobject! 'Fletching Quest Giver'
+            waitforgump 0xdf31ecf8 2000
+            @replygump 0xdf31ecf8 4
+            waitforgump 0x96626c6e 2000
+            @replygump 0x96626c6e 1
+            @unsetalias 'ingenious3'
+            @unsetalias 'bowquesting'
+            @unsetalias 'bowsdone'
+            pause 1000
+            //if you have trigger to go check carpentry, run west
+          elseif @findalias 'checkcarp' and timer 'Carpentry' > 25000
+            while @findtype '0x1bd7' woodhue[] 'ground' 30 2 and counttype '0x1bd7' woodhue[] 'backpack' < 190
+              moveitem 'found' 'backpack'
+              pause 550
+            endwhile
+            if counttype 0x1bd7 woodhue[] 'backpack' < 50 and not @findalias 'restockyes'
+              //get 200 boards from beetle
+              if mounted 'self'
+                pause 550
+                useobject 'self'
+                pause 1000
+              endif
+              waitforcontext 'beetle' bond[] 15000
+              movetype 0x1bd7 'beetle' 'backpack' [(0 0 0)] woodhue[] 200
+              pause 1000
+              if counttype 0x1bd7 woodhue[] 'beetle' < 200
+                @setalias 'restockyes' 'self'
+              endif
+              useobject 'beetle'
+              pause 1000
+            endif
+            if @gumpexists 0x19bc4061
+              @replygump 0x19bc4061 2
+              waitforgump 0xa8b319c6 1000
+              @replygump 0xa8b319c6 3
+            endif
+            while maxweight < weight
+              movetypeoffset 0x1bd7 'backpack' 'ground' [(0 2 0)] woodhue[] 30
+              pause 550
+            endwhile
+            while x > 7000
+              run 'west'
+              //craft while running west
+              if @findalias 'bowquesting' and not @findalias 'bowsdone'
+                if @gumpexists 0x38920abd and not @ingump 0x38920abd 'Faerie Fire'
+                  pause 550
+                  usetype 0x1022 0 'backpack'
+                  waitforgump 0x38920abd 2000
+                  @replygump 0x38920abd 15
+                  waitforgump 0x38920abd 2000
+                endif
+              endif
+              if @gumpexists 0x38920abd
+                if @ingump 0x38920abd 'Faerie Fire'
+                  if @findalias 'simplebow' and counttype 0x13b2 'any' 'backpack' < 10
+                    @replygump 0x38920abd 2
+                  elseif @findalias 'ingenious1' and counttype 0xf50 'any' 'backpack' < 10
+                    @replygump 0x38920abd 9
+                  elseif @findalias 'ingenious2' and counttype 0x13fd 'any' 'backpack' < 8
+                    @replygump 0x38920abd 16
+                  elseif @findalias 'ingenious3' and counttype 0x26c3 'any' 'backpack' < 10
+                    @replygump 0x38920abd 30
+                  elseif not @findalias 'bowsdone' and @findalias 'bowquesting'
+                    if @findalias 'simplebow' and counttype 0x13b2 'any' 'backpack' > 9
+                      @setalias 'bowsdone' 'self'
+                    elseif @findalias 'ingenious1' and counttype 0xf50 'any' 'backpack' > 9
+                      @setalias 'bowsdone' 'self'
+                    elseif @findalias 'ingenious2' and counttype 0x13fd 'any' 'backpack' > 7
+                      @setalias 'bowsdone' 'self'
+                    elseif @findalias 'ingenious3' and counttype 0x26c3 'any' 'backpack' > 9
+                      @setalias 'bowsdone' 'self'
+                    endif
+                  elseif counttype 0xb5e 'any' 'backpack' < 10
+                    if x > 7026
+                      pause 550
+                    endif
+                    usetype 0x1034 0 'backpack'
+                    waitforgump 0x38920abd 2000
+                    @replygump 0x38920abd 8
+                    waitforgump 0x38920abd 2000
+                  endif
+                elseif counttype 0xb5e 'any' 'backpack' < 10 and @ingump 0x38920abd 'Magincia-style'
+                  @replygump 0x38920abd 2
+                elseif counttype 0xb5e 'any' 'backpack' < 10
+                  if x > 7026
+                    pause 550
+                  endif
+                  usetype 0x1034 0 'backpack'
+                  waitforgump 0x38920abd 2000
+                  @replygump 0x38920abd 8
+                  waitforgump 0x38920abd 2000
+                endif
+              endif
+            endwhile
+          else //at fletcher and not time for carp, craft bows
+            if @findalias 'simplebow' and counttype 0x13b2 'any' 'backpack' < 10
+              if not @gumpexists 0x38920abd
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+              endif
+              if @gumpexists 0x38920abd and not @ingump 0x38920abd 'Faerie Fire'
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+                @replygump 0x38920abd 15
+                waitforgump 0x38920abd 2000
+              endif
+              @replygump 0x38920abd 2
+              waitforgump 0x38920abd 2000
+            elseif @findalias 'ingenious1' and counttype 0xf50 'any' 'backpack' < 10
+              if not @gumpexists 0x38920abd
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+              endif
+              if @gumpexists 0x38920abd and not @ingump 0x38920abd 'Faerie Fire'
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+                @replygump 0x38920abd 15
+                waitforgump 0x38920abd 2000
+              endif
+              @replygump 0x38920abd 9
+              waitforgump 0x38920abd 2000
+            elseif @findalias 'ingenious2' and counttype 0x13fd 'any' 'backpack' < 8
+              if not @gumpexists 0x38920abd
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+              endif
+              if @gumpexists 0x38920abd and not @ingump 0x38920abd 'Faerie Fire'
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+                @replygump 0x38920abd 15
+                waitforgump 0x38920abd 2000
+              endif
+              @replygump 0x38920abd 16
+              waitforgump 0x38920abd 2000
+            elseif @findalias 'ingenious3' and counttype 0x26c3 'any' 'backpack' < 10
+              if not @gumpexists 0x38920abd
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+              endif
+              if @gumpexists 0x38920abd and not @ingump 0x38920abd 'Faerie Fire'
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+                @replygump 0x38920abd 15
+                waitforgump 0x38920abd 2000
+              endif
+              @replygump 0x38920abd 30
+              waitforgump 0x38920abd 2000
+            elseif counttype 0xb5e 'any' 'backpack' < 10 and @ingump 0x38920abd 'Magincia-style'
+              @replygump 0x38920abd 2
+              waitforgump 0x38920abd 2000
+            elseif counttype 0xb5e 'any' 'backpack' < 10
+              pause 550
+              usetype 0x1034 0 'backpack'
+              waitforgump 0x38920abd 2000
+              @replygump 0x38920abd 8
+              waitforgump 0x38920abd 2000
+            endif
+          endif
+        elseif @inrange 'Carpentry Quest Giver ' 10
+          if timer 'Carpentry' > 30000
+            settimer 'carptry' 0
+            @unsetalias 'checkcarp'
+            usetype 0x1022 0 'backpack'
+            //try to get footstools for 5 seconds
+            while timer 'carptry' < 5000 and not @ingump 0x19bc4061 'foot stools'
+              if @gumpexists 0xa8b319c6
+                settimer 'carptry' 5500
+              endif
+              @useobject 'Carpentry Quest Giver'
+              //craft while trying quest
+              if @gumpexists 0xdf31ecf8
+                replygump 0xdf31ecf8 4
+                waitforgump 0x96626c6e 5000
+                replygump 0x96626c6e 1
+              endif
+              if @findalias 'bowquesting' and not @findalias 'bowsdone'
+                if @gumpexists 0x38920abd and not @ingump 0x38920abd 'Faerie Fire'
+                  pause 550
+                  usetype 0x1022 0 'backpack'
+                  waitforgump 0x38920abd 2000
+                  @replygump 0x38920abd 15
+                  waitforgump 0x38920abd 2000
+                endif
+              endif
+              if @gumpexists 0x38920abd
+                if @ingump 0x38920abd 'Faerie Fire'
+                  if @findalias 'simplebow' and counttype 0x13b2 'any' 'backpack' < 10
+                    @replygump 0x38920abd 2
+                  elseif @findalias 'ingenious1' and counttype 0xf50 'any' 'backpack' < 10
+                    @replygump 0x38920abd 9
+                  elseif @findalias 'ingenious2' and counttype 0x13fd 'any' 'backpack' < 8
+                    @replygump 0x38920abd 16
+                  elseif @findalias 'ingenious3' and counttype 0x26c3 'any' 'backpack' < 10
+                    @replygump 0x38920abd 30
+                  elseif not @findalias 'bowsdone' and @findalias 'bowquesting'
+                    if @findalias 'simplebow' and counttype 0x13b2 'any' 'backpack' > 9
+                      @setalias 'bowsdone' 'self'
+                    elseif @findalias 'ingenious1' and counttype 0xf50 'any' 'backpack' > 9
+                      @setalias 'bowsdone' 'self'
+                    elseif @findalias 'ingenious2' and counttype 0x13fd 'any' 'backpack' > 7
+                      @setalias 'bowsdone' 'self'
+                    elseif @findalias 'ingenious3' and counttype 0x26c3 'any' 'backpack' > 9
+                      @setalias 'bowsdone' 'self'
+                    endif
+                  elseif counttype 0xb5e 'any' 'backpack' < 10
+                    waitforgump 0x38920abd 2000
+                    pause 550
+                    usetype 0x1034 0 'backpack'
+                    waitforgump 0x38920abd 2000
+                    @replygump 0x38920abd 8
+                    waitforgump 0x38920abd 2000
+                  endif
+                elseif counttype 0xb5e 'any' 'backpack' < 10 and @ingump 0x38920abd 'Magincia-style'
+                  @replygump 0x38920abd 2
+                elseif counttype 0xb5e 'any' 'backpack' < 10
+                  pause 550
+                  usetype 0x1034 0 'backpack'
+                  waitforgump 0x38920abd 2000
+                  @replygump 0x38920abd 8
+                  waitforgump 0x38920abd 2000
+                endif
+              endif
+            endwhile
+            if timer 'Carpentry' > 150000 and not @gumpexists 0xa8b319c6
+              while not @ingump 0x19bc4061 'foot stools' and not @ingump 0xdf31ecf8 'my thanks'
+                @useobject 'Carpentry Quest Giver'
+                if timer 'carptry' > 20000
+                  break
+                endif
+              endwhile
+            endif
+            if @gumpexists 0xdf31ecf8
+              replygump 0xdf31ecf8 4
+              waitforgump 0x96626c6e 5000
+              replygump 0x96626c6e 1
+            elseif @gumpexists 0x96626c6e
+              replygump 0x96626c6e 1
+            endif
+            if @gumpexists 0xa8b319c6 or @ingump 0x19bc4061 'just for weary toes'
+              if @gumpexists 0x19bc4061 and @ingump 0x19bc4061 'just for weary toes'
+                @replygump 0x19bc4061 1
+              endif
+              if not @findalias 'restockyes'
+                while @counttype 0xb5e 'any' 'backpack' < 10
+                  //get 200 boards from beetle if needed
+                  while counttype 0x1bd7 woodhue[] 'backpack' < 10 and not @findalias 'restockyes'
+                    if mounted 'self'
+                      pause 550
+                      useobject 'self'
+                      pause 1000
+                    endif
+                    waitforcontext 'beetle' bond[] 15000
+                    movetype 0x1bd7 'beetle' 'backpack' [(0 0 0)] woodhue[] 200
+                    pause 1000
+                    if counttype 0x1bd7 woodhue[] 'beetle' < 200
+                      @setalias 'restockyes' 'self'
+                    endif
+                    useobject 'beetle'
+                    pause 1000
+                  endwhile
+                  if @gumpexists 0x38920abd and @ingump 0x38920abd 'Magincia-style'
+                    @replygump 0x38920abd 2
+                    waitforgump 0x38920abd 2000
+                  else
+                    waitforgump 0x38920abd 2000
+                    pause 550
+                    usetype 0x1034 0 'backpack'
+                    waitforgump 0x38920abd 2000
+                    @replygump 0x38920abd 8
+                    waitforgump 0x38920abd 2000
+                  endif
+                endwhile
+                waitforcontext 'self' 4 5000
+                waitfortarget 5000
+                settimer 'toggletimeout' 0
+                while @counttype 0xb5e 1258 'backpack' != 10 and timer 'toggletimeout' < 5000
+                  @targettype 0xb5e 0
+                  @targettype 0xb5e 2010
+                  @targettype 0xb5e 1191
+                  pause 150
+                endwhile
+                @canceltarget
+                pause 500
+                @useobject! 'Carpentry Quest Giver'
+                waitforgump 0xdf31ecf8 5000
+                @replygump 0xdf31ecf8 4
+                waitforgump 0x96626c6e 5000
+                @replygump 0x96626c6e 1
+                pause 300
+                settimer 'Carpentry' 0
+                @unsetalias '30no'
+                @unsetalias '60no'
+                @unsetalias '90no'
+                @unsetalias '120no'
+              else //if not enough boards then craft til you're out
+                while @counttype 0x1bd7 woodhue[] 'backpack' > 9 and @counttype 0xb5e 'any' 'backpack' < 10
+                  usetype 0x1034 0 'backpack'
+                  waitforgump 0x38920abd 2000
+                  @replygump 0x38920abd 8
+                  waitforgump 0x38920abd 2000
+                  @replygump 0x38920abd 2
+                  waitforgump 0x38920abd 2000
+                endwhile
+                if @counttype 0xb5e 'any' 'backpack' > 9
+                  waitforcontext 'self' 4 5000
+                  waitfortarget 5000
+                  settimer 'toggletimeout' 0
+                  while @counttype 0xb5e 1258 'backpack' != 10 and timer 'toggletimeout' < 5000
+                    @targettype 0xb5e 0
+                    @targettype 0xb5e 2010
+                    @targettype 0xb5e 1191
+                    pause 150
+                  endwhile
+                  @canceltarget
+                  pause 500
+                  @useobject! 'Carpentry Quest Giver'
+                  waitforgump 0xdf31ecf8 5000
+                  @replygump 0xdf31ecf8 4
+                  waitforgump 0x96626c6e 5000
+                  @replygump 0x96626c6e 1
+                  pause 300
+                  settimer 'Carpentry' 0
+                  @unsetalias '30no'
+                  @unsetalias '60no'
+                  @unsetalias '90no'
+                  @unsetalias '120no'
+                endif
+              endif
+            else //if no quest yet, mark that time as no
+              if timer 'Carpentry' > 120000
+                setalias '120no' 'self'
+                @setalias '90no' 'self'
+                @setalias '60no' 'self'
+                @setalias '30no' 'self'
+              elseif timer 'Carpentry' > 90000
+                setalias '90no' 'self'
+                @setalias '60no' 'self'
+                @setalias '30no' 'self'
+              elseif timer 'Carpentry' > 60000
+                setalias '60no' 'self'
+                @setalias '30no' 'self'
+              elseif timer 'Carpentry' > 30000
+                setalias '30no' 'self'
+              endif
+            endif
+          endif
+          if @gumpexists 0x19bc4061
+            @replygump 0x19bc4061 2
+            waitforgump 0xa8b319c6 1000
+            @replygump 0xa8b319c6 3
+          endif
+          while @findtype '0x1bd7' woodhue[] 'ground' 30 2 and counttype '0x1bd7' woodhue[] 'backpack' < 190
+            moveitem 'found' 'backpack'
+            pause 550
+          endwhile
+          if counttype 0x1bd7 woodhue[] 'backpack' < 50 and not @findalias 'restockyes'
+            //get 200 boards from beetle
+            if mounted 'self'
+              pause 550
+              useobject 'self'
+              pause 1000
+            endif
+            waitforcontext 'beetle' bond[] 15000
+            movetype 0x1bd7 'beetle' 'backpack' [(0 0 0)] woodhue[] 200
+            pause 1000
+            if counttype 0x1bd7 woodhue[] 'beetle' < 200
+              @setalias 'restockyes' 'self'
+            endif
+            useobject 'beetle'
+            pause 1000
+          endif
+          //if dont need to restock, run east to fletcher and craft while doing it
+          while maxweight < weight
+            movetypeoffset 0x1bd7 'backpack' 'ground' [(0 1 0)] woodhue[] 30
+            pause 550
+          endwhile
+          while x < 7036
+            run 'east'
+            if @findalias 'bowquesting' and not @findalias 'bowsdone'
+              if @gumpexists 0x38920abd and not @ingump 0x38920abd 'Faerie Fire'
+                pause 550
+                usetype 0x1022 0 'backpack'
+                waitforgump 0x38920abd 2000
+                @replygump 0x38920abd 15
+                waitforgump 0x38920abd 2000
+              endif
+            endif
+            if @gumpexists 0x38920abd
+              if @ingump 0x38920abd 'Faerie Fire'
+                if @findalias 'simplebow' and counttype 0x13b2 'any' 'backpack' < 10
+                  @replygump 0x38920abd 2
+                elseif @findalias 'ingenious1' and counttype 0xf50 'any' 'backpack' < 10
+                  @replygump 0x38920abd 9
+                elseif @findalias 'ingenious2' and counttype 0x13fd 'any' 'backpack' < 8
+                  @replygump 0x38920abd 16
+                elseif @findalias 'ingenious3' and counttype 0x26c3 'any' 'backpack' < 10
+                  @replygump 0x38920abd 30
+                elseif not @findalias 'bowsdone' and @findalias 'bowquesting'
+                  if @findalias 'simplebow' and counttype 0x13b2 'any' 'backpack' > 9
+                    @setalias 'bowsdone' 'self'
+                  elseif @findalias 'ingenious1' and counttype 0xf50 'any' 'backpack' > 9
+                    @setalias 'bowsdone' 'self'
+                  elseif @findalias 'ingenious2' and counttype 0x13fd 'any' 'backpack' > 7
+                    @setalias 'bowsdone' 'self'
+                  elseif @findalias 'ingenious3' and counttype 0x26c3 'any' 'backpack' > 9
+                    @setalias 'bowsdone' 'self'
+                  endif
+                elseif counttype 0xb5e 'any' 'backpack' < 10
+                  if x < 7013
+                    pause 550
+                  endif
+                  usetype 0x1034 0 'backpack'
+                  waitforgump 0x38920abd 2000
+                  @replygump 0x38920abd 8
+                  waitforgump 0x38920abd 2000
+                endif
+              elseif counttype 0xb5e 'any' 'backpack' < 10 and @ingump 0x38920abd 'Magincia-style'
+                @replygump 0x38920abd 2
+              elseif counttype 0xb5e 'any' 'backpack' < 10
+                if x < 7013
+                  pause 550
+                endif
+                usetype 0x1034 0 'backpack'
+                waitforgump 0x38920abd 2000
+                @replygump 0x38920abd 8
+                waitforgump 0x38920abd 2000
+              endif
+            endif
+          endwhile
+        elseif y == 378
+          while x > 7000
+            run 'west'
+          endwhile
+        else
+          sysmsg 'You need to be near dropoff, carpentry area or fletching trash when starting this macro' 34
+          stop
+        endif
+      endfor
+    endfor
+  endfor
+endfor
