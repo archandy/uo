@@ -52,7 +52,7 @@ while @inrange 'mytarget' 5
   	pause 600
   	endif
   // cast divine fury 
-	if not buffexists 1010
+	if stam < 90
     cast 'divine fury'
     pause 600
   else
