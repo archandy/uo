@@ -75,5 +75,5 @@ while @inrange 'mytarget' 5
     	cast 'remove curse'
     	pause 600
   endif
-pause 1
+pause 2
 endwhile
