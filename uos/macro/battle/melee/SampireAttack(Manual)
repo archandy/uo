@@ -11,7 +11,7 @@ headmsg '▽▽▽' 74 'mytarget'
 if @inrange 'mytarget' 12
 //@headmsg 'START HONORING' 44 'self'
 	virtue 'honor'
-	waitfortarget 500
+	waitfortarget 1500
 	target! 'mytarget'
 	@headmsg '★★ HONORED ★★' 74 'mytarget'
 endif
