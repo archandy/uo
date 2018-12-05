@@ -1,0 +1,26 @@
+if not @findalias 'Bow1'
+promptalias 'Bow1'
+endif
+
+if not @findalias 'Bow2'
+promptalias 'Bow2'
+endif
+
+if not listexists 'Bows'
+createlist 'Bows'
+endif
+
+if list 'Bows' < 1 
+pushlist 'Bows' 'Bow1'
+pushlist 'Bows' 'Bow2'
+endif
+
+clearhands 'both'
+pause 500
+
+equipitem Bows[0] 2
+
+headmsg 'Swap Bow' 33
+
+poplist 'Bows' 'front'
+
