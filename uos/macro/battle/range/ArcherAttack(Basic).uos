@@ -1,20 +1,30 @@
+warmode 'on'
+// 에너미오브원 걸고요
+while not buffexists 'Enemy of One'
+  cast "Enemy of One"
+  pause 600
+endwhile
 
-getenemy 'criminal' 'gray'   'orange' 'enemy' 'closest'
+// 디바인퓨리 걸고요
+if not buffexists 1010
+  cast 'divine fury'
+  pause 600
+endif
+
+// 적 찾고 명예걸고요
+getenemy 'criminal' 'gray' 'orange' 'murderer' 'enemy' 'closest'
 if hits 'enemy' == maxhits 'enemy'
+  @headmsg '▼▼HONOR▼▼' 74 'enemy'
   virtue 'honor'
   waitingfortarget 500
   target 'enemy'
   pause 1000
 endif
-if not buffexists 1010
-  cast 'divine fury'
-  pause 600
-endif
-getenemy 'enemy' 'grey'  'closest' 'murderer'
+
+// 죽을때까지 팹시다
+while not dead 'enemy'
 attack 'enemy'
-if not buffexists 'Enemy of One'
-  cast "Enemy of One"
-endif
+ @headmsg '▼▼▼' 74 'enemy'
 pause 200
 if weight > 330
   usetype '0xe76'
@@ -39,3 +49,4 @@ if timer 'lightning strike' >= 2000 and mana > 3
   cast 'lightning strike'
   settimer 'lightning strike' 0
 endif
+endwhile
