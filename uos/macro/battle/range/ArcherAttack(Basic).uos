@@ -1,1 +1,41 @@
 
+getenemy 'criminal' 'gray'   'orange' 'enemy' 'closest'
+if hits 'enemy' == maxhits 'enemy'
+  virtue 'honor'
+  waitingfortarget 500
+  target 'enemy'
+  pause 1000
+endif
+if not buffexists 1010
+  cast 'divine fury'
+  pause 600
+endif
+getenemy 'enemy' 'grey'  'closest' 'murderer'
+attack 'enemy'
+if not buffexists 'Enemy of One'
+  cast "Enemy of One"
+endif
+pause 200
+if weight > 330
+  usetype '0xe76'
+  waitfortarget 2000
+  targettype 0xeed 0
+endif
+if hits <= 90
+  cast 'confidence'
+endif
+if not timerexists 'Consecrate Weapon'
+  settimer 'Consecrate Weapon' 0
+endif
+if timer 'Consecrate Weapon' >= 7000 and mana > 3
+  cast "Consecrate Weapon"
+  settimer 'Consecrate Weapon' 0
+endif
+pause 100
+if not timerexists 'lightning strike'
+  settimer 'lightning strike' 0
+endif
+if timer 'lightning strike' >= 2000 and mana > 3
+  cast 'lightning strike'
+  settimer 'lightning strike' 0
+endif
