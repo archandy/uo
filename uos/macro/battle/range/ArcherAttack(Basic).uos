@@ -29,9 +29,17 @@ if weight > 330
   waitfortarget 2000
   targettype 0xeed 0
 endif
+
+// 디바인퓨리 걸고요
+if not buffexists 1010
+  cast 'divine fury'
+  pause 600
+endif
+
 if hits <= 90
   cast 'confidence'
 endif
+
 if not timerexists 'Consecrate Weapon'
   settimer 'Consecrate Weapon' 0
 endif
@@ -40,6 +48,7 @@ if timer 'Consecrate Weapon' >= 7000 and mana > 3
   settimer 'Consecrate Weapon' 0
 endif
 pause 100
+
 if not timerexists 'lightning strike'
   settimer 'lightning strike' 0
 endif
