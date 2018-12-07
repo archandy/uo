@@ -3,7 +3,7 @@ while not dead 'self'
   @unsetalias 'mytarget'
   // set enemy
   sysmsg 'Whose ass are you kicking?'
-
+  shownames 'mobiles'
   promptalias 'mytarget'
 
   headmsg '▽▽ oOo ▽▽' 74 'mytarget'
