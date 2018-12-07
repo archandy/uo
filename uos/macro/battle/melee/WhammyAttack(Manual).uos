@@ -37,7 +37,10 @@ if not buffexists 1088
 endif
 // Attack Start
 headmsg 'ATTACKING' 34 'self'
+setability 'primary' 'on'
+//setability 'secondary' 'on'
 attack 'mytarget'
+
 // attack start when enemy in range 5
 while @inrange 'mytarget' 5
   headmsg '▼▼▼' 34 'mytarget'
@@ -84,6 +87,8 @@ while @inrange 'mytarget' 5
       cast 'remove curse'
       pause 600
   endif
+  setability 'primary' 'on'
+  //setability 'secondary' 'on'
   attack 'mytarget'
   pause 1
 endwhile
