@@ -1,14 +1,14 @@
 warmode 'on'
 @unsetalias 'mytarget'
 // set enemy
-sysmsg 'Whose ass is about to be kicked?'
+sysmsg 'Whose ass are you kicking?'
+
 promptalias 'mytarget'
-headmsg '▽' 74 'mytarget'
-headmsg '▽▽' 74 'mytarget'
-headmsg '▽▽▽' 74 'mytarget'
+
+headmsg '▽▽ oOo ▽▽' 74 'mytarget'
+headmsg '---------' 74 'mytarget'
 // honor enemy
 if @inrange 'mytarget' 12
-  //@headmsg 'START HONORING' 44 'self'
   virtue 'honor'
   waitfortarget 1500
   target! 'mytarget'
@@ -75,4 +75,5 @@ while @inrange 'mytarget' 5
       pause 600
     endif
     pause 1
-  endwhile
+  endif
+endwhile
