@@ -65,7 +65,7 @@ while not dead 'self'
       if stam < 70
         cast 'divine fury'
         pause 600
-      else
+      endif
       // cast Counter Attack
       if not buffexists 1095
         cast 'Counter Attack'
@@ -88,13 +88,16 @@ while not dead 'self'
         else
           cast 'remove curse'
           pause 600
+        endif
       endif
     else
       headmsg 'get closer' 'self'
       headmsg '▼▼▼' 44 'mytarget'
     endif
     setability 'primary' 'on'
-    //setability 'secondary' 'on'
+    if buffexists 'feint'
+      setability 'secondary' 'on'
+    endif
     attack 'mytarget'
     pause 1
   endwhile
