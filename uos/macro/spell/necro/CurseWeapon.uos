@@ -1,0 +1,5 @@
+// Curse Weapon
+while not buffexists 1088
+  cast 'Curse Weapon'
+  pause 1100
+endwhile
