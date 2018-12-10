@@ -1,5 +1,5 @@
 // Curse Weapon
 while not buffexists 1088
   usetype 0x2263
-  pause 600
+  pause 1100
 endwhile
