@@ -1,0 +1,9 @@
+// Enemy of One
+while not buffexists 1011
+ if mana > 6
+    cast 'enemy of one'
+    settimer 'EOO' 0
+    pause 600
+  endif
+endwhile
+playmacro 'XXX'
