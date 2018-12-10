@@ -30,6 +30,9 @@ if skill 'magery' < 100
     elseif skill 'magery' < 100
       cast 'mana vampire' 'self'
       pause 1000
+    elseif skill 'magery' < 120
+      cast 'earthquake'
+      pause 1500
     else
       headmsg 'Magery complete!'
       stop
