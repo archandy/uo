@@ -1,12 +1,13 @@
-if not @listexists 'carpjunk' 
-  createlist 'carpjunk' 
-  pushlist 'carpjunk' '0x13b4'  //Club
-  pushlist 'carpjunk' '0xexe'   //Medium Crate
-  pushlist 'carpjunk' '0x14f0'  // DEED! WATCH OUT! Ballot Box
-  pushlist 'carpjunk' '0xb4a'   //Writing Table
-  pushlist 'carpjunk' 0xe89     //Quarter Staff
-  pushlist 'carpjunk' '0x13f8'  //Gnarled Staff 
-endif 
+if not @listexists 'carpjunk'
+  createlist 'carpjunk'
+  pushlist 'carpjunk' 0x9aa
+  pushlist 'carpjunk' 0xe3f
+  pushlist 'carpjunk' 0x14f0
+  pushlist 'carpjunk' 0x14f0 // DEED! WATCH OUT!
+  pushlist 'carpjunk' 0xb4a
+  pushlist 'carpjunk' 0xe89
+  pushlist 'carpjunk' 0x13f8
+endif
 
 // create tinkertool
 if @counttype 0x1eb8 0 'backpack' < 3
@@ -18,7 +19,7 @@ if @counttype 0x1eb8 0 'backpack' < 3
     @replygump 0x38920abd 8
     waitforgump 0x38920abd 2000
     @replygump 0x38920abd 23
-    waitforgump
+     waitforgump 0x38920abd 2000
   endwhile 
 endif
 // create saw
@@ -46,88 +47,90 @@ if not @findobject 'restock'
   useobject 'restock' 
 endif 
 
-if @counttype 0x1bd7 0x0 'backpack' < 20 
-  movetype 0x1bd7 'restock' 'backpack' 0 0 0 0x0 150 
+if @counttype 0x1bd7 0 'backpack' < 20 
+  movetype 0x1bd7 'restock' 'backpack' 0 0 0 0x0 350 
   pause 1000 
 endif 
 
-if skill 'carpentry' < 30 
-  headmsg 'Buy more skill!' 
-  stop 
-elseif skill 'carpentry' < 40 
-  if usetype 0x1034 0x0 'backpack' 
+if skill 'carpentry' < 40
+  if usetype 0x1034 0x0 'backpack'
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 15
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 2
+    waitforgump 0x38920abd 2000
+  endif
+elseif skill 'carpentry' < 50
+  if usetype 0x1034 0x0 'backpack'
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 15
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 16
+    waitforgump 0x38920abd 2000
+  endif
+elseif skill 'carpentry' < 70
+  if usetype 0x1034 0x0 'backpack'
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 43
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 128
+    waitforgump 0x38920abd 15000
+  endif
+elseif skill 'carpentry' < 75
+  if usetype 0x1034 0x0 'backpack'
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 8
+    waitforgump 0x38920abd 15000
+    replygump 0x38920abd 72
+    waitforgump 0x38920abd 2000
+  endif
+elseif skill 'carpentry' < 90
+  if usetype 0x1034 0x0 'backpack'
+    waitforgump 0x38920abd 15000
     replygump 0x38920abd 22
     waitforgump 0x38920abd 15000
-    replygump 0x38920abd 30
+    replygump 0x38920abd 9
+    waitforgump 0x38920abd 2000
+  endif
+elseif skill 'carpentry' < 100
+  if usetype 0x1034 0x0 'backpack'
     waitforgump 0x38920abd 15000
-  endif 
-elseif skill 'carpentry' < 50 
-  if usetype 0x1034 0x0 'backpack' 
-    waitforgump 0x38920abd 15000 
-    replygump 0x38920abd 15 
-    waitforgump 0x38920abd 15000 
-    replygump 0x38920abd 16 
-    waitforgump 0x38920abd 2000 
-  endif 
-elseif skill 'carpentry' < 70 
-  if usetype 0x1034 0x0 'backpack' 
+    replygump 0x38920abd 22
     waitforgump 0x38920abd 15000
-    replygump 0x38920abd 36
-    waitforgump 0x38920abd 15000
-    replygump 0x38920abd 58
-    waitforgump 0x38920abd 15000
-  endif 
-elseif skill 'carpentry' < 75 
-  if usetype 0x1034 0x0 'backpack' 
-    waitforgump 0x38920abd 15000 
-    replygump 0x38920abd 8 
-    waitforgump 0x38920abd 15000 
-    replygump 0x38920abd 72 
-    waitforgump 0x38920abd 2000 
-  endif 
-elseif skill 'carpentry' < 90 
-  if usetype 0x1034 0x0 'backpack' 
-    waitforgump 0x38920abd 15000 
-    replygump 0x38920abd 22 
-    waitforgump 0x38920abd 15000 
-    replygump 0x38920abd 9 
-    waitforgump 0x38920abd 2000 
-  endif 
-elseif skill 'carpentry' < 100 
-  if usetype 0x1034 0x0 'backpack' 
-    waitforgump 0x38920abd 15000 
-    replygump 0x38920abd 22 
-    waitforgump 0x38920abd 15000 
-    replygump 0x38920abd 16 
-    waitforgump 0x38920abd 2000 
-  endif 
-else 
-  headmsg 'Carpentry completed!' 
-  stop 
-endif 
+    replygump 0x38920abd 16
+    waitforgump 0x38920abd 2000
+  endif
+else
+  headmsg 'Carpentry completed!'
+  stop
+endif
 
 // trash crafted items
-while findtype 0x13b4 'any' 'backpack'
-  movetype 0x13b4 'backpack' 'trash'
+while @findtype 0x9aa 'any' 'backpack'
+  movetype 0x9aa 'backpack' 'trash'
   pause 500
 endwhile
-while findtype 0xexe 'any' 'backpack'
-  movetype 0xexe 'backpack' 'trash'
+while @findtype 0xe3f 'any' 'backpack'
+  movetype 0xe3f 'backpack' 'trash'
   pause 500
 endwhile
-while findtype 0x14f0 'any' 'backpack'
+while @findtype 0x14f0 'any' 'backpack'
   movetype 0x14f0 'backpack' 'trash'
   pause 500
 endwhile
-while findtype 0xb4a 'any' 'backpack'
+while @findtype 0xb4a 'any' 'backpack'
   movetype 0xb4a 'backpack' 'trash'
   pause 500
 endwhile
-while findtype 0xe89 'any' 'backpack'
+while @findtype 0xe89 'any' 'backpack'
   movetype 0xe89 'backpack' 'trash'
   pause 500
 endwhile
-while findtype 0x13f8 'any' 'backpack'
+while @findtype 0x13f8 'any' 'backpack'
   movetype 0x13f8 'backpack' 'trash'
   pause 500
 endwhile
+if @counttype 0x1bd7 0 'backpack' < 20 
+  movetype 0x1bd7 'restock' 'backpack' 0 0 0 0x0 350 
+  pause 1000 
+endif 
