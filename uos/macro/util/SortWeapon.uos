@@ -2,8 +2,7 @@ clearignorelist
 
 if not listexists 'Weapons'
   @createlist 'Weapons'
-  @pushlist 'Weapons' 0x1439
-  @pushlist 'Weapons' 0x13f8
+  @pushlist 'Weapons' 0xdf0
 endif
 if not listexists 'Slayers'
   @createlist 'Slayers'
