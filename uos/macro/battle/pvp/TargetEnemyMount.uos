@@ -1,0 +1,80 @@
+@cleartargetqueue
+if not listexists 'mounts'
+  createlist 'mounts'
+  // Swamp Dragon
+  pushlist 'mounts' 0x31f
+  pushlist 'mounts' 0x31a
+  // Nightmare
+  pushlist 'mounts' 0x74
+  pushlist 'mounts' 0xb2
+  pushlist 'mounts' 0xb3
+  pushlist 'mounts' 0xb4
+  pushlist 'mounts' 0x76
+  //warhorse
+  pushlist 'mounts' 0x79
+  // Kirin
+  pushlist 'mounts' 0x84
+  // Skeletal Mount
+  pushlist 'mounts' 0x319
+  // Unicorn
+  pushlist 'mounts' 0x7a
+  // Cu Sidhe
+  pushlist 'mounts' 0x115
+  //horse
+  pushlist 'mounts' 0xe4
+  pushlist 'mounts' 0xcc
+  pushlist 'mounts' 0xc8
+  pushlist 'mounts' 0xe2
+  //beetle
+  pushlist 'mounts' 0x317
+  //reptalon
+  pushlist 'mounts' 0x114
+  //fire steed
+  pushlist 'mounts' 0xbe
+  //hiryu
+  pushlist 'mounts' 0xf3
+endif
+@unsetalias 'target'
+for 0 to 'mounts'
+  // Check for mounts in range of 10 tiles
+  while @findtype 'mounts[]' 'any' 'ground' 1 10
+    ignoreobject 'found'
+    // Mount should not be dead or current enemy
+    if dead 'found' or @serial 'enemy' == serial 'found'
+      continue
+    endif
+    // Skip if mount is "green" or in friend list
+    if friend 'found' or infriendlist 'found'
+      continue
+    endif
+    //dont want innocent in guards
+    // if @inregion 'guards' 'found' 1 and innocent 'found'
+    //   msg 'yo'
+    //   continue
+    ///  endif
+    // Mount must be tamed or bonded
+    waitforproperties 'found' 500
+    if not @property 'tame' 'found' and not @property 'bonded' 'found'
+      continue
+    endif
+    @setalias 'target' 'found'
+    break
+  endwhile
+  // Check if target is defined before next item of mount list
+  if @findalias 'target'
+    @setalias 'enemy' 'target'
+    break
+  endif
+endfor
+if not @findalias 'target'
+  if @findobject 'enemy'
+    @unsetalias 'enemy'
+    clearignorelist
+    replay
+  endif
+  sysmsg 'Enemy mount not found!' 30
+else
+  @setalias 'enemy' 'target'
+  headmsg '[Enemy]' 1153 'enemy'
+  target! 'enemy'
+endif
