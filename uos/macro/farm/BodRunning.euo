@@ -1,0 +1,294 @@
+;Bod Runners need two books in pack with one of them named BS or Blacksmith, stand near doors top floor Luna
+;Put all your Bod Runners on same profile with this macro bound to hotkey specified below: http://pastebin.com/raw/u0cmVUTe
+;This UOS macro will collect bods until both the tailor and bs books reach 250 bods, three useful macros to combine books http://pastebin.com/raw/ysvPpQrR
+
+;confirmed working with client version 7.0.47.0 (http://hz.tehomgpwn.com/viewtopic.php?f=16&t=589) and EUO 1.5.1.294 (http://www.mediafire.com/download/mta3vbf5f2qp3w5/EasyUO.exe)
+
+set %macroKey F10           ;the key your UOSteam macro is mapped to
+set %minsBetweenBods 62
+;******************************************************************
+goto Begin
+;*****************************************************************
+
+sub account1
+msg ###Account1 Login Goes Here####  ;put in your account names here
+wait 10
+click 530 400
+;msg ...  ;not needed if pw saved
+wait 20
+msg $
+return
+
+sub account2
+msg ###Account2####
+wait 10
+click 530 400
+;msg ...  ;not needed if pw saved
+wait 20
+msg $
+return
+
+sub account3
+msg ###Account3####
+wait 10
+click 530 400
+;msg ...  ;not needed if pw saved
+wait 20
+msg $
+return
+
+sub account4
+msg ###Account4####
+wait 10
+click 530 400
+;msg ...  ;not needed if pw saved
+wait 20
+msg $
+return
+
+;******************************************************************
+bodlines:
+;******************************************************************
+
+;uncomment the character slots that have a bodrunner in position
+
+;account1
+;gosub bodcycle 1 0
+;gosub bodcycle 1 1
+;gosub bodcycle 1 2
+;gosub bodcycle 1 3                                                                        .
+;gosub bodcycle 1 4
+;gosub bodcycle 1 5
+;gosub bodcycle 1 6
+
+;account2
+;gosub bodcycle 2 0
+;gosub bodcycle 2 1
+;gosub bodcycle 2 2
+;gosub bodcycle 2 3
+;gosub bodcycle 2 4
+;gosub bodcycle 2 5
+;gosub bodcycle 2 6
+
+;account3
+;gosub bodcycle 3 0
+;gosub bodcycle 3 1
+;gosub bodcycle 3 2
+;gosub bodcycle 3 3
+;gosub bodcycle 3 4
+;gosub bodcycle 3 5
+;gosub bodcycle 3 6
+
+;account4
+;gosub bodcycle 4 0
+;gosub bodcycle 4 1
+;gosub bodcycle 4 2
+;gosub bodcycle 4 3
+;gosub bodcycle 4 4
+;gosub bodcycle 4 5
+;gosub bodcycle 4 6
+
+;******************************************************************
+;Edit nothing below this line
+;******************************************************************
+
+wait 100
+Begin:
+gosub timeOld
+gosub makeMenu
+gosub waitBOD
+gosub _waitSysVar clilogged = 0
+set *BodTime #time
+set *BodDate #date
+goto bodlines
+;******************************************************************
+sub bodCycle
+namespace push
+namespace local bodCycle
+set !loginAttemps 0
+set !account %1
+set !char %2
+set !bodType 1
+
+gosub InfoMenu !account !char
+gosub login !account !char
+
+wait 60
+key %macroKey
+
+wait 6s
+gosub logout
+
+namespace pop
+return #result
+;******************************************************************
+sub login
+namespace push
+namespace local login
+set !loginMax 3 ;max number of times to look throught shardlist
+set %charCreate #false;for use later to determine if char creation came up
+;key combo to restore/maximize
+set !key1 space
+set !key2 alt
+set !key3 x
+;info on what char to login
+set !login0_ %0
+set !account %1
+set !char %2
+set !shard %3
+
+set !shardloc 1 ;initialize
+;clear old Account and pass
+set !y !char * 40 + 140
+click 530 360
+
+   for !i 1 16            ;last number has to be as long as longest account name
+        {
+        key back
+        }
+
+wait 10s
+;type account and pass
+gosub account . !account
+;wait for shard select screen
+_waitShard:
+gosub _waitSysVar contname = normal_gump 60
+wait 45
+msg $
+
+_waitCharSelect:
+gosub _waitSysVar contname = login_gump 40
+if ! #result
+{
+        if %charCreate
+        {
+                gosub backTrack unknown mainMenu_gump
+                namespace pop
+                return #false
+        }
+        gosub determineAction login_gump
+        goto #result
+}
+wait 55
+click 350 !y d
+wait 10
+click 350 !y d
+wait 10
+click 350 !y d
+wait 10
+wait 45
+
+namespace pop
+return #true
+;******************************************************************
+sub logout
+namespace push
+namespace local logout
+logout:
+set !timeOut #scnt + 5
+event macro 8 1
+wait 20
+waitpaperdoll:
+if #scnt > !timeOut
+        goto logout
+if #contname <> paperdoll_gump
+        goto waitpaperdoll
+contpos #clixres 0
+wait 20
+_waitConfirm:
+set !timeOut #scnt + 3
+set !paperDollX #clixres + 210
+click !paperDollX 110
+waitlogout:
+if #scnt > !timeOut
+        goto _waitConfirm
+if #contname <> YesNo_gump
+        goto waitlogout
+set !x #contposx + 120
+set !y #contposy + 90
+_quit:
+wait 10
+click !x !y
+set !timeOut #scnt + 20
+_waitlogout:
+if #scnt > !timeout
+        goto quit
+if #contname <> MainMenu_gump
+        goto _waitlogout
+
+wait 20
+namespace pop
+return
+;******************************************************************
+sub InfoMenu
+namespace push
+namespace local infoMenu
+set !account %1
+set !char %2
+set !lines %0
+set !menuHeight 20 * !lines + 30
+menu clear
+menu show 600 600
+menu Window Title BOD Collection
+menu window color black
+menu font size 12
+menu font color red
+menu font bgcolor black
+menu Window Size 275 !menuHeight
+menu text text 5 5 Gathering Bods
+menu text text 5 25 Account : !account
+menu text text 5 45 Character : !char
+namespace pop
+return
+;******************************************************************
+sub timeOld
+set %time *BodTime
+set %date_old *BodDate
+set %seconds_old ( %time % 100 ) + ( ( %time % 10000 ) / 100 ) * 60 + ( %time / 10000 ) * 3600
+set %date_new #date
+
+if %time = N/A 2
+        set %date_old #date
+        set %seconds_old ( #time % 100 ) + ( ( #time % 10000 ) / 100 ) * 60 + ( #time / 10000 ) * 3600 - 60 * %minsBetweenBods
+return
+;******************************************************************
+sub makeMenu
+menu clear
+set #menubutton N/A
+menu show 50 50
+menu Window Title BOD Collection
+menu window color black
+menu font size 12
+menu font color red
+menu font bgcolor black
+menu Window Size 275 50
+menu text time 5 5 Time Untill next Bod run :$ , %h hours %m minutes
+menu button continue 165 25 105 20 Get Bods Now
+menu hideEUO
+return
+;******************************************************************
+sub waitBod
+set %show #true
+_waitBOD:
+set %date_new #date
+set %seconds_new ( #time % 100 ) + ( ( #time % 10000 ) / 100 ) * 60 + ( #time / 10000 ) * 3600
+if %date_old <> %date_new
+        set %get_bod 60 * %minsBetweenBods - ( ( %seconds_new - %seconds_old ) + 86400 )
+else
+        set %get_bod 60 * %minsBetweenBods - ( %seconds_new - %seconds_old )
+if %get_bod <= 0
+        return
+set %h %get_bod / 3600
+set %m ( %get_bod % 3600 ) / 60
+if %show
+{
+        menu delete time
+        menu text time 5 5 Time Untill next Bod run :$ , %h hours %m minutes
+        if #menubutton = continue
+                return
+        if #menubutton = closed
+                set %show #false
+}
+wait 20
+goto _waitBOD
+;******************************************************************
