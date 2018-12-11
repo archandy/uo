@@ -1,0 +1,341 @@
+//1. add 340 apples to your buy agent and check complete, do not have grapes or eggs enabled on buy agent
+//2. need organizer named "unload" that will move bought items from your backpack to a container in your bank box
+//3. need organizer named "gold" that moves 5k gold from self to your backpack
+//4. set all the runebook ids to yours
+//5. faction runes may be commented out if price in those towns are high
+@setalias 'farmerbook1' 0x41fe2030
+@setalias 'farmerbook2' 0x41fe2164
+@setalias 'farmerbook3' 0x41fe2391
+@setalias 'farmerbook4' 0x41fe24a6
+@setalias 'bankbook' 0x4096ebcb
+@removelist 'Runes1'
+@removelist 'Runes2'
+@removelist 'Runes3'
+@removelist 'Runes4'
+if not listexists 'Runes1'
+  @createlist 'Runes1'
+  pushlist 'Runes1' 5
+  pushlist 'Runes1' 11
+  pushlist 'Runes1' 17
+  pushlist 'Runes1' 23
+  pushlist 'Runes1' 29
+  pushlist 'Runes1' 35
+  pushlist 'Runes1' 41
+  pushlist 'Runes1' 47
+  pushlist 'Runes1' 53
+  pushlist 'Runes1' 59
+  pushlist 'Runes1' 65
+  pushlist 'Runes1' 71
+  pushlist 'Runes1' 77
+  pushlist 'Runes1' 83
+  pushlist 'Runes1' 89
+  pushlist 'Runes1' 95
+endif
+if not listexists 'Runes2'
+  @createlist 'Runes2'
+  pushlist 'Runes2' 5
+  pushlist 'Runes2' 11
+  pushlist 'Runes2' 17
+  pushlist 'Runes2' 23
+  pushlist 'Runes2' 29
+  pushlist 'Runes2' 35
+  pushlist 'Runes2' 41
+  pushlist 'Runes2' 47
+  pushlist 'Runes2' 53
+  pushlist 'Runes2' 59
+  pushlist 'Runes2' 65
+  //start faction runes
+  //pushlist 'Runes2' 71
+  //pushlist 'Runes2' 77
+  //pushlist 'Runes2' 83
+  //pushlist 'Runes2' 89
+  //pushlist 'Runes2' 95
+endif
+if not listexists 'Runes3'
+  @createlist 'Runes3'
+  //pushlist 'Runes3' 5
+  //pushlist 'Runes3' 11
+  //pushlist 'Runes3' 17
+  //pushlist 'Runes3' 23
+  //pushlist 'Runes3' 29
+  //pushlist 'Runes3' 35
+  //pushlist 'Runes3' 41
+  //pushlist 'Runes3' 47
+  //pushlist 'Runes3' 53
+  //pushlist 'Runes3' 59
+  //pushlist 'Runes3' 65
+  //pushlist 'Runes3' 71
+  //pushlist 'Runes3' 77
+  //pushlist 'Runes3' 83
+  //pushlist 'Runes3' 89
+endif
+if not listexists 'Runes4'
+  @createlist 'Runes4'
+  //pushlist 'Runes4' 5
+  //pushlist 'Runes4' 11
+  //end faction runes
+  pushlist 'Runes4' 17
+  pushlist 'Runes4' 23
+  pushlist 'Runes4' 29
+endif
+if not listexists 'npcbodies'
+  createlist 'npcbodies'
+  pushlist 'npcbodies' 0x190
+  pushlist 'npcbodies' 0x191
+endif
+if not timerexists 'hourloop'
+  createtimer 'hourloop'
+endif
+settimer 'hourloop' 0
+@clearjournal
+clearignorelist
+//
+//
+//book 1
+for 0 to 'Runes1'
+  while mana < 20
+  endwhile
+  if @injournal 'world will save'
+    pause 30000
+    @clearjournal
+  endif
+  useobject 'farmerbook1'
+  waitforgump 0x554b87f3 5000
+  sysmsg 'Book1' 33
+  sysmsg 'Runes1[]' 33
+  replygump 0x554b87f3 Runes1[]
+  pause 2000
+  for 0 to 'npcbodies'
+    while @findtype npcbodies[] 'any' 'ground' 1 10
+      waitforproperties 'found' 5000
+      if property 'farmer' 'found'
+        waitforcontext 'found' 1 5000
+        pause 1000
+      endif
+      if @counttype 0x9d0 'any' 'backpack' > 320 or  @counttype 0xeed 'any' 'backpack' < 2000
+        if @injournal 'world will save'
+          pause 30000
+          @clearjournal
+        endif
+        useobject 'bankbook'
+        waitforgump 0x554b87f3 5000
+        replygump 0x554b87f3 95
+        pause 2000
+        msg 'bank'
+        pause 500
+        organizer 'unload'
+        while organizing
+        endwhile
+        organizer 'gold'
+        while organizing
+        endwhile
+        while mana < 20
+        endwhile
+        if @injournal 'world will save'
+          pause 30000
+          @clearjournal
+        endif
+        useobject 'farmerbook1'
+        waitforgump 0x554b87f3 5000
+        sysmsg 'Book1' 33
+        sysmsg 'Runes1[]' 33
+        replygump 0x554b87f3 Runes1[]
+        pause 2000
+      else
+        ignoreobject 'found'
+      endif
+    endwhile
+  endfor
+endfor
+//
+//
+//book 2
+for 0 to 'Runes2'
+  while mana < 20
+  endwhile
+  if @injournal 'world will save'
+    pause 30000
+    @clearjournal
+  endif
+  useobject 'farmerbook2'
+  waitforgump 0x554b87f3 5000
+  sysmsg 'Book2' 33
+  sysmsg 'Runes2[]' 33
+  replygump 0x554b87f3 Runes2[]
+  pause 2000
+  for 0 to 'npcbodies'
+    while @findtype npcbodies[] 'any' 'ground' 1 10
+      waitforproperties 'found' 5000
+      if property 'farmer' 'found'
+        waitforcontext 'found' 1 5000
+        pause 1000
+      endif
+      if @counttype 0x9d0 'any' 'backpack' > 320 or  @counttype 0xeed 'any' 'backpack' < 2000
+        if @injournal 'world will save'
+          pause 30000
+          @clearjournal
+        endif
+        useobject 'bankbook'
+        waitforgump 0x554b87f3 5000
+        replygump 0x554b87f3 95
+        pause 2000
+        msg 'bank'
+        pause 500
+        organizer 'unload'
+        while organizing
+        endwhile
+        organizer 'gold'
+        while organizing
+        endwhile
+        while mana < 20
+        endwhile
+        if @injournal 'world will save'
+          pause 30000
+          @clearjournal
+        endif
+        useobject 'farmerbook2'
+        waitforgump 0x554b87f3 5000
+        sysmsg 'Book2' 33
+        sysmsg 'Runes2[]' 33
+        replygump 0x554b87f3 Runes2[]
+        pause 2000
+      else
+        ignoreobject 'found'
+      endif
+    endwhile
+  endfor
+endfor
+//
+//
+//book 3
+for 0 to 'Runes3'
+  while mana < 20
+  endwhile
+  if @injournal 'world will save'
+    pause 30000
+    @clearjournal
+  endif
+  useobject 'farmerbook3'
+  waitforgump 0x554b87f3 5000
+  sysmsg 'Book3' 33
+  sysmsg 'Runes3[]' 33
+  replygump 0x554b87f3 Runes3[]
+  pause 2000
+  for 0 to 'npcbodies'
+    while @findtype npcbodies[] 'any' 'ground' 1 10
+      waitforproperties 'found' 5000
+      if property 'farmer' 'found'
+        waitforcontext 'found' 1 5000
+        pause 1000
+      endif
+      if @counttype 0x9d0 'any' 'backpack' > 320 or  @counttype 0xeed 'any' 'backpack' < 2000
+        if @injournal 'world will save'
+          pause 30000
+          @clearjournal
+        endif
+        useobject 'bankbook'
+        waitforgump 0x554b87f3 5000
+        replygump 0x554b87f3 95
+        pause 2000
+        msg 'bank'
+        pause 500
+        organizer 'unload'
+        while organizing
+        endwhile
+        organizer 'gold'
+        while organizing
+        endwhile
+        while mana < 20
+        endwhile
+        if @injournal 'world will save'
+          pause 30000
+          @clearjournal
+        endif
+        useobject 'farmerbook3'
+        waitforgump 0x554b87f3 5000
+        sysmsg 'Book3' 33
+        sysmsg 'Runes3[]' 33
+        replygump 0x554b87f3 Runes3[]
+        pause 2000
+      else
+        ignoreobject 'found'
+      endif
+    endwhile
+  endfor
+endfor
+//
+//
+//book 4
+for 0 to 'Runes4'
+  while mana < 20
+  endwhile
+  if @injournal 'world will save'
+    pause 30000
+    @clearjournal
+  endif
+  useobject 'farmerbook4'
+  waitforgump 0x554b87f3 5000
+  sysmsg 'Book4' 33
+  sysmsg 'Runes4[]' 33
+  replygump 0x554b87f3 Runes4[]
+  pause 2000
+  for 0 to 'npcbodies'
+    while @findtype npcbodies[] 'any' 'ground' 1 10
+      waitforproperties 'found' 5000
+      if property 'farmer' 'found'
+        waitforcontext 'found' 1 5000
+        pause 1000
+      endif
+      if @counttype 0x9d0 'any' 'backpack' > 320 or  @counttype 0xeed 'any' 'backpack' < 2000
+        if @injournal 'world will save'
+          pause 30000
+          @clearjournal
+        endif
+        useobject 'bankbook'
+        waitforgump 0x554b87f3 5000
+        replygump 0x554b87f3 95
+        pause 2000
+        msg 'bank'
+        pause 500
+        organizer 'unload'
+        while organizing
+        endwhile
+        organizer 'gold'
+        while organizing
+        endwhile
+        while mana < 20
+        endwhile
+        if @injournal 'world will save'
+          pause 30000
+          @clearjournal
+        endif
+        useobject 'farmerbook4'
+        waitforgump 0x554b87f3 5000
+        sysmsg 'Book4' 33
+        sysmsg 'Runes4[]' 33
+        replygump 0x554b87f3 Runes4[]
+        pause 2000
+      else
+        ignoreobject 'found'
+      endif
+    endwhile
+  endfor
+endfor
+if @injournal 'world will save'
+  pause 30000
+  @clearjournal
+endif
+useobject 'bankbook'
+waitforgump 0x554b87f3 5000
+replygump 0x554b87f3 95
+pause 2000
+msg 'bank'
+pause 500
+organizer 'unload'
+while organizing
+endwhile
+organizer 'gold'
+while organizing
+endwhile
+while timer 'hourloop' < 3720000
+endwhile
