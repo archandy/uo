@@ -1,0 +1,13 @@
+getenemy 'Innocent' 'Humanoid' 'transformation' 'closest'
+if @findalias 'enemy'
+  waitforproperties 'enemy' 5000
+endif
+if not @inregion 'guards' 'enemy' 10
+  if not @property 'wandering healer' 'enemy' and not @property 'Guard' 'enemy'
+    //attack 'enemy'
+    @setalias 'last' 'enemy'
+  else
+    sysmsg 'healer' 63
+  endif
+endif
+//@playmacro 'bandageloop'
