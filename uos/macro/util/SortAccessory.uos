@@ -1,0 +1,75 @@
+clearignorelist
+
+if not listexists 'Jewelry'
+  @createlist 'Jewelry'
+  @pushlist 'Jewelry' 0x108a
+  @pushlist 'Jewelry' 0x1f09
+  @pushlist 'Jewelry' 0x1086
+  @pushlist 'Jewelry' 0x1f06
+endif
+
+headmsg '찾을 상자 :' 34
+promptalias 'stock'
+headmsg 'destination 1 :' 34
+promptalias 'dest1'
+headmsg 'destination 2 :' 34
+promptalias 'dest2'
+headmsg 'trash bag :' 34
+promptalias 'trashbag'
+useobject 'stock'
+if serial 'stock' == serial 'backpack'
+  pause 666
+  headmsg '백팩은 검색할 수 없습니다' 34
+  stop
+endif
+
+while @findtype Jewelry[] 0 'trashbag'
+  waitforproperties 'found' 15000
+  //EP DI jewels
+  if @property 'Enhance Potions' 'found' >= 15 and @property 'Damage Increase' 'found' >= 15
+    @moveitem! 'found' 'backpack'
+    pause 1000
+    break
+  endif
+  //save SDI LMC LRC
+  //if @property 'Faster Casting' 'found'
+    if @property 'Spell Damage Increase' 'found' >= 10 and @property 'Lower Mana Cost' 'found' >= 5
+      @moveitem! 'found' 'dest1'
+      pause 1000
+      break
+    endif
+    if @property 'Spell Damage Increase' 'found' >= 10 and @property 'Lower Reagent Cost' 'found' >= 10
+      @moveitem! 'found' 'dest1'
+      pause 1000
+      break
+    endif
+    if @property 'Lower Reagent Cost' 'found' >= 10 and @property 'Lower Mana Cost' 'found' >= 5
+      @moveitem! 'found' 'dest1'
+      pause 1000
+      break
+    endif
+  //endif
+  //save 1/2 and 1/1
+  if @property 'Faster Cast Recovery' 'found' > 1 and @property 'Faster Casting' 'found'
+    @moveitem! 'found' 'dest1'
+    pause 1000
+    break
+  endif
+  //hci and dci jewels, other usable hci dci jewels will be captured by above
+  if @property 'Defense chance increase' 'found' >= 10 and @property 'Hit chance increase' 'found' >= 10
+    @moveitem! 'found' 'dest2'
+    pause 1000
+    break
+  endif
+  if @property 'Hit Chance Increase' 'found' >= 10 and @property 'Damage Increase' 'found' >= 16
+    @moveitem! 'found' 'dest2'
+    pause 1000
+    break
+  endif
+  if @property 'Defense Chance Increase' 'found' >= 10 and @property 'Damage Increase' 'found' >= 16
+    @moveitem! 'found' 'dest2'
+    pause 1000
+    break
+  endif
+  ignoreobject 'found'
+endwhile
