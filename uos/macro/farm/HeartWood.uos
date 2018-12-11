@@ -275,7 +275,7 @@ for 0 to 'magechiv'
               while @findtype Talismans[] 0 'trash'
                 waitforproperties 'found' 15000
                 //crafting bonus and exceptional bonus talismans
-                if @property 'Tinkering Exceptional Bonus' 'found' >= 23 and @property 'Tinkering Bonus' 'found' >= 23
+                if @property 'Tinkering Exceptional Bonus' 'found' >= 30 and @property 'Tinkering Bonus' 'found' >= 28
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
@@ -283,15 +283,15 @@ for 0 to 'magechiv'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Fletching Exceptional Bonus' 'found' >= 23 and @property 'Fletching Bonus' 'found' >= 23
+                elseif @property 'Fletching Exceptional Bonus' 'found' >= 30 and @property 'Fletching Bonus' 'found' >= 25
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Tailoring Exceptional Bonus' 'found' >= 23 and @property 'Tailoring Bonus' 'found' >= 23
+                elseif @property 'Tailoring Exceptional Bonus' 'found' >= 30 and @property 'Tailoring Bonus' 'found' >= 25
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Carpentry Exceptional Bonus' 'found' >= 23 and @property 'Carpentry Bonus' 'found' >= 23
+                elseif @property 'Carpentry Exceptional Bonus' 'found' >= 30 and @property 'Carpentry Bonus' 'found' >= 25
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
@@ -299,7 +299,7 @@ for 0 to 'magechiv'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Blacksmithing Exceptional Bonus' 'found' >= 23 and @property 'Blacksmithing Bonus' 'found' >= 23
+                elseif @property 'Blacksmithing Exceptional Bonus' 'found' >= 30 and @property 'Blacksmithing Bonus' 'found' >= 25
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
@@ -314,7 +314,7 @@ for 0 to 'magechiv'
                 endfor
                 //get killers
                 for 0 to 'Killers'
-                  if @property Killers[] 'found' >= 90
+                  if @property Killers[] 'found' >= 99
                     @moveitem! 'found' 'backpack'
                     pause 1000
                     break
@@ -322,7 +322,7 @@ for 0 to 'magechiv'
                 endfor
                 //get protections
                 for 0 to 'Protection'
-                  if @property Protection[] 'found' >= 50
+                  if @property Protection[] 'found' >= 59
                     @moveitem! 'found' 'backpack'
                     pause 1000
                     break
@@ -336,7 +336,12 @@ for 0 to 'magechiv'
               while @findtype Jewelry[] 0 'trash'
                 waitforproperties 'found' 15000
                 //EP DI jewels
-                if @property 'Enhance Potions' 'found' >= 15 and @property 'Damage Increase' 'found' >= 15
+                if @property 'Enhance Potions' 'found' >= 15 and @property 'Damage Increase' 'found' >= 20
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Lower Reagent Cost' 'found' >= 19
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
