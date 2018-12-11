@@ -5,6 +5,7 @@ endif
 if not @inregion 'guards' 'enemy' 10
   if not @property 'wandering healer' 'enemy' and not @property 'Guard' 'enemy'
     //attack 'enemy'
+    @headmsg '▼▼▼' 43 'enemy'
     @setalias 'last' 'enemy'
   else
     sysmsg 'healer' 63
