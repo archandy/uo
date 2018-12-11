@@ -1,0 +1,310 @@
+//removes name from list when it finds a guild, resets names on a timer
+if not timerexists 'GuildReset'
+  @createtimer 'GuildReset'
+  @removelist 'Guilds'
+endif
+if timer 'GuildReset' > 360000
+  @removelist 'Guilds'
+  @settimer 'GuildReset' 0
+endif
+if not listexists 'Guilds'
+  createlist 'Guilds'
+  @pushlist 'Guilds' '[Hz]'
+  @pushlist 'Guilds' '[KvG]'
+  @pushlist 'Guilds' '[Req]'
+  @pushlist 'Guilds' '[KoV]'
+  @pushlist 'Guilds' '[Epic]'
+  @pushlist 'Guilds' '[ITP]'
+  @pushlist 'Guilds' '[ES]'
+  @pushlist 'Guilds' '[Duke]'
+  @pushlist 'Guilds' '[LvL]'
+  @pushlist 'Guilds' '[UoH]'
+endif
+@removelist 'count'
+@createlist 'count'
+@pushlist 'count' 0
+@pushlist 'count' 1
+@pushlist 'count' 2
+@pushlist 'count' 3
+@pushlist 'count' 4
+@pushlist 'count' 5
+@pushlist 'count' 6
+@pushlist 'count' 7
+@pushlist 'count' 8
+@pushlist 'count' 9
+@pushlist 'count' 10
+@pushlist 'count' 11
+@pushlist 'count' 12
+@pushlist 'count' 13
+@pushlist 'count' 14
+@pushlist 'count' 15
+@pushlist 'count' 16
+if not timerexists 'timeout'
+  createtimer 'timeout'
+endif
+if not listexists 'BodyTypes'
+  createlist 'BodyTypes'
+  //human
+  pushlist 'BodyTypes' 0x190
+  pushlist 'BodyTypes' 0x191
+  //wraith
+  pushlist 'BodyTypes' 0x2ec
+  pushlist 'BodyTypes' 0x2eb
+  //elf
+  pushlist 'BodyTypes' 0x25d
+  pushlist 'BodyTypes' 0x25e
+  //lich
+  pushlist 'BodyTypes' 0x2ed
+  //vamp
+  pushlist 'BodyTypes' 0x2e9
+  pushlist 'BodyTypes' 0x2e8
+endif
+if not timerexists 'guildcheck'
+  @createtimer 'guildcheck'
+  @settimer 'guildcheck' 31000
+endif
+settimer 'timeout' 0
+if counttypeground 0x75b 1106 18 > 0 and counttypeground 0x75a 1106 18 > 0
+  if counttypeground 0x759 1106 18 > 0 and counttypeground 0x75c 1106 18 > 0
+    while counttypeground 0x1854 38 18 == 0 and counttypeground 0x1854 0 18 == 0
+      //jump out of this loop if walk out of range of altar
+      if not counttypeground 0x75b 1106 18 > 0 or not counttypeground 0x75a 1106 18 > 0
+        replay
+      endif
+      if not counttypeground 0x759 1106 18 > 0 or not counttypeground 0x75c 1106 18 > 0
+        replay
+      endif
+      if counttypeground 0xfee 38 18 > 0
+        allymsg 'Champ Up!'
+        pause 15000
+      endif
+    endwhile
+    if counttypeground 0x1854 38 18 == 16
+      if counttypeground 0x1854 0 18 == 4
+        allymsg 'T4, 16R, 4W'
+      elseif counttypeground 0x1854 0 18 == 3
+        allymsg 'T4, 16R, 3W'
+      elseif counttypeground 0x1854 0 18 == 2
+        allymsg 'T4, 16R, 2W'
+      elseif counttypeground 0x1854 0 18 == 1
+        allymsg 'T4, 16R, 1W'
+      else
+        allymsg 'T4, 16R, 0W'
+      endif
+    elseif counttypeground 0x1854 38 18 == 15
+      if counttypeground 0x1854 0 18 == 4
+        allymsg 'T4, 15R, 4W'
+      elseif counttypeground 0x1854 0 18 == 3
+        allymsg 'T4, 15R, 3W'
+      elseif counttypeground 0x1854 0 18 == 2
+        allymsg 'T4, 15R, 2W'
+      elseif counttypeground 0x1854 0 18 == 1
+        allymsg 'T4, 15R, 1W'
+      else
+        allymsg 'T4, 15R, 0W'
+      endif
+    elseif counttypeground 0x1854 38 18 == 14
+      if counttypeground 0x1854 0 18 == 4
+        allymsg 'T4, 14R, 4W'
+      elseif counttypeground 0x1854 0 18 == 3
+        allymsg 'T4, 14R, 3W'
+      elseif counttypeground 0x1854 0 18 == 2
+        allymsg 'T4, 14R, 2W'
+      elseif counttypeground 0x1854 0 18 == 1
+        allymsg 'T4, 14R, 1W'
+      else
+        allymsg 'T4, 14R, 0W'
+      endif
+    elseif counttypeground 0x1854 38 18 == 13
+      if counttypeground 0x1854 0 18 == 4
+        allymsg 'T4, 13R, 4W'
+      elseif counttypeground 0x1854 0 18 == 3
+        allymsg 'T4, 13R, 3W'
+      elseif counttypeground 0x1854 0 18 == 2
+        allymsg 'T4, 13R, 2W'
+      elseif counttypeground 0x1854 0 18 == 1
+        allymsg 'T4, 13R, 1W'
+      else
+        allymsg 'T4, 13R, 0W'
+      endif
+    elseif counttypeground 0x1854 38 18 == 12
+      if counttypeground 0x1854 0 18 == 4
+        allymsg 'T3, 12R, 4W'
+      elseif counttypeground 0x1854 0 18 == 3
+        allymsg 'T3, 12R, 3W'
+      elseif counttypeground 0x1854 0 18 == 2
+        allymsg 'T3, 12R, 2W'
+      elseif counttypeground 0x1854 0 18 == 1
+        allymsg 'T3, 12R, 1W'
+      else
+        allymsg 'T3, 12R, 0W'
+      endif
+    elseif counttypeground 0x1854 38 18 == 11
+      if counttypeground 0x1854 0 18 == 4
+        allymsg 'T3, 11R, 4W'
+      elseif counttypeground 0x1854 0 18 == 3
+        allymsg 'T3, 11R, 3W'
+      elseif counttypeground 0x1854 0 18 == 2
+        allymsg 'T3, 11R, 2W'
+      elseif counttypeground 0x1854 0 18 == 1
+        allymsg 'T3, 11R, 1W'
+      else
+        allymsg 'T3, 11R, 0W'
+      endif
+    elseif counttypeground 0x1854 38 18 == 10
+      if counttypeground 0x1854 0 18 == 4
+        allymsg 'T3, 10R, 4W'
+      elseif counttypeground 0x1854 0 18 == 3
+        allymsg 'T3, 10R, 3W'
+      elseif counttypeground 0x1854 0 18 == 2
+        allymsg 'T3, 10R, 2W'
+      elseif counttypeground 0x1854 0 18 == 1
+        allymsg 'T3, 10R, 1W'
+      else
+        allymsg 'T3, 10R, 0W'
+      endif
+    elseif counttypeground 0x1854 38 18 == 9
+      allymsg 'T3, 9R'
+    elseif counttypeground 0x1854 38 18 == 8
+      allymsg 'T2, 8R'
+    elseif counttypeground 0x1854 38 18 == 7
+      allymsg 'T2, 7R'
+    elseif counttypeground 0x1854 38 18 == 6
+      allymsg 'T2, 6R'
+    elseif counttypeground 0x1854 38 18 == 5
+      allymsg 'T2, 5R'
+    elseif counttypeground 0x1854 38 18 == 4
+      allymsg 'T1, 4R'
+    elseif counttypeground 0x1854 38 18 == 3
+      allymsg 'T1, 3R'
+    elseif counttypeground 0x1854 38 18 == 2
+      allymsg 'T1, 2R'
+    elseif counttypeground 0x1854 38 18 == 1
+      allymsg 'T1, 1R'
+    else
+      if counttypeground 0x1854 0 18 == 4
+        allymsg 'T1, 0R, 4W'
+      elseif counttypeground 0x1854 0 18 == 3
+        allymsg 'T1, 0R, 3W'
+      elseif counttypeground 0x1854 0 18 == 2
+        allymsg 'T1, 0R, 2W'
+      elseif counttypeground 0x1854 0 18 == 1
+        allymsg 'T1, 0R, 1W'
+      else
+        //
+      endif
+    endif
+    @removelist 'timeout'
+    @createlist 'timeout'
+    if counttypeground 0x1854 0 18 > 0 and counttypeground 0x1854 38 18 > 9
+      //45 sec if more than 0 whites and more than 9 reds
+      @pushlist 'timeout' 45000
+    else
+      //if less than 9 reds or 0 whites, could be reverting, just announce every 3 minutes
+      pushlist 'timeout' 360000
+    endif
+    //dont worry about whites until 10 or more reds
+    if counttypeground 0x1854 38 18 < 10 and counttypeground 0x1854 38 18 > 0
+      for 0 to 'count'
+        if counttypeground 0x1854 38 18 == count[]
+          while counttypeground 0x1854 38 18 == count[] and timer 'timeout' < timeout[0]
+            if timer 'guildcheck' > 10000
+              clearignorelist
+              ignoreobject 'self'
+              for 0 to 'BodyTypes'
+                while @findtype BodyTypes[] 'any' ground 0 18
+                  for 0 to 'Guilds'
+                    if @property Guilds[] 'found'
+                      allymsg 'Guilds[]'
+                      @settimer 'guildcheck' 0
+                      poplist 'Guilds' Guilds[]
+                    endif
+                  endfor
+                  ignoreobject 'found'
+                endwhile
+              endfor
+            endif
+          endwhile
+          break
+        endif
+      endfor
+    else
+      for 0 to 'count'
+        if counttypeground 0x1854 0 18 == count[]
+          //get the red value to compare to for Valor/Revert
+          if counttypeground 0x1854 38 18 == 16
+            @removelist 'redcount'
+            @createlist 'redcount'
+            @pushlist 'redcount' 16
+          elseif counttypeground 0x1854 38 18 == 15
+            @removelist 'redcount'
+            @createlist 'redcount'
+            @pushlist 'redcount' 15
+          elseif counttypeground 0x1854 38 18 == 14
+            @removelist 'redcount'
+            @createlist 'redcount'
+            @pushlist 'redcount' 14
+          elseif counttypeground 0x1854 38 18 == 13
+            @removelist 'redcount'
+            @createlist 'redcount'
+            @pushlist 'redcount' 13
+          elseif counttypeground 0x1854 38 18 == 12
+            @removelist 'redcount'
+            @createlist 'redcount'
+            @pushlist 'redcount' 12
+          elseif counttypeground 0x1854 38 18 == 11
+            @removelist 'redcount'
+            @createlist 'redcount'
+            @pushlist 'redcount' 11
+          elseif counttypeground 0x1854 38 18 == 10
+            @removelist 'redcount'
+            @createlist 'redcount'
+            @pushlist 'redcount' 10
+          endif
+          while counttypeground 0x1854 0 18 == count[] and timer 'timeout' < timeout[0]
+            //to register if a champ has popped
+            if counttypeground 0xfee 38 18 > 0
+              break
+            endif
+            //if red count changes while waiting on whites
+            if counttypeground 0x75b 1106 18 > 0 and counttypeground 0x75a 1106 18 > 0
+              if counttypeground 0x759 1106 18 > 0 and counttypeground 0x75c 1106 18 > 0
+                if counttypeground 0x1854 38 18 < redcount[0] and counttypeground 0x1854 38 18 > 0
+                  allymsg 'Red Revert'
+                  break
+                elseif counttypeground 0x1854 38 18 > redcount[0]
+                  allymsg 'Valored!'
+                  break
+                endif
+              endif
+            endif
+            //periodically scan area for new guild tags
+            if timer 'guildcheck' > 5000
+              clearignorelist
+              ignoreobject 'self'
+              for 0 to 'BodyTypes'
+                while @findtype BodyTypes[] 'any' ground 0 18
+                  for 0 to 'Guilds'
+                    if @property Guilds[] 'found'
+                      allymsg 'Guilds[]'
+                      @settimer 'guildcheck' 0
+                      poplist 'Guilds' Guilds[]
+                    endif
+                  endfor
+                  ignoreobject 'found'
+                endwhile
+              endfor
+            endif
+          endwhile
+          break
+        endif
+      endfor
+    endif
+  elseif not counttypeground 0x759 1106 18 > 0 and not counttypeground 0x75c 1106 18 > 0
+    sysmsg 'Not in full view of the altar' 34
+    pause 5000
+  endif
+elseif not counttypeground 0x75b 1175 18 > 0 and not counttypeground 0x75a 1175 18 > 0
+  sysmsg 'Not in full view of the altar' 34
+  pause 5000
+endif
