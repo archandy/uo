@@ -1,0 +1,4 @@
+getenemy 'gray' 'criminal' 'closest' 'humanoid' 'transformation'
+//attack 'enemy'
+@setalias 'last' 'enemy'
+//@playmacro 'bandageloop'
