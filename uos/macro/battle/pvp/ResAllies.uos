@@ -1,0 +1,66 @@
+if not listexists 'ghosts'
+  createlist 'ghosts'
+  pushlist 'ghosts' 0x192
+  pushlist 'ghosts' 0x193
+  pushlist 'ghosts' 0x260
+  pushlist 'ghosts' 0x25f
+endif
+if not timerexists 'restimer'
+  createtimer 'restimer'
+  settimer 'restimer' 40000
+endif
+clearignorelist
+if targetexists 'neutral'
+  target! 'self'
+endif
+if targetexists 'harmful' and not inregion 'guards'
+  target! 'enemy'
+endif
+if targetexists 'beneficial' and timer 'restimer' > 30000
+  @target! 'friend'
+  if skill 'Magery' < 120 and counttype 0x1f67 'any' 'backpack' > 0
+    usetype 0x1f67 'any' 'backpack'
+  else
+    cast 'Resurrection'
+  endif
+  settimer 'restimer' 0
+  while not targetexists
+  endwhile
+endif
+if not targetexists 'beneficial'
+  if skill 'Magery' < 120 and counttype 0x1f67 'any' 'backpack' > 0
+    usetype 0x1f67 'any' 'backpack'
+  else
+    cast 'Resurrection'
+  endif
+  settimer 'restimer' 0
+  while not targetexists
+  endwhile
+endif
+for 0 to 'ghosts'
+  if @findtype ghosts[] 'any' 'ground' 1 18
+    while @findtype ghosts[] 'any' 'ground' 1 10
+      if infriendlist 'found' or @inparty 'found'
+        if not @property '[SL]' 'found' and not @property '[Min]' 'found'
+          if not @property '[TB]' 'found' and not @property '[CoM]' 'found'
+            @headmsg 'RES ME' 33 'found'
+            while not @inrange 'found' 1
+              pause 100
+            endwhile
+            target! 'found'
+            stop
+          else
+            headmsg 'Faction' 43 'found'
+          endif
+        else
+          headmsg 'Faction' 43 'found'
+        endif
+      endif
+      ignoreobject 'found'
+    endwhile
+  endif
+  pause 100
+endfor
+if targetexists 'beneficial'
+  replay
+endif
