@@ -1,0 +1,91 @@
+clearignorelist
+
+if not listexists 'Weapons'
+  @createlist 'Weapons'
+  @pushlist 'Weapons' 0x1439
+  @pushlist 'Weapons' 0x13f8
+endif
+if not listexists 'Slayers'
+  @createlist 'Slayers'
+  @pushlist 'Slayers' 'Ice Slayer'
+  @pushlist 'Slayers' 'Flame Slayer'
+  @pushlist 'Slayers' 'Vermin Slayer'
+  @pushlist 'Slayers' 'Mage Slayer'
+  @pushlist 'Slayers' 'Bird Slayer'
+  @pushlist 'Slayers' 'Repond Slayer'
+  @pushlist 'Slayers' 'Dragon Slayer'
+  @pushlist 'Slayers' 'Reptile Slayer'
+  @pushlist 'Slayers' 'Demon Slayer'
+  @pushlist 'Slayers' 'Spider Slayer'
+  @pushlist 'Slayers' 'Arachnid Slayer'
+  @pushlist 'Slayers' 'Scorpion Slayer'
+  @pushlist 'Slayers' 'Blood Elemental Slayer'
+  @pushlist 'Slayers' 'Elemental Slayer'
+  @pushlist 'Slayers' 'Terathan Slayer'
+  @pushlist 'Slayers' 'Undead Slayer'
+endif
+headmsg '찾을 상자 :' 34
+promptalias 'stock'
+headmsg 'destination 1 :' 34
+promptalias 'dest1'
+headmsg 'destination 2 :' 34
+promptalias 'dest2'
+headmsg 'destination 3 :' 34
+promptalias 'dest3'
+headmsg 'destination 4 :' 34
+promptalias 'dest4'
+headmsg 'destination 5 :' 34
+promptalias 'dest5'
+headmsg 'destination 6 :' 34
+promptalias 'dest6'
+headmsg 'trash bag :' 74
+promptalias 'trashbag'
+useobject 'stock'
+if serial 'stock' == serial 'backpack'
+  pause 666
+  headmsg '백팩은 검색할 수 없습니다' 34
+  stop
+endif
+for 0 to 'Weapons'
+  while @findtype Weapons[] 0 'trashbag'
+    waitforproperties 'found' 15000
+    //get slayers
+    for 0 to 'Slayers'
+      if @property Slayers[] 'found'
+        @moveitem! 'found' 'dest1'
+        pause 1000
+        break
+      endif
+    endfor
+    //HML
+    if @property 'Hit Mana Leech' 'found' and @property 'Damaga Increase' 'found'
+      @moveitem! 'found' 'dest2'
+      pause 1000
+      break
+    endif
+    //HSL
+    if @property 'Hit Stamina Leech' 'found' and @property 'Damaga Increase' 'found'
+      @moveitem! 'found' 'dest3'
+      pause 1000
+      break
+    endif
+    //HSL
+    if @property 'Hit Life Leech' 'found' and @property 'Damaga Increase' 'found'
+      @moveitem! 'found' 'dest4'
+      pause 1000
+      break
+    endif
+    // HLD
+    if @property 'Hit Lower Defense' 'found' and @property 'Damage Increase' 'found'
+      @moveitem! 'found' 'dest5'
+      pause 1000
+      break
+    endif
+    if @property 'Hit Lower Attack' 'found' and @property 'Damage Increase' 'found'
+      @moveitem! 'found' 'dest6'
+      pause 1000
+      break
+    endif
+    ignoreobject 'found'
+  endwhile
+endfor
