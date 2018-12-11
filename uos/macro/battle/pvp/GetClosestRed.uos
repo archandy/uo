@@ -1,0 +1,16 @@
+getenemy 'murderer' 'closest'  'humanoid' 'transformation' 'enemy'
+if @findalias 'enemy'
+  waitforproperties 'enemy' 5000
+endif
+if not @property 'wandering healer' 'enemy' and not @property 'Priest of' 'enemy'
+  if not @property 'the piper' 'enemy'
+    //attack 'enemy'
+    @headmsg '▼▼▼' 43 'enemy'
+    @setalias 'last' 'enemy'
+  else
+    sysmsg 'Barracoon' 88
+  endif
+else
+  sysmsg 'healer' 63
+endif
+//@playmacro 'bandageloop'
