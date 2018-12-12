@@ -40,13 +40,9 @@ promptalias 'dest6'
 headmsg 'trash bag :' 74
 promptalias 'trashbag'
 useobject 'stock'
-if serial 'stock' == serial 'backpack'
-  pause 666
-  headmsg '백팩은 검색할 수 없습니다' 34
-  stop
-endif
+
 for 0 to 'Weapons'
-  while @findtype Weapons[] 0 'trashbag'
+  while @findtype Weapons[] 'any' 'backpack'
     waitforproperties 'found' 15000
     //get slayers
     for 0 to 'Slayers'
@@ -57,34 +53,37 @@ for 0 to 'Weapons'
       endif
     endfor
     //HML
-    if @property 'Hit Mana Leech' 'found' and @property 'Damaga Increase' 'found'
-      @moveitem! 'found' 'dest2'
-      pause 1000
-      break
+    if @property 'Damage Increase' 'found'
+      if @property 'Hit Mana Leech' 'found' >= 40
+        @moveitem! 'found' 'dest2'
+        pause 1000
+        break
+      endif
+      //HSL
+      if @property 'Hit Stamina Leech' 'found' >= 40
+        @moveitem! 'found' 'dest3'
+        pause 1000
+        break
+      endif
+      //HSL
+      if @property 'Hit Life Leech' 'found' >= 40
+        @moveitem! 'found' 'dest4'
+        pause 1000
+        break
+      endif
+      // HLD
+      if @property 'Hit Lower Defense' 'found' >= 30
+        @moveitem! 'found' 'dest5'
+        pause 1000
+        break
+      endif
+      if @property 'Hit Lower Attack' 'found'  >= 30
+        @moveitem! 'found' 'dest6'
+        pause 1000
+        break
+      endif
     endif
-    //HSL
-    if @property 'Hit Stamina Leech' 'found' and @property 'Damaga Increase' 'found'
-      @moveitem! 'found' 'dest3'
-      pause 1000
-      break
-    endif
-    //HSL
-    if @property 'Hit Life Leech' 'found' and @property 'Damaga Increase' 'found'
-      @moveitem! 'found' 'dest4'
-      pause 1000
-      break
-    endif
-    // HLD
-    if @property 'Hit Lower Defense' 'found' and @property 'Damage Increase' 'found'
-      @moveitem! 'found' 'dest5'
-      pause 1000
-      break
-    endif
-    if @property 'Hit Lower Attack' 'found' and @property 'Damage Increase' 'found'
-      @moveitem! 'found' 'dest6'
-      pause 1000
-      break
-    endif
+    @moveitem! 'found' 'trashbag'
     ignoreobject 'found'
   endwhile
 endfor
