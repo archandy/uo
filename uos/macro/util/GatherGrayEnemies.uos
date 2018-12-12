@@ -1,0 +1,3 @@
+getenemy 'gray'
+attack! 'enemy'
+pause 200
