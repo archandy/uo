@@ -75,6 +75,6 @@ while not dead 'enemy'
   //  setability 'primary' 'on'
   //endif
   attack 'enemy'
-  pause 1
+  pause 100
 endwhile
 stop
