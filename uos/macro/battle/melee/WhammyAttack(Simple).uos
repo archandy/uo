@@ -38,7 +38,7 @@ while not dead 'enemy'
     endif
   endif
   if timer 'EOO' > 90000
-   if mana > 6
+   if mana > 20
       while not buffexists 1011
         cast 'enemy of one'
         settimer 'EOO' 0
@@ -54,7 +54,7 @@ while not dead 'enemy'
     endif
   endif
   // Divine Fury
-  if stam < 95
+  if not buffexists 'divine fury' and mana > 17
     cast 'divine fury'
     pause 600
   endif
