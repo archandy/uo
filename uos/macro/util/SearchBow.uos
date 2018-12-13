@@ -1,0 +1,51 @@
+수정삭제목록답변글쓰기
+// 원하는 옵션의 물건 찾아서 백팩으로 옮기기
+// 181126
+// v1.2, written by Love
+//
+// 상자에서 지정한 물건만 골라서 내 가방으로 옮겨줍니다.
+//
+// 23번째 줄의 @findtype 바로 뒤에 찾을 물건의 graphic(type)을 넣어주세요.
+// 35번째 줄의 @property 바로 뒤에 찾을 조건을 넣어주세요.
+//
+clearignorelist
+headmsg '찾을 상자 :' 34
+promptalias 'stock'
+useobject 'stock'
+if serial 'stock' == serial 'backpack'
+  pause 666
+  headmsg '백팩은 검색할 수 없습니다' 34
+  stop
+endif
+while hits > 0
+  headmsg '* 꽝 *' 89
+  // 아래에 찾을 물건의 graphic(type)을 넣어주세요.
+  //            !!!!!
+  if @findtype '0xe89' 'any' 'Stock'
+
+  // 두 종류 이상의 물건을 찾을때는 elseif로 추가할 수 있습니다.
+
+  //                   !!!!!
+
+  // elseif @findtype '0xdf1' 'any' 'Stock'
+  else
+    headmsg 'done'
+    stop
+  endif
+  waitforproperties 'found' 10000
+  // 아래에 찾을 조건을 넣어주세요.
+  // 동시 조건(and)은 2개 까지만 가능하고, 3개 하시면 버그때문에 못찾습니다
+  
+  if @property 'Hit Chance' 'found' >= 20
+    if @property 'hit Lightning' 'found' >= 40
+      if @property 'Speed' 'found' >= 35
+        headmsg '$$$ 빠밤 $$$' 114
+        pause 600
+        moveitem 'found' 'backpack'
+        pause 600
+      endif
+    endif
+  endif
+  ignoreobject 'found'
+
+endwhile 
