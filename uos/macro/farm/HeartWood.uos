@@ -77,16 +77,10 @@ if not listexists 'Weapons'
   @pushlist 'Weapons' 0xe81 
 endif
 
-if not listexists 'Shields'
-  @createlist 'Shields'
-  // Shields 
-  @pushlist 'Shields' 0x1b76 
-  @pushlist 'Shields' 0x1b7b 
-  @pushlist 'Shields' 0x1b72 
-  @pushlist 'Shields' 0x1b73 
-  @pushlist 'Shields' 0x1b74 
-  @pushlist 'Shields' 0x1b79 
-  @pushlist 'Shields' 0x1b7a 
+if not listexists 'Scroll'
+  @createlist 'Scroll'
+  // Scroll 
+  @pushlist 'Scroll' 0x2831  
 endif
 if not listexists 'Talismans'
   @createlist 'Talismans'
@@ -332,6 +326,44 @@ for 0 to 'magechiv'
                     break
                   endif
                 endfor
+                ignoreobject 'found'
+              endwhile
+            endfor
+            //Scroll
+            for 0 to 'Scroll'
+              while @findtype Jewelry[] 0 'trash'
+                waitforproperties 'found' 15000
+                //EP DI jewels
+                if @property 'Magi' 'found'
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Blight' 'found'
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Faerie Fire' 'found'
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Mischief Maker' 'found'
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Silvani's Feywood' 'found'
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Night Reaper' 'found'
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
                 ignoreobject 'found'
               endwhile
             endfor
