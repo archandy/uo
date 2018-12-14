@@ -1,0 +1,7 @@
+if counttypeground 0x1854 0 18 > 0 and counttypeground 0x1854 38 18 > 9
+  //45 sec if more than 0 whites and more than 9 reds
+  @pushlist 'timeout' 45000
+else
+  //if less than 9 reds or 0 whites, could be reverting, just announce every 3 minutes
+  pushlist 'timeout' 360000
+endif
