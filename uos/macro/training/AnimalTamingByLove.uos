@@ -1,0 +1,61 @@
+// Animal Taming in Delucia
+// 181128
+// v1.7, written by Love
+//
+@getenemy 'gray' 'closest'
+createtimer 'timeout'
+@canceltarget
+while @inrange 'enemy' 12
+  if timer 'timeout' > 15000
+    headmsg 'X' 996  'enemy'
+    @getenemy 'gray'
+  elseif @injournal 'cannot'
+    @clearjournal
+    headmsg 'X' 996  'enemy'
+    @getenemy 'gray'
+  endif
+  if graphic 'enemy' == '0xdd' or graphic 'enemy' == '0xd5'
+    headmsg 'O' 74 'enemy'
+    useskill 'animal taming'
+    @target! 'enemy'
+    if @injournal 'already' or @injournal 'too many'
+      while @inrange 'enemy' 3 and hits 'enemy' > 0
+        headmsg 'X' 34 'enemy'
+        @canceltarget
+        attack! 'enemy'
+        settimer 'timeout' 0
+      endwhile
+      @clearjournal
+    endif
+  else
+    while @inrange 'enemy' 3 and hits 'enemy' > 0
+      headmsg 'X' 996 'enemy'
+      attack! 'enemy'
+      @canceltarget
+      settimer 'timeout' 0
+    endwhile
+  endif
+  if @distance 'enemy' > 3
+    if @x 'enemy' > x 'self' and @y 'enemy' > y 'self'
+      run 'Southeast'
+    elseif @x 'enemy' < x 'self' and @y 'enemy' > y 'self'
+      run 'Southwest'
+    elseif @x 'enemy' > x 'self' and @y 'enemy' < y 'self'
+      run 'Northeast'
+    elseif @x 'enemy' < x 'self' and @y 'enemy' < y 'self'
+      run 'Northwest'
+    elseif @x 'enemy' > x 'self' and @y 'enemy' == y 'self'
+      run 'East'
+    elseif @x 'enemy' < x 'self' and @y 'enemy' == y 'self'
+      run 'West'
+    elseif @x 'enemy' == x 'self' and @y 'enemy' > y 'self'
+      run 'South'
+    elseif @x 'enemy' == x 'self' and @y 'enemy' < y 'self'
+      run 'North'
+    endif
+  endif
+  if @distance 'enemy' < 4
+    pause 600
+    settimer 'timeout' 0
+  endif
+endwhile 
