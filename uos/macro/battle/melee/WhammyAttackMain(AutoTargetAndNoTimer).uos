@@ -1,0 +1,63 @@
+warmode 'on'
+
+// set enemy
+shownames 'mobiles'
+getenemy 'criminal' 'gray' 'orange' 'murderer' 'enemy' 'closest'
+@headmsg '★★ Found ★★' 74 'enemy'
+// Honor Eenemy
+virtue 'honor'
+waitfortarget 1500
+target! 'enemy'
+
+// Curse Weapon from scroll
+usetype 0x2263
+pause 1100
+
+//use LS or primary skill
+cast "Lightning Strike"
+//setability 'primary' 'on'
+//setability 'secondary' 'on'
+
+attack 'enemy'
+while not dead 'enemy'
+  headmsg '▼▼▼' 34 'enemy'
+  
+  // Curse Weapon from scroll
+  if not buffexists 'Curse Weapon' 
+    if mana > 6
+      usetype 0x2263
+      pause 1100
+    endif
+  endif
+
+  // Consecrate Weapon
+  if not buffexists 1082 
+    if mana > 6
+      cast 'Consecrate Weapon'
+      pause 600
+    endif
+  endif
+  
+  // Divine Fury
+  if not buffexists 'divine fury' and mana > 17
+    cast 'divine fury'
+    pause 600
+  endif
+  
+  // Counter Attack
+  if not buffexists 1095
+    cast 'Counter Attack'
+    pause 600
+  endif
+  
+  // Lightning Strike
+  if not buffexists  1096
+    cast "Lightning Strike"
+    pause 600
+  endif
+  //setability 'primary' 'on'
+  
+  attack 'enemy'
+  pause 100
+endwhile
+stop
