@@ -7,7 +7,7 @@
 // 준비되셨으면 Loop 체크 하지말고 그냥 스타트
 
 
-// 
+// 메저리
 while skill 'magery' < 100
 if @injournal 'insufficient mana' 
   clearjournal 
