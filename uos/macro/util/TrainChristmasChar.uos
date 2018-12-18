@@ -48,6 +48,7 @@ while skill 'evaluating intelligence' < 100
   else
     cast 'weaken' 'self' 
     pause 1500 
+  endif
 endwhile
 
 // 스피릿 스피킹
@@ -64,6 +65,7 @@ while skill 'Spirit Speak' < 100
   else
     cast "Wither"
     pause 2000 
+  endif
 endwhile
 
 // 네크로
