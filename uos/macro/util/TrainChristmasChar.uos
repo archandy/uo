@@ -51,11 +51,15 @@ while skill 'evaluating intelligence' < 100
 endwhile
 
 // 스피릿 스피킹
+if skillstate 'Necromancy' == 'up'
+  setskill 'Necromancy' == 'locked'
+endif
+headmsg '정신을 집중해 스피릿스피킹을 올립니다 뿌우'
 while skill 'Spirit Speak' < 100 
   if @injournal 'insufficient mana' 
     clearjournal 
     useskill 'meditation' 
-    while mana < maxmana 
+    while mana < 50 
     endwhile 
   else
     cast "Wither"
@@ -63,12 +67,16 @@ while skill 'Spirit Speak' < 100
 endwhile
 
 // 네크로
+headmsg '정신을 집중해 네크로를 올립니다 뿌우'
+if skillstate 'Necromancy' == 'locked'
+  setskill 'Necromancy' == 'up'
+endif
 while skill 'Necromancy' < 100
   if @injournal 'insufficient mana'
     clearjournal
     useskill 'Meditation'
-    while mana < maxmana
-    endwhile
+    while mana < 50 
+    endwhile 
   else
     if skill 'Necromancy' < 35
       headmsg 'Please buy skill to continue!'
@@ -89,6 +97,7 @@ while skill 'Necromancy' < 100
   endif
 endwhile
 
+headmsg '뻠수상이 숨기 훈련을 시작합니다'
 // Hiding
 while skill 'hiding' < 100 
   useskill 'hiding' 
