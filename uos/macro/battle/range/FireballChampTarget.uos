@@ -1,0 +1,84 @@
+// 2018 Christmas Town Boss Check by Fireball
+// 181030
+// Htown v1.5, written by Love ( Ctown fix Mark 20181217 )
+//
+shownames 'mobiles'
+for 1000
+  if @findtype '0x1f03' '1194'
+    waitforcontext 'self' 3 3000
+    waitfortarget 3000
+    target! 'found'
+    waitfortarget 3000
+    canceltarget
+    if findlayer 'self' 22
+      moveitem 'found' 'backpack'
+    endif
+    equipitem 'found' 22
+    pause 1000
+  endif
+  //
+  if poisoned 'self'
+    cast 'cure'
+    waitfortarget 1000
+    @target! 'self'
+  elseif hits 'self' < 90
+    cast 'heal'
+    waitfortarget 1000
+    @target! 'self'
+  endif
+  //
+  @canceltarget
+  @clearlist 'names'
+  @createlist 'names'
+  pushlist 'names' 'Santa Claws'
+  pushlist 'names' 'The Grinch'
+  pushlist 'names' 'Maugrim'
+  pushlist 'names' 'The White Witch'
+  pushlist 'names' 'Christmas Angel'
+  pushlist 'names' 'Gingerbread Man'
+  pushlist 'names' 'Rudolph the Rapidly Rotting Reindeer'
+  pushlist 'names' 'he Memory Of Your Tormented Past'
+  pushlist 'names' 'The Image Of Your Despicable Present'
+  pushlist 'names' 'he potential horror of your future self'
+  //
+  //pushlist 'names' 'Santa Claws'
+  //pushlist 'names' 'Santa Claws'
+  //
+  @getenemy 'murderer' 'gray'
+  for 0 to 'names'
+    headmsg 'names[]' '996'
+    if @name 'enemy' == names[]
+      while @inrange 'enemy' 12
+        headmsg '<$$$$>' 34 'enemy'
+        //
+        if poisoned 'self'
+          cast 'arch cure'
+          waitfortarget 2000
+          @target! 'self'
+        elseif hits 'self' < 90
+          cast 'heal'
+          waitfortarget 1000
+          @target! 'self'
+        else
+          cast 'fireball'
+          waitfortarget 2000
+          @target! 'enemy'
+        endif
+        //
+      endwhile
+    endif
+  endfor
+  //
+  if not hidden 'self'
+    if skill 'hiding' > 90
+      useskill 'hiding'
+    elseif mana == maxmana
+      cast 'invisibility'
+      waitfortarget 2000
+      target! 'self'
+      pause 1000
+    endif
+  endif
+  //
+  pause 1
+endfor
