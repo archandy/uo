@@ -1,0 +1,112 @@
+// // 2018 Christmas Town Boss Check
+// 181024
+// Htown v1.4, written by Love ( Ctown fix Mark 20181217 )
+//
+@canceltarget
+@clearlist 'names'
+@createlist 'names'
+pushlist 'names' 'Santa Claws'
+pushlist 'names' 'The Grinch'
+pushlist 'names' 'Maugrim'
+pushlist 'names' 'The White Witch'
+pushlist 'names' 'Christmas Angel'
+pushlist 'names' 'Gingerbread Man'
+pushlist 'names' 'Rudolph the Rapidly Rotting Reindeer'
+pushlist 'names' 'he Memory Of Your Tormented Past'
+pushlist 'names' 'The Image Of Your Despicable Present'
+pushlist 'names' 'he potential horror of your future self'
+//
+@getenemy 'murderer'
+for 0 to 'names'
+  headmsg 'names[]' 996
+  if @name 'enemy' == names[]
+    setability 'primary' 'off'
+    while @inrange 'enemy' 12
+      headmsg '▼' 34 'enemy'
+      @warmode 'on'
+      @attack! 'enemy'
+      //
+      if @findtype '0xf08' 0
+        usetype '0xf08' 0
+        pause 400
+      endif
+      if @findtype '0xf0b' 0
+        usetype '0xf0b' 0
+        pause 400
+      endif
+      //
+      if skill 'archery' >= 90
+        setability 'primary' 'on'
+        if not timerexists 'bandage'
+          createtimer 'bandage'
+        endif
+        if poisoned 'self' or hits 'self' < 90
+          if timer 'bandage' > 6000
+            if @findtype 0xe21
+              bandageself
+            else
+              headmsg '* no bandage *'
+            endif
+            settimer 'bandage' 0
+          endif
+        endif
+        if not timerexists 'throw'
+          createtimer 'throw'
+        endif
+        if timer 'throw' > 30000
+          pause 300
+          settimer 'throw' 0
+          if @findtype '0xf06' 1161
+            usetype '0xf06' 1161
+            waitfortarget 3000
+            target! 'enemy'
+            pause 300
+          else
+            headmsg '* no fire potion *'
+          endif
+          if @findtype '0xf0d' 0
+            for 3
+              usetype '0xf0d' 0
+              waitfortarget 3000
+              target! 'enemy'
+              pause 300
+            endfor
+          else
+            headmsg '* no explosion potion *'
+          endif
+        endif
+        //
+      elseif skill 'magery' > 40
+        cast 'fireball'
+        waitfortarget 3000
+        @target! 'enemy'
+        if poisoned 'self'
+          cast 'cure'
+          waitfortarget 3000
+          target! 'self'
+        endif
+        if hits 'self' < 40
+          cast 'heal'
+          waitfortarget 3000
+          target! 'self'
+        endif
+      else
+        headmsg '* no skills to use *'
+      endif
+      //
+    endwhile
+  endif
+endfor
+//
+if not hidden 'self'
+  if skill 'hiding' > 90
+    useskill 'hiding'
+  elseif mana == maxmana
+    cast 'invisibility'
+    waitfortarget 2000
+    target! 'self'
+    pause 1000
+  endif
+endif
+//
+pause 1
