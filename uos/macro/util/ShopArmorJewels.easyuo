@@ -1,0 +1,1117 @@
+;==================================
+; Script Name:   Armor / Jewel Shopper
+; Author: Necro|FS
+; Version: 1.29
+; Client Tested with: Current
+; EUO version tested with: EasyUO 1.5 Approved !
+; Shard OSI / FS: OSI
+; Revision Date: 03/20/05
+; Public Release: 02/23/05
+; Global Variables Used:
+; Purpose: Used to search vendors for the armor/item you select..  Has options to open vendors packs/etc.
+;==================================
+set %_version 1.29
+;-----------------------------------------------------------------
+set %lGloves KKH
+set %lGorget JKH
+set %lCap NJL
+set %lTunic QKH
+set %lLegs VKH
+set %lSleeves HKH
+set %bracelet IJG_CWL
+set %ring UJG_LWL
+set %packTypes LKF_ZJF_CKF_CUD_HKF_AUD_DLN_IIF_BUD
+set %skillJewels %bracelet , _ , %ring
+;-----------------------------------------------------------------
+gosub Initialize
+set #MENUBUTTON n/a
+;-----------------------------------------------------------------
+mainMenuLoop:
+wait 0
+if #MENUBUTTON = cmdGo
+        gosub Go
+if #MENUBUTTON = closed || #MENUBUTTON = cmdExit
+        gosub Exit
+if #MENUBUTTON = cmdpacks
+        gosub openPacks open
+if #MENUBUTTON = cmdBrowse
+        gosub openPacks browse
+if %_sCnt <> n/a && #scnt > %_sCnt
+        gosub resetError
+menu Get cmbMain
+if #menures <> 0 && #menures <> %menuRes
+        gosub setupComboLists #menures
+gosub checkChanges
+goto mainMenuLoop
+ 
+;-----------------------------------------------------------------
+sub Initialize
+initializeRedoCheckLog:
+if #clilogged <> 1
+{
+  if %_clilogged = n/a
+  {
+    set %_clilogged
+        display ok Please log in
+  }
+  wait 0
+  goto initializeRedoCheckLog
+}
+set #lpc 1000
+gosub setVars
+gosub setupPaperdoll
+gosub showEUOMenu1
+menu Show 421 270
+set #lpc 10
+return
+;-----------------------------------------------------------------
+sub setVars
+for %_cnt 1 10
+{
+        set %_cmbArg , %_cnt , menuRes 0
+}
+return
+;-----------------------------------------------------------------
+sub Go
+set #MENUBUTTON n/a
+gosub resetError
+menu Get cmbMain
+if #menures = 0
+{
+        gosub showStatus Error
+        set %_sCnt #scnt + 5
+        return
+}
+menu Font Size 8
+menu Font Color WindowText
+menu Font BGColor Yellow
+menu Button cmdStop 12 404 75 53 &Stop
+gosub findItemMain
+return
+;-----------------------------------------------------------------
+sub Exit
+menu hide
+menu clear
+halt
+;-----------------------------------------------------------------
+sub openPacks
+set #menubutton n/a
+ignoreitem reset packs
+msg vendor browse$
+if %1 = browse
+        return
+gosub showStatus Packs
+wait 20
+oPstart:
+finditem %packTypes C
+if #findkind = -1
+{
+        gosub showStatus Done
+        return
+}
+if #findbagid = #backpackid || #findbagid = %paperdoll
+{
+        ignoreitem #findid
+        goto oPstart
+}
+opRedo:
+set #lobjectid #findid
+event macro 17
+wait 10
+if #contid <> #findid
+        goto oPredo
+ignoreitem #findid packs
+goto oPstart
+;-----------------------------------------------------------------
+sub findItemMain
+; sets up to find the item
+set #lpc 500
+gosub fIMmain
+for %_fIMcnt 1 10
+{
+        gosub fIMArgs %_fIMcnt
+        set %_result , %_fIMcnt #result
+}
+for %_fIMcnt 1 10
+{
+        gosub fIMfindAmount %_fIMcnt %_result . %_fIMcnt
+}
+gosub showStatus Searching
+gosub fIMfindIt
+gosub showStatus #result
+gosub resetArgs
+set %thisitemok #false
+menu delete cmdStop
+set #lpc 10
+return
+;-----------------------------------------------------------------
+sub fIMmain
+menu Get cmbMain
+if #menures = 1
+        set %_mainItem BRACELET
+if #menures = 2
+        set %_mainItem LCAP
+if #menures = 3
+        set %_mainItem LGLOVES
+if #menures = 4
+        set %_mainItem LGORGET
+if #menures = 5
+        set %_mainItem LLEGS
+if #menures = 6
+        set %_mainItem LSLEEVES
+if #menures = 7
+        set %_mainItem LTUNIC
+if #menures = 8
+        set %_mainItem RING
+if #menures = 9
+        set %_mainItem SKILLJEWELS
+return
+;-----------------------------------------------------------------
+sub fIMArgs
+set %_fIMArgs1 %1
+menu Get cmbArg , %_fIMArgs1
+set %percent , %1 #false
+if %_curType = ring
+{
+        if #menures = 1 2
+                set %_arg , %1 physical , #spc , resist
+                set %percent , %1 #true
+        if #menures = 2 2
+                set %_arg , %1 fire , #spc , resist
+                set %percent , %1 #true
+        if #menures = 3 2
+                set %_arg , %1 cold , #spc , resist
+                set %percent , %1 #true
+        if #menures = 4 2
+                set %_arg , %1 poison , #spc , resist
+                set %percent , %1 #true
+        if #menures = 5 2
+                set %_arg , %1 energy , #spc , resist
+                set %percent , %1 #true
+        if #menures = 6 2
+                set %_arg , %1 lower , #spc , mana , #spc , cost
+                set %percent , %1 #true
+        if #menures = 7 2
+                set %_arg , %1 lower , #spc , reagent , #spc , cost
+                set %percent , %1 #true
+        if #menures = 8 2
+                set %_arg , %1 hit , #spc , chance , #spc , increase
+                set %percent , %1 #true
+        if #menures = 9 2
+                set %_arg , %1 defense , #spc , chance , #spc , increase
+                set %percent , %1 #true
+        if #menures = 10
+                set %_arg , %1 faster , #spc , casting
+        if #menures = 11
+                set %_arg , %1 faster , #spc , cast , #spc , recovery
+        if #menures = 12
+                set %_arg , %1 intelligence , #spc , bonus
+        if #menures = 13
+                set %_arg , %1 strength , #spc , bonus
+        if #menures = 14
+                set %_arg , %1 dexterity , #spc , bonus
+        if #menures = 15
+                set %_arg , %1 luck
+        if #menures = 16
+                set %_arg , %1 nightsight
+        if #menures = 17 2
+                set %_arg , %1 damage , #spc , increase
+                set %percent , %1 #true
+        if #menures = 18 2
+                set %_arg , %1 enhance , #spc , potions
+                set %percent , %1 #true
+}
+if %_curType = armor
+{
+        if #menures = 1 2
+                set %_arg , %1 physical , #spc , resist
+                set %percent , %1 #true
+        if #menures = 2 2
+                set %_arg , %1 fire , #spc , resist
+                set %percent , %1 #true
+        if #menures = 3 2
+                set %_arg , %1 cold , #spc , resist
+                set %percent , %1 #true
+        if #menures = 4 2
+                set %_arg , %1 poison , #spc , resist
+                set %percent , %1 #true
+        if #menures = 5 2
+                set %_arg , %1 energy , #spc , resist
+                set %percent , %1 #true
+        if #menures = 6
+                set %_arg , %1 mana , #spc , regeneration
+        if #menures = 7
+                set %_arg , %1 hit , #spc , point , #spc , regeneration
+        if #menures = 8
+                set %_arg , %1 stamina , #spc , regeneration
+        if #menures = 9 2
+                set %_arg , %1 lower , #spc , mana , #spc , cost
+                set %percent , %1 #true
+        if #menures = 10 2
+                set %_arg , %1 lower , #spc , reagent , #spc , cost
+                set %percent , %1 #true
+        if #menures = 11
+                set %_arg , %1 luck
+        if #menures = 12 2
+                set %_arg , %1 reflect , #spc , physical , #spc , damage
+                set %percent , %1 #true
+        if #menures = 13
+                set %_arg , %1 nightsight
+        if #menures = 14
+                set %_arg , %1 hit , #spc , point , #spc , increase
+        if #menures = 15
+                set %_arg , %1 mana , #spc , increase
+        if #menures = 16
+                set %_arg , %1 stamina , #spc , increase
+        if #menures = 17
+                set %_arg , %1 self , #spc , repair
+}
+if %_curType = skilljewels
+{
+        if #menures = 1
+                set %_arg , %1 Anatomy
+        if #menures = 2
+                set %_arg , %1 Animal , #spc , Lore
+        if #menures = 3
+                set %_arg , %1 Animal , #spc , Taming
+        if #menures = 4
+                set %_arg , %1 Archery
+        if #menures = 5
+                set %_arg , %1 Bushido
+        if #menures = 6
+                set %_arg , %1 Chivalry
+        if #menures = 7
+                set %_arg , %1 Discordance
+        if #menures = 8
+                set %_arg , %1 Evaluating , #spc , Intelligence
+        if #menures = 9
+                set %_arg , %1 Fencing
+        if #menures = 10
+                set %_arg , %1 Focus
+        if #menures = 11
+                set %_arg , %1 Healing
+        if #menures = 12
+                set %_arg , %1 Hiding
+        if #menures = 13
+                set %_arg , %1 Mace , #spc , Fighting
+        if #menures = 14
+                set %_arg , %1 Magery
+        if #menures = 15
+                set %_arg , %1 Meditation
+        if #menures = 16
+                set %_arg , %1 Musicianship
+        if #menures = 17
+                set %_arg , %1 Necromancy
+        if #menures = 18
+                set %_arg , %1 Ninjitsu
+        if #menures = 19
+                set %_arg , %1 Parrying
+        if #menures = 20
+                set %_arg , %1 Peacemaking
+        if #menures = 21
+                set %_arg , %1 Provocation
+        if #menures = 22
+                set %_arg , %1 Snooping
+        if #menures = 23
+                set %_arg , %1 Spirit , #spc , Speak
+        if #menures = 24
+                set %_arg , %1 Stealing
+        if #menures = 25
+                set %_arg , %1 Stealth
+        if #menures = 26
+                set %_arg , %1 Swordsmanship
+        if #menures = 27
+                set %_arg , %1 Tactics
+        if #menures = 28
+                set %_arg , %1 Veterinary
+        if #menures = 29
+                set %_arg , %1 Wrestling
+}
+set %fIMargsRet %_arg . %1
+return %fIMargsRet
+;-----------------------------------------------------------------
+sub fIMfindAmount
+if %_arg . %1 = n/a
+        return none
+menu Get txtArg , %1
+if ( resist in %_arg . %1 && %_curType = ring ) || ( %_curType = skilljewels )
+        set %_amount , %1 16 - #menures
+if resist in %_arg . %1 && %_curType = armor
+        set %_amount , %1 26 - #menures
+if regen in %_arg . %1 && stam notIn %_arg . %1
+        set %_amount , %1 3 - #menures
+if stamina_regen in %_arg . %1
+        set %_amount , %1 4 - #menures
+if lower , #spc , mana in %_arg . %1 || mana , #spc , increase in %_arg . %1 || bonus in %_arg . %1 || stamina , #spc , increase in %_arg . %1
+        set %_amount , %1 9 - #menures
+if hit , #spc , point , #spc , increase in %_arg . %1
+        set %_amount , %1 6 - #menures
+if lower , #spc , reagent in %_arg . %1
+        set %_amount , %1 21 - #menures
+if luck in %_arg . %1
+        set %_amount , %1 101 - #menures
+if reflect in %_arg . %1
+        set %_amount , %1 16 - #menures
+if nightsight in %_arg . %1
+{
+        if #menures = 1
+                set %_amount , %1 #true
+        if #menures = 2
+                set %_amount , %1 #false
+}
+if repair in %_arg . %1
+        set %_amount , %1 6 - #menures
+if chance , #spc , increase in %_arg . %1
+        set %_amount , %1 16 - #menures
+if casting in %_arg . %1
+        set %_amount , %1 2 - #menures
+if recovery in %_arg . %1
+        set %_amount , %1 4 - #menures
+if potions in %_arg . %1 || damage in %_arg . %1
+        set %_amount , %1 26 - #menures
+return
+;-----------------------------------------------------------------
+sub resetArgs
+for %_cnt 1 10
+{
+        set %_arg , %_cnt n/a
+}
+return
+;-----------------------------------------------------------------
+;-----------------------------------------------------------------
+sub fIMfindIt
+fIMbegin:
+if #menubutton = cmdStop
+{
+        set #menubutton n/a
+        ignoreitem reset this_search
+        return halted
+}
+finditem % . %_mainItem C
+gosub updateCounter #findcnt
+if #findkind = -1
+{
+        set %_scnt #scnt + 5
+        ignoreitem reset this_search
+        gosub updateCounter
+        return failed
+}
+if #findbagid = #backpackid || #findbagid = %Paperdoll
+{
+        ignoreitem #findid
+        goto fIMbegin
+}
+if #findkind <> -1
+{
+fIMpropRedo:
+        if #menubutton = cmdStop
+        {
+                set #menubutton n/a
+                ignoreitem reset this_search
+                return halted
+        }
+        event property #findid
+        str len #property
+        if #strres < 2
+                goto fIMpropRedo
+        set %property #property
+        set %thisItemOK #false
+        for %_finditCnt 1 10
+        {
+                set %_ok , %_finditCnt #false
+                if %_arg . %_finditCnt = nightsight && %_amount . %_finditCnt = #true
+                {
+                        if nightsight notIn %Property
+                        {
+                                ignoreitem #findid this_search
+                                goto fIMbegin
+                        }
+                }
+                set %_amount %_amount . %_finditCnt
+                for %_finditCnt2 1 140
+                {
+;pause
+                                if %_curType = skilljewels
+                                        set %_message %_arg . %_finditCnt , #spc , + , %_finditCnt2
+                                if %_curType = armor || %_curType = ring
+                                        set %_message %_arg . %_finditCnt , #spc , %_finditCnt2
+                                if %percent . %_finditCnt = #true
+                                        set %_message %_message , %
+                                if n/a in %_message
+                                {
+                                        set %_ok , %_finditCnt #true
+                                        goto exitit
+                                }
+                                if %_message in %Property && %_finditCnt2 >= %_amount
+                                {
+                                        set %thisItemOK #true
+                                        set %_ok , %_finditCnt #true
+                                        goto exitit
+                                }
+                }
+                if %_ok , %_finditCnt <> #true
+                {
+                        ignoreitem #findid this_search
+                        goto fIMbegin
+                }
+exitit:
+        }
+        for %_finditCnt2 1 10
+        {
+                if %thisItemOK = #false || %_ok . %_finditCnt2 = #false
+                {
+                        ignoreitem #findid this_search
+                        goto fIMbegin
+                }
+        }
+        set #lpc 10
+        set #lobjectid #findbagid
+        wait 10
+        event macro 17
+        wait 20
+        contpos 0 0
+        finditem #findid
+        event exMsg #findid 2 0 HERE IT IS!
+        click #findx #findy MC
+        wait 10
+        set #ltargetid #findid
+        set %_scnt #scnt + 7
+        set #lpc 1000
+        return Found
+}
+;-----------------------------------------------------------------
+sub setupPaperdoll
+event macro 9 1
+wait 20
+sPopenIt:
+event macro 8 1
+wait 8
+if #contname <> paperdoll_gump
+        goto sPopenIt
+set %Paperdoll #contID
+return
+;-----------------------------------------------------------------
+sub resetError
+set %_sCnt n/a
+gosub showStatus
+gosub updateCounter
+return
+;-----------------------------------------------------------------
+sub showStatus
+; %1 = Clear, Searching, Found, Failed, Packs, Done, Halted
+if %0 = 0 || %0 = n/a
+{
+        menu delete lblStatus
+        return
+}
+if %1 = Searching
+{
+        gosub showStatus
+        menu Font BGColor BtnFace
+        menu Font Color White
+        menu Font Size 12
+        menu Text lblStatus 326 156 Searching for Your Item
+}
+if %1 = Found
+{
+  gosub updateCounter
+        gosub showStatus
+        menu Font BGColor BtnFace
+        menu Font Color White
+        menu Font Size 12
+        menu Text lblStatus 340 156 Found for Your Item
+}
+if %1 = Failed
+{
+        gosub showStatus
+        menu Font BGColor BtnFace
+        menu Font Color White
+        menu Font Size 12
+        menu Text lblStatus 340 156 Failed on Your Item
+}
+if %1 = Error
+{
+        gosub showStatus
+        menu Font BGColor BtnFace
+        menu Font Color White
+        menu Font Size 12
+        menu Text lblStatus 325 156 Please make a selection
+}
+if %1 = Packs
+{
+        gosub showStatus
+        menu Font BGColor BtnFace
+        menu Font Color White
+        menu Font Size 12
+        menu Text lblStatus 326 156 Opening Packs
+}
+if %1 = Done
+{
+        gosub showStatus
+        menu Font BGColor BtnFace
+        menu Font Color White
+        menu Font Size 12
+        menu Text lblStatus 326 156 Done with Packs
+        set %_scnt #scnt + 5
+}
+if %1 = Halted
+{
+        gosub showStatus
+        menu Font BGColor BtnFace
+        menu Font Color White
+        menu Font Size 12
+        menu Text lblStatus 340 156 Halted.....
+        set %_scnt #scnt + 5
+}
+menu Font BGColor Window
+menu Font Size 8
+menu Font Color Black
+return
+;-----------------------------------------------------------------
+sub updateCounter
+ 
+if %0 = 0 || %0 = n/a
+{
+        menu delete lblCounter
+        return
+}
+gosub updateCounter
+menu Font BGColor BtnFace
+menu Font Color White
+menu Font Size 80
+menu Text lblCounter 350 210 #findcnt
+menu Font BGColor Window
+menu Font Size 8
+menu Font Color Black
+return
+;-----------------------------------------------------------------
+sub checkChanges
+set #lpc 500
+for %_cnt 1 10
+{
+        menu Get cmbArg , %_cnt
+        set %_var _cmbArg , %_cnt , menuRes
+        if #menures <> % . %_var
+        {
+                set % . %_var #menures
+                if %_curType = ring
+                {
+                        set %_parm1 1
+                        if #menures > 0 && #menures <= 5
+                                set %_parm2 1
+                        if #menures = 12 || #menures = 13 || #menures = 14 || #menures = 6
+                                set %_parm2 3
+                        if #menures = 7
+                                set %_parm2 6
+                        if #menures = 8 || #menures = 9
+                                set %_parm2 10
+                        if #menures = 10
+                                set %_parm2 11
+                        if #menures = 11
+                                set %_parm2 9
+                        if #menures = 15
+                                set %_parm2 5
+                        if #menures = 16
+                                set %_parm2 8
+                        if #menures = 17 || #menures = 18
+                                set %_parm2 12
+                        if #menures = 19
+                                set %_parm2 none
+                }
+                if %_curType = armor
+                {
+                        set %_parm1 2
+                        if #menures > 0 && #menures <= 5
+                                set %_parm2 1
+                        if #menures = 6 || #menures = 7
+                                set %_parm2 2
+                        if #menures = 8
+                                set %_parm2 9
+                        if #menures = 9 || #menures = 15 || #menures = 16
+                                set %_parm2 3
+                        if #menures = 10
+                                set %_parm2 6
+                        if #menures = 11
+                                set %_parm2 5
+                        if #menures = 12
+                                set %_parm2 4
+                        if #menures = 13
+                                set %_parm2 8
+                        if #menures = 17 || #menures = 14
+                                set %_parm2 7
+                        if #menures = 18
+                                set %_parm2 none
+                }
+                if %_curType = skilljewels
+                {
+                        set %_parm1 3
+                        set %_parm2 1                  
+                }
+gosub setupArgs %_parm1 %_parm2 %_cnt
+        }
+}
+set #lpc 10
+return
+;-----------------------------------------------------------------
+sub setupComboLists
+set #lpc 1000
+set %menures %1
+if %1 = 1 || %1 = 8
+{
+        set %_type ring
+        if %_type = %_curType
+                return
+        gosub createComboLists 1
+        set %_curType ring
+        set #lpc 10
+        return
+}
+if %1 < 8 && %1 > 1
+{
+        set %_type armor
+        if %_type = %_curType
+                return
+        gosub createComboLists 2
+        set %_curType armor
+        set #lpc 10
+        return
+}
+if %1 = 9
+{
+        set %_type skilljewels
+        if %_type = %_curType
+                return
+        gosub createComboLists 3
+        set %_curType skilljewels
+        set #lpc 10
+        return
+}
+return
+;-----------------------------------------------------------------
+sub setupArgs
+;%1 = 1 - Ring/Bracelet
+;         2 - Armor Peice
+;         3 - Skill Jewels
+;%2 = 1 - Resists, 2 - ManaHPRegen, 3 - LMC/DexBonus/IntBonux/StrBonus/HPIncrease/ManaIncrease/
+;  StaminaIncrease/, 4 - ReflectPhysical, 5 - Luck(100), 6 - LRC, 7 - Self Repair, 8 - Nightsight,
+;  9 - Stamina Regen/FCR, 10 - HCI/DCI, 11 - FasterCasting, 12 - PotEnhance/DamageINcrease}
+;  13 - HitPointIncrease
+;%3 = %_cnt to show which box to adjust
+nameSpace Push
+nameSpace local setupArgs
+if %0 = n/a || %0 < 3
+        return
+set !1 %1
+set !2 %2
+set !3 %3
+set !posVal1 1_3_5_6_8_9_10_11_12
+set !posVal2 1_2_3_4_5_6_7_8_9
+set !posVal3 1
+set %_yPosMod 28 * !3
+set %_yPos 88 + %_yPosMod
+if !2 = none
+{
+        menu delete txtArg , !3
+        menu Edit txtArg , !3 180 %_yPos 121
+        goto skipsA2
+}
+if ( !1 = 1 && !2 notIn !posVal1 ) || ( !1 = 2 && !2 notIn !posVal2 ) || ( !1 = 3 && !2 notIn !posVal3 )
+        return
+if !1 = 1 || !1 = 3
+{
+        if !2 = 1
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 15 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA1
+        }
+        if !2 = 3
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 8 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA1
+        }
+        if !2 = 5
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 100 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA1
+        }
+        if !2 = 6
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 20 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA1
+        }
+        if !2 = 8
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                menu combo add txtArg , !3 Yes
+                menu combo add txtArg , !3 No
+                menu combo select txtArg , !3 1
+                goto skipsA1
+        }
+        if !2 = 9
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 3 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA1
+        }
+        if !2 = 10
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 15 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA1
+        }
+        if !2 = 11
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                menu combo add txtArg , !3 1
+                menu combo select txtArg , !3 1
+        }
+        if !2 = 12
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 25 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+skipsA1:
+}
+if !1 = 2
+{
+        if !2 = 1
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 25 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+        if !2 = 2
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 2 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+        if !2 = 3
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 8 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+        if !2 = 4
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 15 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+        if !2 = 5
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 140 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+        if !2 = 6
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 20 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+        if !2 = 7
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 5 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+        if !2 = 8
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                menu combo add txtArg , !3 Yes
+                menu combo add txtArg , !3 No
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+        if !2 = 9
+        {
+                menu delete txtArg , !3
+                menu combo create txtArg , !3 180 %_yPos 121
+                for %_sAcnt 3 1
+                {
+                        menu combo add txtArg , !3 %_sAcnt
+                }
+                menu combo select txtArg , !3 1
+                goto skipsA2
+        }
+}
+return
+;-----------------------------------------------------------------
+sub createComboLists
+if %1 = 1
+{
+        set %_curType jewel
+        for %_cnt 1 10
+        {
+                set %_yPosMod 28 * %_cnt
+                set %_yPos 88 + %_yPosMod
+                menu Delete cmbArg , %_cnt
+                menu Delete txtArg , %_cnt
+                menu Edit txtArg , %_cnt 180 %_yPos 121
+                menu Combo Create cmbArg , %_cnt 84 %_yPos 85
+                menu Combo Add cmbArg , %_cnt PhysRes
+                menu Combo Add cmbArg , %_cnt FireRes
+                menu Combo Add cmbArg , %_cnt ColdRes
+                menu Combo Add cmbArg , %_cnt PoisRes
+                menu Combo Add cmbArg , %_cnt EnerRes
+                menu Combo Add cmbArg , %_cnt LMC
+                menu Combo Add cmbArg , %_cnt LRC
+                menu Combo Add cmbArg , %_cnt HCI
+                menu Combo Add cmbArg , %_cnt DCI
+                menu Combo Add cmbArg , %_cnt FC
+                menu Combo Add cmbArg , %_cnt FCR
+                menu Combo Add cmbArg , %_cnt IntBonus
+                menu Combo Add cmbArg , %_cnt StrBonus
+                menu Combo Add cmbArg , %_cnt DexBonus
+                menu Combo Add cmbArg , %_cnt Luck
+                menu Combo Add cmbArg , %_cnt NightSight
+                menu Combo Add cmbArg , %_cnt DmgInc
+                menu Combo Add cmbArg , %_cnt PotEnhance
+                menu Combo Add cmbArg , %_cnt (NONE)
+        }
+}
+if %1 = 2
+{
+        set %_curType armor
+        for %_cnt 1 10
+        {
+                set %_yPosMod 28 * %_cnt
+                set %_yPos 88 + %_yPosMod
+                menu Delete cmbArg , %_cnt
+                menu Delete txtArg , %_cnt
+                menu Edit txtArg , %_cnt 180 %_yPos 121
+                menu Combo Create cmbArg , %_cnt 84 %_yPos 85
+                menu Combo Add cmbArg , %_cnt PhysRes
+                menu Combo Add cmbArg , %_cnt FireRes
+                menu Combo Add cmbArg , %_cnt ColdRes
+                menu Combo Add cmbArg , %_cnt PoisRes
+                menu Combo Add cmbArg , %_cnt EnerRes
+                menu Combo Add cmbArg , %_cnt ManaRegen
+                menu Combo Add cmbArg , %_cnt HPRegen
+                menu Combo Add cmbArg , %_cnt StamRegen
+                menu Combo Add cmbArg , %_cnt LMC
+                menu Combo Add cmbArg , %_cnt LRC
+                menu Combo Add cmbArg , %_cnt Luck
+                menu Combo Add cmbArg , %_cnt RefPhys
+                menu Combo Add cmbArg , %_cnt NightSight
+                menu Combo Add cmbArg , %_cnt HPinc
+                menu Combo Add cmbArg , %_cnt ManaInc
+                menu Combo Add cmbArg , %_cnt StamInc
+                menu Combo Add cmbArg , %_cnt Self Repair
+                menu Combo Add cmbArg , %_cnt (NONE)
+        }
+}
+if %1 = 3
+{
+        set %_curType armor
+        for %_cnt 1 10
+        {
+                set %_yPosMod 28 * %_cnt
+                set %_yPos 88 + %_yPosMod
+                menu Delete cmbArg , %_cnt
+                menu Delete txtArg , %_cnt
+                menu Edit txtArg , %_cnt 180 %_yPos 121
+                menu Combo Create cmbArg , %_cnt 84 %_yPos 85
+                menu Combo Add cmbArg , %_cnt Anatomy
+                menu Combo Add cmbArg , %_cnt Animal Lore
+                menu Combo Add cmbArg , %_cnt Animal Taming
+                menu Combo Add cmbArg , %_cnt Archery
+                menu Combo Add cmbArg , %_cnt Bushido
+                menu Combo Add cmbArg , %_cnt Chivalry
+                menu Combo Add cmbArg , %_cnt Discordance
+                menu Combo Add cmbArg , %_cnt Eval Int
+                menu Combo Add cmbArg , %_cnt Fencing
+                menu Combo Add cmbArg , %_cnt Focus
+                menu Combo Add cmbArg , %_cnt Healing
+                menu Combo Add cmbArg , %_cnt Hiding
+                menu Combo Add cmbArg , %_cnt Macing
+                menu Combo Add cmbArg , %_cnt Magery
+                menu Combo Add cmbArg , %_cnt Meditation
+                menu Combo Add cmbArg , %_cnt Musicianship
+                menu Combo Add cmbArg , %_cnt Necromancy
+                menu Combo Add cmbArg , %_cnt Ninjitsu
+                menu Combo Add cmbArg , %_cnt Parry
+                menu Combo Add cmbArg , %_cnt Peacemaking
+                menu Combo Add cmbArg , %_cnt Provocation
+                menu Combo Add cmbArg , %_cnt Snooping
+                menu Combo Add cmbArg , %_cnt Spirit Speak
+                menu Combo Add cmbArg , %_cnt Stealing
+                menu Combo Add cmbArg , %_cnt Stealth
+                menu Combo Add cmbArg , %_cnt Swordsmanship
+                menu Combo Add cmbArg , %_cnt Tactics
+                menu Combo Add cmbArg , %_cnt Veterinary
+                menu Combo Add cmbArg , %_cnt Wrestling
+                menu Combo Add cmbArg , %_cnt (NONE)
+        }
+}
+if %1 = empty
+{
+        set %_curType n/a
+        for %_cnt 1 10
+        {
+                set %_yPosMod 28 * %_cnt
+                set %_yPos 88 + %_yPosMod
+                menu delete cmbArg , %_cnt
+                menu delete txtArg , %_cnt
+                menu Combo Create cmbArg , %_cnt 84 %_yPos 85
+                menu Edit txtArg , %_cnt 180 %_yPos 121
+                set % . _cmbArg , %_cnt , menuRes 0
+        }
+}
+gosub setVars
+return
+;-----------------------------------------------------------------
+;--------- EasyUO Menu Designer Code Begin ---------
+sub showEUOMenu1
+        menu Clear
+        menu Window Title Armor Shopper v , %_version
+        menu Window Color Black
+        menu Window Size 526 476
+        menu Font Transparent #true
+        menu Font Align Right
+        menu Font Name MS Sans Serif
+        menu Font Size 14
+        menu Font Style b
+        menu Font Color White
+        menu Font Align Center
+        menu Font BGColor Black
+        menu Text EUOLabel1 50 20 Please make your selections --
+        menu Font Size 8
+        menu Font Style
+        menu Font Align Left
+        menu Text EUOLabel2 12 120 Arguement 1 -
+        menu Text EUOLabel3 12 148 Arguement 2 -
+        menu Text EUOLabel4 12 176 Arguement 3 -
+        menu Text EUOLabel5 12 204 Arguement 4 -
+        menu Text EUOLabel7 12 232 Arguement 5 -
+        menu Text EUOLabel8 12 260 Arguement 6 -
+        menu Text EUOLabel9 12 288 Arguement 7 -
+        menu Text EUOLabel10 12 316 Arguement 8 -
+        menu Text EUOLabel11 12 344 Arguement 9 -
+        menu Text EUOLabel12 12 372 Arguement 10 -
+        menu Text EUOLabel6 8 72 Main Selection - Armor Type --
+        menu Shape EUOShape1 314 144 193 1 3 7 1 White 7 White
+        menu Shape EUOShape2 314 144 1 45 3 7 1 White 7 White
+        menu Shape EUOShape3 506 144 1 45 3 7 1 White 7 White
+        menu Shape EUOShape4 314 188 193 1 3 7 1 White 7 White
+        menu Font Color WindowText
+        menu Font BGColor Window
+        menu Combo Create cmbMain 156 68 145
+        menu Combo Add cmbMain Bracelet
+        menu Combo Add cmbMain Leather Cap
+        menu Combo Add cmbMain Leather Gloves
+        menu Combo Add cmbMain Leather Gorget
+        menu Combo Add cmbMain Leather Leggings
+        menu Combo Add cmbMain Leather Sleeves
+        menu Combo Add cmbMain Leather Tunic
+        menu Combo Add cmbMain Ring
+        menu Combo Add cmbMain Skill Jewels
+        menu Combo Create cmbArg1 84 116 85
+        menu Combo Create cmbArg2 84 144 85
+        menu Combo Create cmbArg3 84 172 85
+        menu Combo Create cmbArg4 84 200 85
+        menu Combo Create cmbArg5 84 228 85
+        menu Combo Create cmbArg6 84 256 85
+        menu Combo Create cmbArg7 84 284 85
+        menu Combo Create cmbArg8 84 312 85
+        menu Combo Create cmbArg9 84 340 85
+        menu Combo Create cmbArg10 84 368 85
+        menu Edit txtArg1 180 116 121
+        menu Edit txtArg2 180 144 121
+        menu Edit txtArg3 180 172 121
+        menu Edit txtArg4 180 200 121
+        menu Edit txtArg5 180 228 121
+        menu Edit txtArg6 180 256 121
+        menu Edit txtArg7 180 284 121
+        menu Edit txtArg8 180 312 121
+        menu Edit txtArg9 180 340 121
+        menu Edit txtArg10 180 368 121
+        menu Font BGColor Green
+        menu Button cmdGo 88 404 141 53 Go (&Search)
+        menu Font BGColor Red
+        menu Button cmdExit 220 404 102 53 E&xit
+        menu Font BGColor Blue
+        menu Button cmdPacks 323 404 141 53 &Open Packs
+        menu Font BGColor Window
+        menu Button cmdBrowse 323 351 141 53 &Browse
+        menu Font Color WindowText
+return
