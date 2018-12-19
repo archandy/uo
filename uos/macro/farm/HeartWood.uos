@@ -273,7 +273,7 @@ for 0 to 'magechiv'
               while @findtype Talismans[] 0 'trash'
                 waitforproperties 'found' 15000
                 //crafting bonus and exceptional bonus talismans
-                if @property 'Tinkering Exceptional Bonus' 'found' >= 30 and @property 'Tinkering Bonus' 'found' >= 28
+                if @property 'Tinkering Exceptional Bonus' 'found' >= 28 and @property 'Tinkering Bonus' 'found' >= 27
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
@@ -281,27 +281,19 @@ for 0 to 'magechiv'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                 break
-                elseif @property 'Alchemy Bonus' 'found' >= 30 or @property 'Fletching Bonus' 'found' >= 30
+                elseif @property 'Fletching Exceptional Bonus' 'found' >= 28 and @property 'Fletching Bonus' 'found' >= 27
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Fletching Exceptional Bonus' 'found' >= 30 and @property 'Fletching Bonus' 'found' >= 25
+                elseif @property 'Tailoring Exceptional Bonus' 'found' >= 28 and @property 'Tailoring Bonus' 'found' >= 27
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Tailoring Exceptional Bonus' 'found' >= 30 and @property 'Tailoring Bonus' 'found' >= 25
+                elseif @property 'Carpentry Exceptional Bonus' 'found' >= 28 and @property 'Carpentry Bonus' 'found' >= 27
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Carpentry Exceptional Bonus' 'found' >= 30 and @property 'Carpentry Bonus' 'found' >= 25
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                elseif @property 'Inscription Bonus' 'found' >= 30 or @property 'Cooking Bonus' 'found' >= 30
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                elseif @property 'Blacksmithing Exceptional Bonus' 'found' >= 30 and @property 'Blacksmithing Bonus' 'found' >= 25
+                elseif @property 'Blacksmithing Exceptional Bonus' 'found' >= 28 and @property 'Blacksmithing Bonus' 'found' >= 27
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
