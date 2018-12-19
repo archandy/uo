@@ -112,25 +112,29 @@ if not listexists 'Killers'
   @createlist 'Killers'
   @pushlist 'Killers' 'Yamandon Killer'
   //@pushlist 'Killers' 'Lich Killer'
-  @pushlist 'Killers' 'Lich Lord Killer'
+  //@pushlist 'Killers' 'Lich Lord Killer'
   @pushlist 'Killers' 'Ancient Lich Killer'
-  @pushlist 'Killers' 'Dread Spider Killer'
+  //@pushlist 'Killers' 'Dread Spider Killer'
   @pushlist 'Killers' 'Giant Black Widow Killer'
-  @pushlist 'Killers' 'Eagle Killer'
-  @pushlist 'Killers' 'Phoenix Killer'
+  //@pushlist 'Killers' 'Eagle Killer'
+  //@pushlist 'Killers' 'Phoenix Killer'
   @pushlist 'Killers' 'Snake Killer'
   @pushlist 'Killers' 'Silver Serpent Killer'
   @pushlist 'Killers' 'Skeletal Mage Killer'
+  @pushlist 'Killers' 'Meraktus'
+  @pushlist 'Killers' 'Dragon'
+  @pushlist 'Killers' 'Wyrm'
 endif
 if not listexists 'Protection'
   @createlist 'Protection'
-  @pushlist 'Protection' 'Yamandon Protection'
+  //@pushlist 'Protection' 'Yamandon Protection'
   //@pushlist 'Protection' 'Lich Protection'
-  @pushlist 'Protection' 'Lich Lord Protection'
-  @pushlist 'Protection' 'Dread Spider Protection'
-  @pushlist 'Protection' 'Giant Black Widow Protection'
+  //@pushlist 'Protection' 'Lich Lord Protection'
+  //@pushlist 'Protection' 'Dread Spider Protection'
+  //@pushlist 'Protection' 'Giant Black Widow Protection'
   //@pushlist 'Protection' 'Silver Serpent Protection'
-  @pushlist 'Protection' 'Eagle Protection'
+  //@pushlist 'Protection' 'Eagle Protection'
+  @pushlist 'Protection' 'Meraktus'
 endif
 if not listexists 'Jewelry'
   @createlist 'Jewelry'
@@ -273,7 +277,7 @@ for 0 to 'magechiv'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Arctic' 'found' or  @property 'Summoning' 'found'
+                elseif @property 'Arctic' 'found' or  @property 'Vorpal' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                 break
@@ -331,9 +335,8 @@ for 0 to 'magechiv'
             endfor
             //Scroll
             for 0 to 'Scroll'
-              while @findtype Jewelry[] 0 'trash'
+              while @findtype Scroll[] 0 'trash'
                 waitforproperties 'found' 15000
-                //EP DI jewels
                 if @property 'Magi' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
@@ -371,6 +374,12 @@ for 0 to 'magechiv'
             for 0 to 'Jewelry'
               while @findtype Jewelry[] 0 'trash'
                 waitforproperties 'found' 15000
+                //Animal Taming jewels
+                if @property 'Animal Taming' 'found' >= 12
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
                 //EP DI jewels
                 if @property 'Enhance Potions' 'found' >= 15 and @property 'Damage Increase' 'found' >= 20
                   @moveitem! 'found' 'backpack'
