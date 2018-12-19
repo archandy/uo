@@ -334,6 +334,11 @@ for 0 to 'magechiv'
                   pause 1000
                   break
                 endif
+                if @property 'Compendium' 'found'
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
                 if @property 'Blight' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
