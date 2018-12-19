@@ -582,6 +582,11 @@ for 0 to 'magechiv'
             movetype 0x1028 'backpack' 'FletcherDropoff' (0 0 0) 1193 1
             pause 500
           endwhile
+          //unload scrolls
+          while counttype 0x2831 'any' 'backpack' > 0
+            movetype 0x2831 'backpack' 'FletcherDropoff'
+            pause 500
+          endwhile
           //unload talismans
           while counttype 0x2f58 0 'backpack' > 0
             movetype 0x2f58 'backpack' 'FletcherDropoff' (0 0 0) 0 1
@@ -616,6 +621,8 @@ for 0 to 'magechiv'
             movetype 0x1022 'backpack' 'FletcherDropoff' (0 0 0) 1193 1
             pause 500
           endwhile
+          
+          
           //get more bolts
           if counttype 0x1bfb 0 'backpack' < 130
             if counttype 0x1bfb 0 'FletcherDropoff' < 200
