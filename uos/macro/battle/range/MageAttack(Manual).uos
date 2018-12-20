@@ -1,0 +1,26 @@
+shownames 'mobiles'
+for 1000
+  if poisoned 'self'
+    cast 'arch cure' 'self'
+  elseif hits 'self' < 90
+    cast 'heal' 'self'
+  endif
+  @canceltarget
+  if not @findobject 'mytarget'
+    promptalias 'mytarget'
+  endif
+  while @inrange 'mytarget' 12
+    headmsg '▼▼▼' 34 'mytarget'
+    if poisoned 'self'
+      cast 'arch cure' 'self'
+    elseif hits 'self' < 90
+      cast 'heal' 'self'
+    else
+      cast 'fireball'
+      waitfortarget 2000
+      @target! 'mytarget'
+    endif
+  endwhile
+  pause 1
+endfor
+unsetalias 'mytarget'
