@@ -10,7 +10,7 @@ waitfortarget 1500
 target! 'enemy'
 
 // Curse Weapon from scroll
-usetype 0x2263
+usetype! 0x2263
 pause 1100
 
 //use LS or primary skill
@@ -25,7 +25,7 @@ while not dead 'enemy'
   // Curse Weapon from scroll
   if not buffexists 'Curse Weapon' 
     if mana > 6
-      usetype 0x2263
+      usetype! 0x2263
       pause 1100
     endif
   endif
