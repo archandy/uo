@@ -9,7 +9,7 @@ virtue 'honor'
 waitfortarget 1500
 target! 'enemy'
 // Curse Weapon from scroll
-usetype 0x2263
+usetype! 0x2263
 pause 1100
 
 // Create timers
@@ -29,7 +29,7 @@ while not dead 'enemy'
   // Curse Weapon from scroll
   if timer 'CW' > 25000
     if mana > 6
-      usetype 0x2263
+      usetype! 0x2263
       settimer 'CW' 0
       pause 1100
     endif
