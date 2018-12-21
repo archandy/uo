@@ -21,7 +21,7 @@ endif
 
 // set enemy
 shownames 'mobiles'
-getenemy 'criminal' 'gray' 'orange' 'murderer' 'enemy' 'nearest'
+getenemy 'criminal' 'gray' 'orange' 'murderer' 'enemy' 'closest'
 @headmsg '★★ Found ★★' 74 'enemy'
 
 attack 'enemy'
