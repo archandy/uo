@@ -28,7 +28,7 @@ else
     cast 'invisibility' 'self' 
     while waitingfortarget 
     endwhile 
-    pause 1000 
+    pause 1000
   elseif skill 'magery' < 100 
     cast 'mana vampire' 'self' 
     pause 1000 
@@ -99,7 +99,7 @@ while skill 'Necromancy' < 100
   endif
 endwhile
 
-headmsg '뻠수상이 숨기 훈련을 시작합니다'
+headmsg '숨기 훈련을 시작합니다'
 // Hiding
 while skill 'hiding' < 100 
   useskill 'hiding' 
