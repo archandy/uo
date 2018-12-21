@@ -1,7 +1,10 @@
 warmode 'on'
 
 //use LS or primary skill
-//cast "Lightning Strike"
+//  if not buffexists  1096
+//    cast "Lightning Strike"
+//    pause 600
+//  endif
 setability 'primary' 'on'
 //setability 'secondary' 'on'
 
