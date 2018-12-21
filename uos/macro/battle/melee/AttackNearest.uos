@@ -1,0 +1,29 @@
+warmode 'on'
+
+//use LS or primary skill
+//cast "Lightning Strike"
+setability 'primary' 'on'
+//setability 'secondary' 'on'
+
+// Consecrate Weapon
+if not buffexists 1082 
+  if mana > 6
+    cast 'Consecrate Weapon'
+    pause 600
+  endif
+endif
+
+// Divine Fury
+if stamina < 130 and mana > 17
+  cast 'divine fury'
+  pause 600
+endif
+
+// set enemy
+shownames 'mobiles'
+getenemy 'criminal' 'gray' 'orange' 'murderer' 'enemy' 'nearest'
+@headmsg '★★ Found ★★' 74 'enemy'
+
+attack 'enemy'
+
+pause 1
