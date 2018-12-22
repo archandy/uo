@@ -1,0 +1,52 @@
+// Pet heal
+// 181021
+// written by Love
+//
+@setalias 'pet' 0xac68a
+// Change with your pet serial
+headmsg '* Pet Heal *'
+while hits > 0
+  @canceltarget!
+  if hits 'pet' < 20 and skill 'magery' > 60
+    headmsg '* shit *'
+    cast "Greater Heal"
+    usetype '0xe21'
+    waitfortarget 2000
+    target! 'pet'
+    waitfortarget 5000
+    target! 'pet'
+    cast "Greater Heal"
+    waitfortarget 2000
+    target! 'pet'
+  elseif hits 'pet' < 98
+    headmsg '▼' 89 'pet'
+    if @inrange 'pet' 3
+      usetype '0xe21'
+      waitfortarget 2000
+      target! 'pet'
+      pause 1000
+      if poisoned 'pet'
+        if skill 'magery' > 60
+          cast 'cure'
+          waitfortarget 2000
+          target! 'pet'
+        elseif skill 'chivalry' > 60
+          cast 'cleanse of fire'
+          waitfortarget 2000
+          target! 'pet'
+        else
+          pause 250
+        endif
+        pause 750
+      else
+        pause 1000
+      endif
+    else
+      headmsg '* Pet is not near here *'
+      pause 1000
+    endif
+  else
+    headmsg '* Pet is healthy *'
+    pause 1000
+  endif
+endwhile
