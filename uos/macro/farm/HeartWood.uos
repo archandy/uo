@@ -10,7 +10,7 @@
 @createlist 'magechiv2'
 @createlist 'bond'
 //plain=0, oak=2010, ash=1191 | mage=5,11 chiv = 7,13 | bond = 10, unbond = 9
-@pushlist 'woodhue' 0
+@pushlist 'woodhue' 2010
 @pushlist 'magechiv' 5
 @pushlist 'magechiv2' 11
 @pushlist 'bond' 10
@@ -273,34 +273,34 @@ for 0 to 'magechiv'
               while @findtype Talismans[] 0 'trash'
                 waitforproperties 'found' 15000
                 //crafting bonus and exceptional bonus talismans
-                if @property 'Tinkering Exceptional Bonus' 'found' >= 28 and @property 'Tinkering Bonus' 'found' >= 27
+                if @property 'Tinkering Exceptional Bonus' 'found' >= 30 and @property 'Tinkering Bonus' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
                 elseif @property 'Arctic' 'found' or  @property 'Vorpal' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
-                break
-                elseif @property 'Fletching Exceptional Bonus' 'found' >= 28 and @property 'Fletching Bonus' 'found' >= 27
+                  break
+                elseif @property 'Fletching Exceptional Bonus' 'found' >= 30 and @property 'Fletching Bonus' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Tailoring Exceptional Bonus' 'found' >= 28 and @property 'Tailoring Bonus' 'found' >= 27
+                elseif @property 'Tailoring Exceptional Bonus' 'found' >= 30 and @property 'Tailoring Bonus' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Carpentry Exceptional Bonus' 'found' >= 28 and @property 'Carpentry Bonus' 'found' >= 27
+                elseif @property 'Carpentry Exceptional Bonus' 'found' >= 30 and @property 'Carpentry Bonus' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Blacksmithing Exceptional Bonus' 'found' >= 28 and @property 'Blacksmithing Bonus' 'found' >= 27
+                elseif @property 'Blacksmithing Exceptional Bonus' 'found' >= 30 and @property 'Blacksmithing Bonus' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
                 endif
                 //get slayers
                 for 0 to 'Slayers'
-                  if @property Slayers[] 'found'
+                  if @property Slayers[] 'found' and @property Killers[] 'found'
                     @moveitem! 'found' 'backpack'
                     pause 1000
                     break
@@ -308,15 +308,12 @@ for 0 to 'magechiv'
                 endfor
                 //get killers
                 for 0 to 'Killers'
-                  if @property Killers[] 'found' >= 99
+                  if @property Killers[] 'found' >= 95 and @property Protection[] 'found' >= 50
                     @moveitem! 'found' 'backpack'
                     pause 1000
                     break
                   endif
-                endfor
-                //get protections
-                for 0 to 'Protection'
-                  if @property Protection[] 'found' >= 59
+                  if @property Killers[] 'found' >= 100
                     @moveitem! 'found' 'backpack'
                     pause 1000
                     break
@@ -339,31 +336,6 @@ for 0 to 'magechiv'
                   pause 1000
                   break
                 endif
-                if @property 'Blight' 'found'
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Faerie Fire' 'found'
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Mischief Maker' 'found'
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Silvani's Feywood' 'found'
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Night Reaper' 'found'
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
                 ignoreobject 'found'
               endwhile
             endfor
@@ -372,7 +344,7 @@ for 0 to 'magechiv'
               while @findtype Jewelry[] 0 'trash'
                 waitforproperties 'found' 15000
                 //Animal Taming jewels
-                if @property 'Animal Taming' 'found' >= 12
+                if @property 'Animal Taming' 'found' >= 10 and @property 'Animal Lore' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
@@ -396,9 +368,11 @@ for 0 to 'magechiv'
                     break
                   endif
                   if @property 'Spell Damage Increase' 'found' >= 10 and @property 'Lower Reagent Cost' 'found' >= 10
-                    @moveitem! 'found' 'backpack'
-                    pause 1000
-                    break
+                    if @property 'Faster' 'found'
+                      @moveitem! 'found' 'backpack'
+                      pause 1000
+                      break
+                    endif
                   endif
                   if @property 'Lower Reagent Cost' 'found' >= 10 and @property 'Lower Mana Cost' 'found' >= 5
                     @moveitem! 'found' 'backpack'
@@ -424,91 +398,6 @@ for 0 to 'magechiv'
                   break
                 endif
                 if @property 'Defense Chance Increase' 'found' >= 10 and @property 'Damage Increase' 'found' >= 16
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                ignoreobject 'found'
-              endwhile
-            endfor
-            //Weapons
-            for 0 to 'Weapons'
-              while @findtype Weapons[] 0 'trash'
-                waitforproperties 'found' 15000
-                //get slayers
-                for 0 to 'Slayers'
-                  if @property Slayers[] 'found'
-                    @moveitem! 'found' 'backpack'
-                    pause 1000
-                    break
-                  endif
-                endfor
-                //HML HSL
-                if @property 'Hit Mana Leech' 'found' >= 30 and @property 'Hit Stamina Leech' 'found' >= 30
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                //HML DI
-                if @property 'Hit Mana Leech' 'found' >= 30 and @property 'Damaga Increase' 'found' >= 20
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                //HSL DI
-                if @property 'Hit Stamina Leech' 'found' >= 30 and @property 'Damaga Increase' 'found' >= 20
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                // HLD
-                if @property 'Hit Lower Defense' 'found' >= 10 and @property 'Damage Increase' 'found' >= 20
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Hit Lower Defense' 'found' >= 20 and @property 'Hit Stamina Leech' 'found' >= 25
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Hit Lower Defense' 'found' >= 20 and @property 'Hit Mana Leech' 'found' >= 25
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Hit Lower Defense' 'found' >= 20 and @property 'Hit Lower Attack' 'found' >= 20
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Hit Lower Defense' 'found' >= 20 and @property 'Swing Speed Increase' 'found' >= 10
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                // HLA
-                if @property 'Hit Lower Attack' 'found' >= 10 and @property 'Damage Increase' 'found' >= 20
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Hit Lower Attack' 'found' >= 20 and @property 'Hit Stamina Leech' 'found' >= 25
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Hit Lower Attack' 'found' >= 20 and @property 'Hit Mana Leech' 'found' >= 25
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Hit Lower Attack' 'found' >= 20 and @property 'Hit Lower Attack' 'found' >= 20
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
-                endif
-                if @property 'Hit Lower Defense' 'found' >= 20 and @property 'Swing Speed Increase' 'found' >= 10
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
