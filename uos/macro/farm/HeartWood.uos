@@ -1,6 +1,6 @@
-@setalias 'FletcherDropoff' 0x41597f58
-@setalias 'beetle' 0xb2093
-@setalias 'FletcherRunebook' 0x421cf0f1
+@setalias 'FletcherDropoff' 0x4253f1df
+@setalias 'beetle' 0xa11e8
+@setalias 'FletcherRunebook' 0x430de30d
 @removelist 'woodhue'
 @removelist 'magechiv'
 @removelist 'magechiv2'
@@ -10,7 +10,7 @@
 @createlist 'magechiv2'
 @createlist 'bond'
 //plain=0, oak=2010, ash=1191 | mage=5,11 chiv = 7,13 | bond = 10, unbond = 9
-@pushlist 'woodhue' 2010
+@pushlist 'woodhue' 0
 @pushlist 'magechiv' 5
 @pushlist 'magechiv2' 11
 @pushlist 'bond' 10
@@ -26,61 +26,56 @@
 if not listexists 'Weapons'
   @createlist 'Weapons'
   // Swords
-  @pushlist 'Weapons' 0xf43 
-  @pushlist 'Weapons' 0xf45 
-  @pushlist 'Weapons' 0x13fb 
-  @pushlist 'Weapons' 0x1443 
-  @pushlist 'Weapons' 0xf49 
-  @pushlist 'Weapons' 0xf47 
-  @pushlist 'Weapons' 0xf4d 
-  @pushlist 'Weapons' 0x143e 
-  @pushlist 'Weapons' 0xf4b 
-  @pushlist 'Weapons' 0xf5e 
-  @pushlist 'Weapons' 0x13ff 
-  @pushlist 'Weapons' 0x13b6 
-  @pushlist 'Weapons' 0x13b9 
-  @pushlist 'Weapons' 0xf5e 
-  @pushlist 'Weapons' 0x1441 
-  @pushlist 'Weapons' 0xf61 
-  @pushlist 'Weapons' 0xf61 
-
-  // Fencing 
-  @pushlist 'Weapons' 0x1401 
-  @pushlist 'Weapons' 0x1405 
-  //2 Handed 
-  @pushlist 'Weapons' 0xf62 
-  @pushlist 'Weapons' 0x1403 
-  @pushlist 'Weapons' 0xf52 
-  @pushlist 'Weapons' 0xe87 
-
-  //Bows 
-  @pushlist 'Weapons' 0x26c3 
-  @pushlist 'Weapons' 0x26c2 
-  @pushlist 'Weapons' 0x13b2 
-  //Xbows 
-  @pushlist 'Weapons' 0xf50 
-  @pushlist 'Weapons' 0x13fd 
-
-  // Maces 
-  @pushlist 'Weapons' 0x143d 
-  @pushlist 'Weapons' 0xe89 
-  @pushlist 'Weapons' 0x1407 
-  @pushlist 'Weapons' 0x13b4 
-  @pushlist 'Weapons' 0x143b 
-  @pushlist 'Weapons' 0x13b0 
-  @pushlist 'Weapons' 0xf5c 
-  @pushlist 'Weapons' 0xdf0 
-
-  //2 Handed 
-  @pushlist 'Weapons' 0x1439 
-  @pushlist 'Weapons' 0x13f8 
-  @pushlist 'Weapons' 0xe81 
+  @pushlist 'Weapons' 0xf43
+  @pushlist 'Weapons' 0xf45
+  @pushlist 'Weapons' 0x13fb
+  @pushlist 'Weapons' 0x1443
+  @pushlist 'Weapons' 0xf49
+  @pushlist 'Weapons' 0xf47
+  @pushlist 'Weapons' 0xf4d
+  @pushlist 'Weapons' 0x143e
+  @pushlist 'Weapons' 0xf4b
+  @pushlist 'Weapons' 0xf5e
+  @pushlist 'Weapons' 0x13ff
+  @pushlist 'Weapons' 0x13b6
+  @pushlist 'Weapons' 0x13b9
+  @pushlist 'Weapons' 0xf5e
+  @pushlist 'Weapons' 0x1441
+  @pushlist 'Weapons' 0xf61
+  @pushlist 'Weapons' 0xf61
+  // Fencing
+  @pushlist 'Weapons' 0x1401
+  @pushlist 'Weapons' 0x1405
+  //2 Handed
+  @pushlist 'Weapons' 0xf62
+  @pushlist 'Weapons' 0x1403
+  @pushlist 'Weapons' 0xf52
+  @pushlist 'Weapons' 0xe87
+  //Bows
+  @pushlist 'Weapons' 0x26c3
+  @pushlist 'Weapons' 0x26c2
+  @pushlist 'Weapons' 0x13b2
+  //Xbows
+  @pushlist 'Weapons' 0xf50
+  @pushlist 'Weapons' 0x13fd
+  // Maces
+  @pushlist 'Weapons' 0x143d
+  @pushlist 'Weapons' 0xe89
+  @pushlist 'Weapons' 0x1407
+  @pushlist 'Weapons' 0x13b4
+  @pushlist 'Weapons' 0x143b
+  @pushlist 'Weapons' 0x13b0
+  @pushlist 'Weapons' 0xf5c
+  @pushlist 'Weapons' 0xdf0
+  //2 Handed
+  @pushlist 'Weapons' 0x1439
+  @pushlist 'Weapons' 0x13f8
+  @pushlist 'Weapons' 0xe81
 endif
-
 if not listexists 'Scroll'
   @createlist 'Scroll'
-  // Scroll 
-  @pushlist 'Scroll' 0x2831  
+  // Scroll
+  @pushlist 'Scroll' 0x2831
 endif
 if not listexists 'Talismans'
   @createlist 'Talismans'
@@ -362,23 +357,23 @@ for 0 to 'magechiv'
                 endif
                 //save SDI LMC LRC
                 //if @property 'Faster Casting' 'found'
-                  if @property 'Spell Damage Increase' 'found' >= 10 and @property 'Lower Mana Cost' 'found' >= 5
+                if @property 'Spell Damage Increase' 'found' >= 10 and @property 'Lower Mana Cost' 'found' >= 5
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Spell Damage Increase' 'found' >= 10 and @property 'Lower Reagent Cost' 'found' >= 10
+                  if @property 'Faster' 'found'
                     @moveitem! 'found' 'backpack'
                     pause 1000
                     break
                   endif
-                  if @property 'Spell Damage Increase' 'found' >= 10 and @property 'Lower Reagent Cost' 'found' >= 10
-                    if @property 'Faster' 'found'
-                      @moveitem! 'found' 'backpack'
-                      pause 1000
-                      break
-                    endif
-                  endif
-                  if @property 'Lower Reagent Cost' 'found' >= 10 and @property 'Lower Mana Cost' 'found' >= 5
-                    @moveitem! 'found' 'backpack'
-                    pause 1000
-                    break
-                  endif
+                endif
+                if @property 'Lower Reagent Cost' 'found' >= 10 and @property 'Lower Mana Cost' 'found' >= 5
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
                 //endif
                 //save 1/2 and 1/1
                 if @property 'Faster Cast Recovery' 'found' > 1 and @property 'Faster Casting' 'found'
@@ -510,8 +505,6 @@ for 0 to 'magechiv'
             movetype 0x1022 'backpack' 'FletcherDropoff' (0 0 0) 1193 1
             pause 500
           endwhile
-          
-          
           //get more bolts
           if counttype 0x1bfb 0 'backpack' < 130
             if counttype 0x1bfb 0 'FletcherDropoff' < 200
