@@ -1,0 +1,6 @@
+cleartargetqueue
+canceltarget
+setalias 'enemy' 'last'
+cast 'Evil omen' 'enemy'
+pause 550
+cast 'Flame strike' 'enemy'
