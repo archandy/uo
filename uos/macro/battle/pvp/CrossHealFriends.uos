@@ -165,4 +165,4 @@ if poisoned 'buddy' and @inrange 'buddy' 10
 elseif hits 'buddy' < 95 and @inrange 'buddy' 10
   cast 'heal' 'buddy'
 endif
-@playmacro 'ParaMortal'
+//@playmacro 'ParaMortal'
