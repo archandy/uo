@@ -272,10 +272,6 @@ for 0 to 'magechiv'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
-                elseif @property 'Arctic' 'found' or  @property 'Vorpal' 'found'
-                  @moveitem! 'found' 'backpack'
-                  pause 1000
-                  break
                 elseif @property 'Fletching Exceptional Bonus' 'found' >= 30 and @property 'Fletching Bonus' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
@@ -350,7 +346,7 @@ for 0 to 'magechiv'
                   pause 1000
                   break
                 endif
-                if @property 'Lower Reagent Cost' 'found' >= 19
+                if @property 'Lower Reagent Cost' 'found' >= 15 and @property 'Faster' 'found'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
@@ -380,6 +376,21 @@ for 0 to 'magechiv'
                   @moveitem! 'found' 'backpack'
                   pause 1000
                   break
+                endif
+                if @property 'Faster Cast Recovery' 'found' and @property 'Faster Casting' 'found'
+                  if @property 'Lower' 'found' >= 6
+                    @moveitem! 'found' 'backpack'
+                    pause 1000
+                    break
+                  elseif @property 'Defense' 'found' >= 10
+                    @moveitem! 'found' 'backpack'
+                    pause 1000
+                    break
+                  elseif @property 'Damage' 'found' >= 10
+                    @moveitem! 'found' 'backpack'
+                    pause 1000
+                    break
+                  endif
                 endif
                 //hci and dci jewels, other usable hci dci jewels will be captured by above
                 if @property 'Defense chance increase' 'found' >= 10 and @property 'Hit chance increase' 'found' >= 10
