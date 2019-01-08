@@ -1,0 +1,4 @@
+getenemy 'gray' 'criminal' 'murderer' 'closest'
+//attack 'enemy'
+target! 'enemy'
+@headmsg '▼▼▼' 43 'enemy'
