@@ -104,12 +104,7 @@ for 0 to 'BodyTypes'
               headmsg 'Criminal in guards!' 1000 'found'
               @setalias 'sent' 'self'
             endif
-          elseif @property '[SL]' 'found' or @property '[Min]' 'found'
-            if not @findalias 'sent'
-              headmsg 'Faction' 43 'found'
-              @setalias 'sent' 'self'
-            endif
-          elseif @property '[TB]' 'found' or @property '[CoM]' 'found'
+          elseif @property '[Hz]' 'found'
             if not @findalias 'sent'
               headmsg 'Faction' 43 'found'
               @setalias 'sent' 'self'
