@@ -9,5 +9,5 @@ cast 'fireball' 'enemy'
 //자신의 패캐에 맞게 딜레이 수정
 pause 1500
 if diffhit 'pet' 3
-  playmacro '00_petheal'
+  playmacro '00_heal_pet'
 endif
