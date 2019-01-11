@@ -1,0 +1,27 @@
+//말에서내려서
+if mounted 
+  useobject 'self' 
+  pause 600
+endif
+
+//올킬을 외치고
+msg 'all kill'
+
+//타겟공격
+getenemy 'gray''criminal''closest'
+if @findobject 'enemy'
+  @headmsg '▼▼▼' 43 'enemy'
+  autotargetenemy
+  if criminal 'enemy'
+    target! 'enemy'
+    @clearusequeue
+    @cancelautotarget
+    stop
+  endif
+  if gray 'enemy'
+    target! 'enemy'
+    @clearusequeue
+    @cancelautotarget
+    stop
+  endif
+endif
