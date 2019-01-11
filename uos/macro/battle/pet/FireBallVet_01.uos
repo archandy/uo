@@ -1,0 +1,13 @@
+if not @findobject 'pet'
+  promptalias 'pet'
+endif
+
+//Get Enemy Grey Only
+getenemy 'gray''criminal''closest'
+headmsg '▼' 34 'enemy'
+cast 'fireball' 'enemy'
+//자신의 패캐에 맞게 딜레이 수정
+pause 1500
+if diffhit 'pet' 3
+  playmacro '00_petheal'
+endif
