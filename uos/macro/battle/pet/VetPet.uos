@@ -1,0 +1,6 @@
+if not @findobject 'pet'
+  promptalias 'pet'
+endif
+bandage
+autotargetobject! 'pet'
+playmacro '00_attack_fb'
