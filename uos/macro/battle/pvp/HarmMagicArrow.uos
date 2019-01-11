@@ -1,0 +1,35 @@
+//make sure do not auto interrupt is checked
+if @findtype 0xf0d 0 'ground' 1 2
+  if @inrange 'last' '10'
+    @useobject 'found'
+    @target! 'last'
+  else
+    @autotargetenemy
+    @useobject 'found'
+    if @inrange 'enemy' '10
+      @target! 'enemy'
+    else
+      @targettilerelative 'self' 4
+    endif
+  endif
+elseif @inrange 'last' 10 and not @infriendlist 'last'
+  // Dump existing harmful target on enemy
+  if targetexists 'harmful'
+    target! 'last '
+    // Harm if enemy is standing next to you
+  elseif @inrange 'last' 1
+    cast 'Harm' 'last'
+  else
+    // Handle sequence, using alias trick
+    if not @findalias 'Sequencing'
+      cast 'Magic Arrow' 'last'
+      @setalias 'Sequencing' 'self'
+    else
+      cast 'Fireball' 'last'
+      @unsetalias 'Sequencing'
+    endif
+    // Wait until cast is finished
+    while waitingfortarget 'harmful'
+    endwhile
+  endif
+endif
