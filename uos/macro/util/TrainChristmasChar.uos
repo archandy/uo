@@ -53,7 +53,7 @@ endwhile
 
 // 스피릿 스피킹
 if skillstate 'Necromancy' == 'up'
-  setskill 'Necromancy' == 'locked'
+  setskill 'Necromancy' 'locked'
 endif
 headmsg '정신을 집중해 스피릿스피킹을 올립니다 뿌우'
 while skill 'Spirit Speak' < 100 
@@ -71,7 +71,7 @@ endwhile
 // 네크로
 headmsg '정신을 집중해 네크로를 올립니다 뿌우'
 if skillstate 'Necromancy' == 'locked'
-  setskill 'Necromancy' == 'up'
+  setskill 'Necromancy' 'up'
 endif
 while skill 'Necromancy' < 100
   if @injournal 'insufficient mana'
