@@ -340,6 +340,16 @@ for 0 to 'magechiv'
                   pause 1000
                   break
                 endif
+                if @property 'Provocation' 'found' >= 10 or @property 'Discordance' 'found' >= 10
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
+                if @property 'Peacemaking' 'found' >= 10
+                  @moveitem! 'found' 'backpack'
+                  pause 1000
+                  break
+                endif
                 //EP DI jewels
                 if @property 'Enhance Potions' 'found' >= 15 and @property 'Damage Increase' 'found' >= 20
                   @moveitem! 'found' 'backpack'
