@@ -17,10 +17,10 @@ if serial 'stock' == serial 'backpack'
   stop
 endif
 while hits > 0
-  headmsg '* 찾는중 *' 89
+  headmsg '* 찾는중 *' 114
   // 아래에 찾을 물건의 graphic(type)을 넣어주세요.
   //            !!!!!
-  if @findtype '0xe89' 'any' 'Stock'
+  if @findtype '0xdf0' 'any' 'Stock'
 
   // 두 종류 이상의 물건을 찾을때는 elseif로 추가할 수 있습니다.
 
@@ -35,19 +35,69 @@ while hits > 0
   // 아래에 찾을 조건을 넣어주세요.
   // 동시 조건(and)은 2개 까지만 가능하고, 3개 하시면 버그때문에 못찾습니다.
   //            !!!!!!!                         !!!!!!!!!
-  if @property 'Damage Increase' 'found'
-    if @property 'Demon' 'found'
-    //if @property 'Hit Life Leech' 'found' >= 35
-    //if @property 'Hit Mana Leech' 'found' >= 35
-    //if @property 'Hit Stamina Leech' 'found' >= 35
-    //if @property 'Hit Lower Defense' 'found' >= 35
-    //if @property 'Hit Lower Attack' 'found' >= 35
-    //if @property 'Area' 'found' >= 35
+  if @property 'slayer' 'found'
+    if @property 'leech' 'found' >= 30
+      headmsg '* 찾음 *' 89
+      pause 600
+      moveitem 'found' 'backpack'
+      pause 600
+    endif
+  elseif @property 'stamina' 'found'
+    if @property 'mana' 'found'
+      headmsg '* 찾음 *' 89
+      pause 600
+      moveitem 'found' 'backpack'
+      pause 600
+    endif
+  elseif @property 'stamina' 'found'
+    if @property 'life' 'found'
+      headmsg '* 찾음 *' 89
+      pause 600
+      moveitem 'found' 'backpack'
+      pause 600
+    endif
+  elseif @property 'life' 'found'
+    if @property 'mana' 'found'
+      headmsg '* 찾음 *' 89
+      pause 600
+      moveitem 'found' 'backpack'
+      pause 600
+    endif
+  elseif @property 'hit lower' 'found' or @property 'area' 'found'
+    if @property 'leech' 'found'
       headmsg '* 찾음 *' 114
       pause 600
       moveitem 'found' 'backpack'
       pause 600
     endif
+  elseif @property 'defense' 'found' or @property 'attack' 'found'
+    if @property 'leech' 'found'
+      headmsg '* 찾음 *' 89
+      pause 600
+      moveitem 'found' 'backpack'
+      pause 600
+    endif
+  elseif @property 'fireball' 'found' or @property 'lightning' 'found'
+    if @property 'leech' 'found'
+      headmsg '* 찾음 *' 89
+      pause 600
+      moveitem 'found' 'backpack'
+      pause 600
+    endif
+  elseif @property 'harm' 'found'
+    if @property 'leech' 'found'
+      headmsg '* 찾음 *' 89
+      pause 600
+      moveitem 'found' 'backpack'
+      pause 600
+    endif
+  elseif @property 'leech' 'found' >= 40
+    //if @property 'leech' 'found'
+      headmsg '* 찾음 *' 89
+      pause 600
+      moveitem 'found' 'backpack'
+      pause 600
+    //endif
   endif
   ignoreobject 'found'
 
