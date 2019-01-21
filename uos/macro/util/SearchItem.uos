@@ -65,7 +65,7 @@ while hits > 0
     endif
   elseif @property 'hit lower' 'found' or @property 'area' 'found'
     if @property 'leech' 'found'
-      headmsg '* 찾음 *' 114
+      headmsg '* 찾음 *' 89
       pause 600
       moveitem 'found' 'backpack'
       pause 600
@@ -98,6 +98,13 @@ while hits > 0
       moveitem 'found' 'backpack'
       pause 600
     //endif
+  elseif @property 'best' 'found'
+    if @property 'leech' 'found'
+      headmsg '* 찾음 *' 89
+      pause 600
+      moveitem 'found' 'backpack'
+      pause 600
+    endif
   endif
   ignoreobject 'found'
 
