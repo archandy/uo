@@ -1,0 +1,443 @@
+울온 매클
+
+@setalias '5mod' 0x425e3148
+@setalias '3mod' 0x425e314e
+if  @findtype 0x13c7 'any' 'backpack' or @findtype 0x277a 'any' 'backpack'
+  //gorget
+  @setalias 'LRCMR' 0x425cfcb6
+  @setalias 'HPILMCMR' 0x425cfcbb
+  @setalias 'StamLMCMR' 0x425cfcd4
+  @setalias 'ManaLMCMR' 0x425cfcc8
+  @setalias 'LMCMR' 0x425cfcb7
+  @setalias 'StamHPIMR' 0x425cfccf
+  @setalias 'ManaHPIMR' 0x425cfcd8
+  @setalias 'HPIMR' 0x425cfcbc
+  @setalias 'StamMR' 0x425cfccd
+  @setalias 'ManaMR' 0x425055ee
+  //
+  @setalias 'MR' 0x425055eb
+  @setalias 'LRCLMCHPI' 0x424591c2
+  @setalias 'LRCHPI' 0x42459727
+  @setalias 'LRCLMC' 0x42504597
+  @setalias 'LRC' 0x4245971e
+  @setalias 'HPILMCStam' 0x42456ff5
+  @setalias 'HPILMCMana' 0x425055fa
+  @setalias 'HPILMC' 0x42456fed
+  @setalias 'StamManaLMC' 0x4245693d
+  @setalias 'StamLMC' 0x4245693c
+  //
+  @setalias 'ManaLMC' 0x424544c7
+  @setalias 'LMC' 0x42456949
+  @setalias 'HPIManaStam' 0x42459712
+  @setalias 'HPIStam' 0x425055ec
+  @setalias 'HPIMana' 0x42456937
+  @setalias 'HPI' 0x42456947
+  @setalias 'ManaStam' 0x42504582
+  @setalias 'Stam' 0x42456fea
+  @setalias 'Mana' 0x42456939
+  @setalias 'Resist' 0x42456946
+  //
+  @setalias 'LRCMule' 0x425e314e
+elseif @findtype 0x13cd 'any' 'backpack' or @findtype 0x277e 'any' 'backpack'
+  //sleeves
+  @setalias 'LRCMR' 0x424544c5
+  @setalias 'HPILMCMR' 0x424591b8
+  @setalias 'StamLMCMR' 0x425055f8
+  @setalias 'ManaLMCMR' 0x42459719
+  @setalias 'LMCMR' 0x425055dd
+  @setalias 'StamHPIMR' 0x42456feb
+  @setalias 'ManaHPIMR' 0x42456fe8
+  @setalias 'HPIMR' 0x42459726
+  @setalias 'StamMR' 0x4245693e
+  @setalias 'ManaMR' 0x424591b7
+  //
+  @setalias 'MR' 0x425055e7
+  @setalias 'LRCLMCHPI' 0x42504589
+  @setalias 'LRCHPI' 0x425055ef
+  @setalias 'LRCLMC' 0x425055fb
+  @setalias 'LRC' 0x424544ca
+  @setalias 'HPILMCStam' 0x424591bf
+  @setalias 'HPILMCMana' 0x42505603
+  @setalias 'HPILMC' 0x42504598
+  @setalias 'StamManaLMC' 0x425055f6
+  @setalias 'StamLMC' 0x42504581
+  //
+  @setalias 'ManaLMC' 0x4250459f
+  @setalias 'LMC' 0x42456948
+  @setalias 'HPIManaStam' 0x424544d1
+  @setalias 'HPIStam' 0x4250457f
+  @setalias 'HPIMana' 0x42456fec
+  @setalias 'HPI' 0x42459714
+  @setalias 'ManaStam' 0x425045a4
+  @setalias 'Stam' 0x4245693b
+  @setalias 'Mana' 0x42456ff4
+  @setalias 'Resist' 0x424591bc
+  //
+  @setalias 'LRCMule' 0x425e314d
+elseif @findtype 0x13c6 'any' 'backpack' or @findtype 0x2792 'any' 'backpack'
+  //gloves
+  @setalias 'LRCMR' 0x42456ff0
+  @setalias 'HPILMCMR' 0x42456ff7
+  @setalias 'StamLMCMR' 0x424544ce
+  @setalias 'ManaLMCMR' 0x424544cc
+  @setalias 'LMCMR' 0x424544c6
+  @setalias 'StamHPIMR' 0x424544c4
+  @setalias 'ManaHPIMR' 0x42459723
+  @setalias 'HPIMR' 0x4245971d
+  @setalias 'StamMR' 0x424544cf
+  @setalias 'ManaMR' 0x42504596
+  //
+  @setalias 'MR' 0x424544cd
+  @setalias 'LRCLMCHPI' 0x42456ff6
+  @setalias 'LRCHPI' 0x42456ff1
+  @setalias 'LRCLMC' 0x42459724
+  @setalias 'LRC' 0x424591c9
+  @setalias 'HPILMCStam' 0x424591b6
+  @setalias 'HPILMCMana' 0x42459720
+  @setalias 'HPILMC' 0x424591c5
+  @setalias 'StamManaLMC' 0x42459713
+  @setalias 'StamLMC' 0x42504590
+  //
+  @setalias 'ManaLMC' 0x42505602
+  @setalias 'LMC' 0x42504584
+  @setalias 'HPIManaStam' 0x42504587
+  @setalias 'HPIStam' 0x42504599
+  @setalias 'HPIMana' 0x42456944
+  @setalias 'HPI' 0x424591ca
+  @setalias 'ManaStam' 0x425045a2
+  @setalias 'Stam' 0x425045a5
+  @setalias 'Mana' 0x42505604
+  @setalias 'Resist' 0x425045a6
+  //
+  @setalias 'LRCMule' 0x425e314f
+elseif  @findtype 0x13cb 'any' 'backpack' or @findtype 0x278a 'any' 'backpack'
+  //legs
+  @setalias 'LRCMR' 0x42456941
+  @setalias 'HPILMCMR' 0x42456ffb
+  @setalias 'StamLMCMR' 0x425cfcd6
+  @setalias 'ManaLMCMR' 0x425cfcc0
+  @setalias 'LMCMR' 0x42459722
+  @setalias 'StamHPIMR' 0x424544c1
+  @setalias 'ManaHPIMR' 0x425cfcbf
+  @setalias 'HPIMR' 0x425cfcda
+  @setalias 'StamMR' 0x4245971b
+  @setalias 'ManaMR' 0x425055e5
+  //
+  @setalias 'MR' 0x42505605
+  @setalias 'LRCLMCHPI' 0x4250458a
+  @setalias 'LRCHPI' 0x425055d8
+  @setalias 'LRCLMC' 0x42504595
+  @setalias 'LRC' 0x425055fc
+  @setalias 'HPILMCStam' 0x425055df
+  @setalias 'HPILMCMana' 0x424591be
+  @setalias 'HPILMC' 0x42504586
+  @setalias 'StamManaLMC' 0x425055dc
+  @setalias 'StamLMC' 0x425055db
+  //
+  @setalias 'ManaLMC' 0x425055fe
+  @setalias 'LMC' 0x42456fee
+  @setalias 'HPIManaStam' 0x425055f1
+  @setalias 'HPIStam' 0x424591c6
+  @setalias 'HPIMana' 0x424591c7
+  @setalias 'HPI' 0x42456938
+  @setalias 'ManaStam' 0x42459721
+  @setalias 'Stam' 0x42456ff2
+  @setalias 'Mana' 0x42456ff8
+  @setalias 'Resist' 0x42504580
+  //
+  @setalias 'LRCMule' 0x425e3150
+elseif  @findtype 0x13cc 'any' 'backpack'
+  //tunic
+  @setalias 'LRCMR' 0x43b53905
+  @setalias 'HPILMCMR' 0x43b538fc
+  @setalias 'StamLMCMR' 0x43b53906
+  @setalias 'ManaLMCMR' 0x43b53904
+  @setalias 'LMCMR' 0x43b53908
+  @setalias 'StamHPIMR' 0x43b538fa
+  @setalias 'ManaHPIMR' 0x43b538ff
+  @setalias 'HPIMR' 0x43b538fe
+  @setalias 'StamMR' 0x43b538fb
+  @setalias 'ManaMR' 0x43b53900
+  //
+  @setalias 'MR' 0x43b53903
+  @setalias 'LRCLMCHPI' 0x43b53907
+  @setalias 'LRCHPI' 0x43b538f7
+  @setalias 'LRCLMC' 0x43b538f6
+  @setalias 'LRC' 0x43b53909
+  @setalias 'HPILMCStam' 0x43b538fd
+  @setalias 'HPILMCMana' 0x43b538f9
+  @setalias 'HPILMC' 0x43b538f8
+  @setalias 'StamManaLMC' 0x43b53902
+  @setalias 'StamLMC' 0x43b53901
+  //
+  @setalias 'ManaLMC' 0x43b69902
+  @setalias 'LMC' 0x43b698fe
+  @setalias 'HPIManaStam' 0x43b698fd
+  @setalias 'HPIStam' 0x43b69900
+  @setalias 'HPIMana' 0x43b69901
+  @setalias 'HPI' 0x43b69906
+  @setalias 'ManaStam' 0x43b698ff
+  @setalias 'Stam' 0x43b69905
+  @setalias 'Mana' 0x43b69904
+  @setalias 'Resist' 0x43b69903
+  //
+  @setalias 'LRCMule' 0x425e314a
+endif
+if @injournal 'world will save'
+  while not @injournal 'world save complete'
+  endwhile
+  @clearjournal
+endif
+@removelist 'modcount'
+@createlist 'modcount'
+if @findobject 'found' 'any' 'backpack'
+  waitforproperties 'found' 5000
+else
+  pause 550
+  sysmsg 'Done' 34
+  if @findalias 'all5'
+    playmacro 'Craft All 5 Runic'
+  else
+    @playmacro 'Craft Last Runic'
+  endif
+  stop
+endif
+if @property 'mana regeneration' 'found' == 2
+  pushlist 'modcount' 'mr'
+endif
+if @property 'lower mana cost' 'found' >= 4
+  pushlist 'modcount' 'lmc'
+endif
+if @property 'lower reagent cost' 'found' >= 12
+  pushlist 'modcount' 'lrc'
+endif
+if @property 'hit point increase' 'found' >= 3
+  pushlist 'modcount' 'hpi'
+endif
+if @property 'mana increase' 'found' >= 5
+  pushlist 'modcount' 'mana'
+endif
+if @property 'stamina increase' 'found' >= 5
+  pushlist 'modcount' 'stam'
+endif
+if @property 'physical resist' 'found' >= 14
+  pushlist 'modcount' 'physical'
+endif
+if @property 'fire resist' 'found' >= 14
+  pushlist 'modcount' 'fire'
+endif
+if @property 'cold resist' 'found' >= 14
+  pushlist 'modcount' 'cold'
+endif
+if @property 'poison resist' 'found' >= 14
+  pushlist 'modcount' 'poison'
+endif
+if @property 'energy resist' 'found' >= 14
+  pushlist 'modcount' 'energy'
+endif
+if @property 'luck' 'found' >= 100
+  pushlist 'modcount' 'luck'
+endif
+if @property 'lower reagent cost' 'found' >= 12 and @property 'stamina increase' 'found' >= 5
+  poplist 'modcount' 'stam'
+endif
+if @property 'lower reagent cost' 'found' >= 12 and @property 'mana increase' 'found' >= 5
+  poplist 'modcount' 'mana'
+endif
+if @property 'lower reagent cost' 'found' >= 12 and @property 'energy resist' 'found' >= 14
+  poplist 'modcount' 'energy'
+endif
+///
+///
+///sort
+if list 'modcount' <= 2
+  sysmsg '2mod'
+  if @property 'lower reagent cost' 'found' >= 18 and @property 'mana regeneration' 'found' == 2
+    sysmsg 'Mule' 88
+    if @property 'Contents' 'lrcmule' < 10 or @property 'stamina regeneration' 'found'
+      moveitem 'found' 'lrcmule'
+    elseif serial 'self' ==  0x68607
+      moveitem 'found' '3mod'
+      pause 550
+    else
+      usetype! 0xf9f
+      while waitingfortarget
+      endwhile
+      pause 550
+      target! 'found'
+    endif
+  elseif @property 'lower mana cost' 'found' >= 7 and @property 'lower reagent cost' 'found' >= 18
+    if @property 'Contents' 'lrcmule' < 10 or @property 'stamina regeneration' 'found'
+      sysmsg 'Mule' 88
+      moveitem 'found' 'lrcmule'
+    elseif serial 'self' ==  0x68607
+      moveitem 'found' '3mod'
+      pause 550
+    else
+      usetype! 0xf9f
+      while waitingfortarget
+      endwhile
+      pause 550
+      target! 'found'
+    endif
+  else
+    sysmsg 'cut up'
+    //edit this to cut up
+    usetype! 0xf9f
+    while waitingfortarget
+    endwhile
+    pause 550
+    target! 'found'
+  endif
+elseif list 'modcount' == 3
+  sysmsg '3mod' 52
+  if @property 'lower reagent cost' 'found' >= 18 and @property 'mana regeneration' 'found' == 2
+    if @property 'Contents' 'lrcmule' < 10 or @property 'stamina regeneration' 'found'
+      sysmsg 'Mule' 88
+      moveitem 'found' 'lrcmule'
+    elseif serial 'self' ==  0x68607
+      moveitem 'found' '3mod'
+      pause 550
+    else
+      usetype! 0xf9f
+      while waitingfortarget
+      endwhile
+      pause 550
+      target! 'found'
+    endif
+  elseif @property 'lower mana cost' 'found' >= 7 and @property 'lower reagent cost' 'found' >= 18
+    if @property 'Contents' 'lrcmule' < 10 or @property 'stamina regeneration' 'found'
+      sysmsg 'Mule' 88
+      moveitem 'found' 'lrcmule'
+    elseif serial 'self' ==  0x68607
+      moveitem 'found' '3mod'
+      pause 550
+    else
+      usetype! 0xf9f
+      while waitingfortarget
+      endwhile
+      pause 550
+      target! 'found'
+    endif
+  elseif serial 'self' ==  0x68607
+    moveitem 'found' '3mod'
+    pause 550
+  else
+    usetype! 0xf9f
+    while waitingfortarget
+    endwhile
+    pause 550
+    target! 'found'
+  endif
+  //comment out next 3 lines to put 5 mod into stacks
+elseif list 'modcount' == 5
+  sysmsg '5mod' 64
+  moveitem 'found' '5mod'
+elseif list 'modcount' >= 4
+  sysmsg '4+mod' 34
+  if @property 'mana regeneration' 'found' == 2 and @property 'lower reagent cost' 'found'
+    sysmsg 'LRC & MR'
+    moveitem 'found' 'lrcmr'
+  elseif @property 'mana regeneration' 'found' == 2 and @property 'lower mana cost' 'found' >= 4
+    if @property 'hit point increase' 'found'
+      sysmsg 'HPI LMC & MR'
+      moveitem 'found' 'hpilmcmr'
+    elseif @property 'stamina increase' 'found'
+      sysmsg 'Stam LMC & MR'
+      moveitem 'found' 'stamlmcmr'
+    elseif @property 'mana increase' 'found'
+      sysmsg 'Mana LMC & MR'
+      moveitem 'found' 'manalmcmr'
+    else
+      sysmsg 'LMC & MR'
+      moveitem 'found' 'lmcmr'
+    endif
+  elseif @property 'mana regeneration' 'found' == 2 and @property 'hit point increase' 'found' >= 3
+    if @property 'stamina increase' 'found'
+      sysmsg 'Stam HPI & MR'
+      moveitem 'found' 'stamhpimr'
+    elseif @property 'mana increase' 'found'
+      sysmsg 'Mana LMC MR'
+      moveitem 'found' 'manahpimr'
+    else
+      sysmsg 'HPI & MR'
+      moveitem 'found' 'hpimr'
+    endif
+  elseif @property 'mana regeneration' 'found' == 2 and @property 'stamina increase' 'found' >= 5
+    sysmsg 'Stam & MR'
+    moveitem 'found' 'stammr'
+  elseif @property 'mana regeneration' 'found' == 2 and @property 'mana increase' 'found' >= 5
+    sysmsg 'Mana & MR'
+    moveitem 'found' 'manamr'
+  elseif @property 'mana regeneration' 'found' == 2
+    sysmsg 'MR only'
+    moveitem 'found' 'mr'
+  elseif @property 'lower reagent cost' 'found'
+    if @property 'lower mana cost' 'found' >= 4 and @property 'hit point increase' 'found' >= 3
+      sysmsg 'LRC LMC & HPI'
+      moveitem 'found' 'lrclmchpi'
+    elseif @property 'lower mana cost' 'found' >= 4
+      sysmsg 'LMC & LRC'
+      moveitem 'found' 'lrclmc'
+    elseif @property 'hit point increase' 'found' >= 3
+      sysmsg 'HPI & LRC'
+      moveitem 'found' 'lrchpi'
+    else
+      sysmsg 'LRC Only'
+      moveitem 'found' 'lrc'
+    endif
+  elseif @property 'lower mana cost' 'found' >= 4 and @property 'hit point increase' 'found' >= 3
+    if @property 'stamina increase' 'found' >= 5
+      sysmsg 'HPI LMC & Stam'
+      moveitem 'found' 'hpilmcstam'
+    elseif @property 'mana increase' 'found' >= 5
+      sysmsg 'HPI LMC & Mana'
+      moveitem 'found' 'hpilmcmana'
+    else
+      sysmsg 'HPI & LMC'
+      moveitem 'found' 'HPILMC'
+    endif
+  elseif @property 'lower mana cost' 'found' >= 4
+    if @property 'stamina increase' 'found' >= 5 and @property 'mana increase' 'found' >= 5
+      sysmsg 'Stam Mana & LMC'
+      moveitem 'found' 'stammanalmc'
+    elseif @property 'stamina increase' 'found' >= 5
+      sysmsg 'Stam & LMC'
+      moveitem 'found' 'stamlmc'
+    elseif @property 'mana increase' 'found' >= 5
+      sysmsg 'Mana & LMC'
+      moveitem 'found' 'manalmc'
+    elseif @property 'Lower Mana Cost' 'found' >= 4
+      sysmsg 'LMC Only'
+      moveitem 'found' 'LMC'
+    endif
+  elseif @property 'hit point increase' 'found' >= 3
+    if @property 'stamina increase' 'found' >= 5 and @property 'Mana Increase' 'found' >= 5
+      sysmsg 'HPI Stam & Mana'
+      moveitem 'found' 'HPIManaStam'
+    elseif @property 'stamina increase' 'found' >= 5
+      sysmsg 'HPI & Stam'
+      moveitem 'found' 'HPIStam'
+    elseif @property 'mana increase' 'found' >= 5
+      sysmsg 'HPI & Mana'
+      moveitem 'found' 'HPIMana'
+    else
+      sysmsg 'HPI Only'
+      moveitem 'found' 'hpi'
+    endif
+  elseif @property 'stamina increase' 'found' >= 5 and @property 'Mana Increase' 'found' >= 5
+    sysmsg 'Stam and Mana'
+    moveitem 'found' 'ManaStam'
+  elseif @property 'Stamina increase' 'found' >= 5
+    sysmsg 'Stam only'
+    moveitem 'found' 'Stam'
+  elseif @property 'Mana increase' 'found' >= 5
+    sysmsg 'Mana only'
+    moveitem 'found' 'Mana'
+  else
+    sysmsg 'Resist Only'
+    moveitem 'found' 'resist'
+  endif
+endif
+pause 550
+sysmsg '-' 72
