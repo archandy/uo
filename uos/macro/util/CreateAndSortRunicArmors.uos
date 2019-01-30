@@ -1,5 +1,4 @@
-울온 매클
-
+@setalias 'OnlyLRC' 0000000
 @setalias '5mod' 0x425e3148
 @setalias '3mod' 0x425e314e
 if  @findtype 0x13c7 'any' 'backpack' or @findtype 0x277a 'any' 'backpack'
@@ -280,6 +279,8 @@ if list 'modcount' <= 2
       pause 550
       target! 'found'
     endif
+  elseif @property 'lower reagent cost' 'found'
+      moveitem 'found' 'OnlyLRC'
   else
     sysmsg 'cut up'
     //edit this to cut up
